@@ -171,6 +171,21 @@ class Cowboy_MCP_Transport {
     /* ── MCP Lifecycle ────────────────────────────────────── */
 
     private static function handle_initialize( array $params ): array {
+        // Remember which client this is (display only). Sanitized + capped; stamped on the credential.
+        $ci   = is_array( $params['clientInfo'] ?? null ) ? $params['clientInfo'] : [];
+        $info = [];
+        foreach ( [ 'name', 'title', 'version' ] as $k ) {
+            if ( isset( $ci[ $k ] ) && is_scalar( $ci[ $k ] ) ) {
+                $v = mb_substr( sanitize_text_field( (string) $ci[ $k ] ), 0, 100 );
+                if ( '' !== $v ) {
+                    $info[ $k ] = $v;
+                }
+            }
+        }
+        if ( isset( $info['name'] ) ) {
+            Cowboy_MCP_Auth::record_client_info( $info );
+        }
+
         return [
             'protocolVersion' => '2025-06-18',
             'capabilities'    => [
@@ -301,6 +316,7 @@ class Cowboy_MCP_Transport {
         set_transient( self::SESSION_PREFIX . $id, [
             'created' => time(),
             'key_id'  => Cowboy_MCP_Auth::$current_key_context['key_id'] ?? null,
+            'client'  => Cowboy_MCP_Auth::$last_client_info,
         ], HOUR_IN_SECONDS );
         return $id;
     }

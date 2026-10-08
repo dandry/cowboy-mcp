@@ -154,6 +154,7 @@ class Cowboy_MCP_Auth {
                 'created'   => $k['created'],
                 'last_used' => $k['last_used'] ?? null,
                 'scope'     => ( isset( $k['scope'] ) && is_array( $k['scope'] ) ) ? $k['scope'] : null,
+                'client_info' => $k['client_info'] ?? null,
             ];
         }, array_values( $keys ) );
     }
@@ -301,6 +302,43 @@ class Cowboy_MCP_Auth {
         self::note_auth_failure( $client_ip );
         self::send_www_authenticate();
         return new WP_Error( 'mcp_unauthorized', 'Invalid API key.', [ 'status' => 401 ] );
+    }
+
+    /** This request's sanitized MCP clientInfo (set by the transport on initialize). */
+    public static array $last_client_info = [];
+
+    /**
+     * Stamp the authenticated credential with the client that is using it: the OAuth client row
+     * for cmcp_at_ tokens, the key record otherwise. Throttled like last_used (one write per minute
+     * unless name/version changed). Never fails the request.
+     */
+    public static function record_client_info( array $info ): void {
+        self::$last_client_info = $info;
+        $ctx = self::$current_key_context;
+        if ( empty( $ctx['key_id'] ) ) {
+            return;
+        }
+        if ( ( $ctx['key_prefix'] ?? '' ) === 'cmcp_at' ) {
+            if ( class_exists( 'Cowboy_MCP_OAuth' ) ) {
+                Cowboy_MCP_OAuth::stamp_client_info( substr( (string) $ctx['key_id'], 6 ), $info );
+            }
+            return;
+        }
+        $keys = get_option( self::OPTION_KEY, [] );
+        if ( ! isset( $keys[ $ctx['key_id'] ] ) ) {
+            return;
+        }
+        if ( ! self::client_info_changed( (array) ( $keys[ $ctx['key_id'] ]['client_info'] ?? [] ), $info ) ) {
+            return;
+        }
+        $keys[ $ctx['key_id'] ]['client_info'] = $info + [ 'at' => time() ];
+        update_option( self::OPTION_KEY, $keys );
+    }
+
+    public static function client_info_changed( array $prev, array $info ): bool {
+        return ( $prev['name'] ?? null ) !== ( $info['name'] ?? null )
+            || ( $prev['version'] ?? null ) !== ( $info['version'] ?? null )
+            || ( time() - (int) ( $prev['at'] ?? 0 ) ) >= 60;
     }
 
     /**

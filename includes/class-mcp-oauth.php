@@ -258,6 +258,45 @@ class Cowboy_MCP_OAuth {
         return '' !== $host ? self::app_label_for_host( $host ) : 'An unknown app';
     }
 
+    public static function stamp_client_info( string $access_id, array $info ): void {
+        $tokens = get_option( self::TOKENS_OPTION, [] );
+        $cid    = (string) ( $tokens[ $access_id ]['client_id'] ?? '' );
+        if ( '' === $cid ) {
+            return;
+        }
+        $clients = get_option( self::CLIENTS_OPTION, [] );
+        if ( ! isset( $clients[ $cid ] ) || ! Cowboy_MCP_Auth::client_info_changed( (array) ( $clients[ $cid ]['client_info'] ?? [] ), $info ) ) {
+            return;
+        }
+        $clients[ $cid ]['client_info'] = $info + [ 'at' => time() ];
+        update_option( self::CLIENTS_OPTION, $clients, false );
+    }
+
+    /** Slug from an MCP initialize clientInfo (names verified from each client's source, 2026-10-07). */
+    public static function client_slug_for_info( $info ): ?string {
+        if ( ! is_array( $info ) || empty( $info['name'] ) ) {
+            return null;
+        }
+        $name = (string) $info['name'];
+        $map  = [ 'claude-code' => 'claude-code', 'codex-mcp-client' => 'codex', 'gemini-cli-mcp-client' => 'gemini-cli', 'cursor-vscode' => 'cursor', 'opencode' => 'opencode' ];
+        if ( isset( $map[ $name ] ) ) {
+            return $map[ $name ];
+        }
+        return str_starts_with( $name, 'Visual Studio Code' ) ? 'vscode' : null;
+    }
+
+    /** Human name for a clientInfo: the registry label, else the client's own title/name (capped). */
+    public static function client_display_name( $info ): ?string {
+        if ( ! is_array( $info ) || empty( $info['name'] ) ) {
+            return null;
+        }
+        $slug = self::client_slug_for_info( $info );
+        if ( null !== $slug ) {
+            return self::CLIENT_LABELS[ $slug ];
+        }
+        return mb_substr( (string) ( $info['title'] ?? $info['name'] ), 0, 40 );
+    }
+
     /** Closed-window DCR: remember who tried (throttled, because this endpoint is unauthenticated). */
     private static function record_blocked_registration( array $body ): void {
         $ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) );
@@ -789,6 +828,7 @@ class Cowboy_MCP_OAuth {
                 'created'     => (int) ( $clients[ $cid ]['created'] ?? $info['created'] ),
                 'last_used'   => $info['last_used'],
                 'tool_scope'  => ( isset( $clients[ $cid ]['tool_scope'] ) && is_array( $clients[ $cid ]['tool_scope'] ) ) ? $clients[ $cid ]['tool_scope'] : null,
+                'client_info' => $clients[ $cid ]['client_info'] ?? null,
             ];
         }
         return $out;
