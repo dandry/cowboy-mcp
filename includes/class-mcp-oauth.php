@@ -43,8 +43,40 @@ class Cowboy_MCP_OAuth {
      * via the cowboy_mcp_oauth_redirect_hosts filter; oauth_redirect_allowlist=false
      * restores the old any-host behaviour.
      */
-    const DEFAULT_REDIRECT_HOSTS = [ 'chatgpt.com', 'openai.com', 'claude.ai', 'claude.com', 'anthropic.com', 'vscode.dev', 'cursor.com', 'perplexity.ai', 'n8n.cloud' ];
+    const DEFAULT_REDIRECT_HOSTS = [ 'chatgpt.com', 'openai.com', 'claude.ai', 'claude.com', 'anthropic.com', 'vscode.dev', 'cursor.com', 'perplexity.ai', 'n8n.cloud', 'grok.com', 'mistral.ai', 'antigravity.google', 'oauth-redirect.googleusercontent.com' ];
     const LOOPBACK_HOSTS         = [ 'localhost', '127.0.0.1', '::1' ];
+    /**
+     * Private-use redirect URIs accepted verbatim (RFC 8252 §7.1), mapped to the client slug.
+     * Exact string match only - never a scheme or a pattern. Cursor desktop authorizes with
+     * this URI, so dropping it broke Cursor's OAuth at /authorize (verified 2026-10-07).
+     */
+    const NATIVE_REDIRECT_URIS = [ 'cursor://anysphere.cursor-mcp/oauth/callback' => 'cursor' ];
+    /** Display labels for the client slugs this plugin recognises (admin UI, Doctor, status strip). */
+    const CLIENT_LABELS = [
+        'claude'      => 'Claude',
+        'chatgpt'     => 'ChatGPT',
+        'claude-code' => 'Claude Code',
+        'codex'       => 'Codex',
+        'gemini-cli'  => 'Gemini CLI',
+        'cursor'      => 'Cursor',
+        'vscode'      => 'VS Code',
+        'opencode'    => 'Opencode',
+        'perplexity'  => 'Perplexity',
+        'n8n'         => 'n8n',
+        'grok'        => 'Grok',
+        'lechat'      => 'Le Chat',
+        'gemini-app'  => 'Gemini',
+        'antigravity' => 'Antigravity',
+        'zed'         => 'Zed',
+        'cline'       => 'Cline',
+        'goose'       => 'Goose',
+        'amp'         => 'Amp',
+        'kiro'        => 'Kiro',
+        'qwen-code'   => 'Qwen Code',
+        'kilo'        => 'Kilo Code',
+        'raycast'     => 'Raycast',
+        'windsurf'    => 'Windsurf',
+    ];
     /** Registrations refused while the "New connections" window was closed (shown on the Connections tab and in the Doctor). */
     const BLOCKED_OPTION         = 'cowboy_mcp_oauth_blocked';
     const SIGNED_PREFIX = 'cmcp_client_s1_';
@@ -83,6 +115,11 @@ class Cowboy_MCP_OAuth {
 
     public static function resource_url(): string {
         return rest_url( 'cowboy-mcp/v1/endpoint' );
+    }
+
+    /** RFC 8707 audience check, tolerant of a trailing slash (Perplexity sends one and keeps it at /token). */
+    public static function resource_matches( string $resource ): bool {
+        return untrailingslashit( $resource ) === untrailingslashit( self::resource_url() );
     }
 
     /**
@@ -146,6 +183,7 @@ class Cowboy_MCP_OAuth {
             'chatgpt.com' => 'ChatGPT', 'openai.com' => 'ChatGPT',
             'claude.ai' => 'Claude', 'claude.com' => 'Claude', 'anthropic.com' => 'Claude',
             'vscode.dev' => 'VS Code', 'cursor.com' => 'Cursor', 'perplexity.ai' => 'Perplexity', 'n8n.cloud' => 'n8n',
+            'grok.com' => 'Grok', 'mistral.ai' => 'Le Chat', 'oauth-redirect.googleusercontent.com' => 'Gemini', 'antigravity.google' => 'Antigravity',
         ];
         foreach ( $map as $base => $label ) {
             if ( $host === $base || str_ends_with( $host, '.' . $base ) ) {
@@ -157,6 +195,67 @@ class Cowboy_MCP_OAuth {
         }
         $clean = substr( (string) preg_replace( '/[^a-z0-9.\-]/', '', $host ), 0, 100 );
         return '' !== $clean ? $clean : 'An unknown app';
+    }
+
+    public static function is_native_redirect_uri( string $uri ): bool {
+        return isset( self::NATIVE_REDIRECT_URIS[ $uri ] );
+    }
+
+    /** Redirect-URI sanitizer: the exact native URIs pass verbatim; everything else must be http(s). */
+    public static function sanitize_redirect_uri( string $uri ): string {
+        return self::is_native_redirect_uri( $uri ) ? $uri : esc_url_raw( $uri, [ 'https', 'http' ] );
+    }
+
+    /**
+     * Which known client a registration belongs to. Vendor hosts (any redirect URI) and the native
+     * URIs are authoritative; client_name is consulted ONLY when every redirect URI is loopback,
+     * because a terminal app has no other identity. Display and watch-matching only - never
+     * allowlisting. null = unknown.
+     */
+    public static function client_slug_for_row( array $row ): ?string {
+        $uris = array_values( array_filter( (array) ( $row['redirect_uris'] ?? [] ), 'is_string' ) );
+        $host_map = [
+            'chatgpt.com' => 'chatgpt', 'openai.com' => 'chatgpt',
+            'claude.ai' => 'claude', 'claude.com' => 'claude', 'anthropic.com' => 'claude',
+            'vscode.dev' => 'vscode', 'cursor.com' => 'cursor', 'perplexity.ai' => 'perplexity', 'n8n.cloud' => 'n8n',
+            'grok.com' => 'grok', 'mistral.ai' => 'lechat', 'oauth-redirect.googleusercontent.com' => 'gemini-app', 'antigravity.google' => 'antigravity',
+        ];
+        $all_loopback = ! empty( $uris );
+        foreach ( $uris as $u ) {
+            if ( self::is_native_redirect_uri( $u ) ) {
+                return self::NATIVE_REDIRECT_URIS[ $u ];
+            }
+            $host = strtolower( trim( (string) wp_parse_url( $u, PHP_URL_HOST ), '[]' ) );
+            foreach ( $host_map as $base => $slug ) {
+                if ( $host === $base || str_ends_with( $host, '.' . $base ) ) {
+                    return $slug;
+                }
+            }
+            if ( ! in_array( $host, self::LOOPBACK_HOSTS, true ) ) {
+                $all_loopback = false;
+            }
+        }
+        if ( ! $all_loopback ) {
+            return null;
+        }
+        $name = strtolower( trim( (string) ( $row['client_name'] ?? '' ) ) );
+        foreach ( [ 'claude code' => 'claude-code', 'codex' => 'codex', 'gemini cli' => 'gemini-cli', 'visual studio code' => 'vscode', 'cursor' => 'cursor', 'opencode' => 'opencode', 'zed' => 'zed', 'cline' => 'cline', 'goose' => 'goose', 'amp' => 'amp', 'kiro' => 'kiro', 'qwen code' => 'qwen-code', 'kilo' => 'kilo', 'raycast' => 'raycast', 'windsurf' => 'windsurf', 'devin' => 'windsurf' ] as $prefix => $slug ) {
+            if ( str_starts_with( $name, $prefix ) ) {
+                return $slug;
+            }
+        }
+        return null;
+    }
+
+    /** Registry label for a client row, falling back to the host-based label. */
+    public static function client_label_for_row( array $row ): string {
+        $slug = self::client_slug_for_row( $row );
+        if ( null !== $slug && isset( self::CLIENT_LABELS[ $slug ] ) ) {
+            return self::CLIENT_LABELS[ $slug ];
+        }
+        $first = (string) ( ( (array) ( $row['redirect_uris'] ?? [] ) )[0] ?? '' );
+        $host  = (string) wp_parse_url( $first, PHP_URL_HOST );
+        return '' !== $host ? self::app_label_for_host( $host ) : 'An unknown app';
     }
 
     /** Closed-window DCR: remember who tried (throttled, because this endpoint is unauthenticated). */
@@ -175,7 +274,8 @@ class Cowboy_MCP_OAuth {
             }
         }
         $host  = '' !== $uri ? strtolower( (string) wp_parse_url( $uri, PHP_URL_HOST ) ) : '';
-        $app   = '' !== $host ? self::app_label_for_host( $host ) : 'An unknown app';
+        $slug  = self::client_slug_for_row( [ 'client_name' => (string) ( $body['client_name'] ?? '' ), 'redirect_uris' => (array) ( $body['redirect_uris'] ?? [] ) ] );
+        $app   = null !== $slug ? self::CLIENT_LABELS[ $slug ] : ( '' !== $host ? self::app_label_for_host( $host ) : 'An unknown app' );
         $allowlisted = '' !== $uri && self::redirect_uri_allowed( $uri );
         $now   = time();
         $store = get_option( self::BLOCKED_OPTION, [] );
@@ -185,11 +285,11 @@ class Cowboy_MCP_OAuth {
             $list[0]['at'] = $now;
             ++$list[0]['count'];
         } else {
-            array_unshift( $list, [ 'app' => $app, 'host' => preg_replace( '/[^a-z0-9.\-:\[\]]/', '', $host ), 'allowlisted' => $allowlisted, 'count' => 1, 'at' => $now ] );
+            array_unshift( $list, [ 'app' => $app, 'slug' => $slug, 'host' => preg_replace( '/[^a-z0-9.\-:\[\]]/', '', $host ), 'allowlisted' => $allowlisted, 'count' => 1, 'at' => $now ] );
         }
         $store['attempts'] = array_slice( $list, 0, 10 );
         update_option( self::BLOCKED_OPTION, $store, false );
-        Cowboy_MCP_Auth::log( 'oauth_registration_blocked', [ 'args' => [ 'app' => $app, 'host' => $host, 'allowlisted' => $allowlisted ] ] );
+        Cowboy_MCP_Auth::log( 'oauth_registration_blocked', [ 'args' => [ 'app' => $app, 'slug' => $slug, 'host' => $host, 'allowlisted' => $allowlisted ] ] );
     }
 
     /** Visible blocked attempts (last 24 h, after any dismissal), newest first. */
@@ -252,6 +352,9 @@ class Cowboy_MCP_OAuth {
      * Only ever loosened by the site's own administrator — never by a registrant.
      */
     public static function redirect_uri_allowed( string $uri ): bool {
+        if ( self::is_native_redirect_uri( $uri ) ) {
+            return true;
+        }
         $scheme = strtolower( (string) wp_parse_url( $uri, PHP_URL_SCHEME ) );
         $host   = strtolower( trim( (string) wp_parse_url( $uri, PHP_URL_HOST ), '[]' ) );
         if ( $host === '' || ! in_array( $scheme, [ 'https', 'http' ], true ) ) {
@@ -366,7 +469,7 @@ class Cowboy_MCP_OAuth {
             return null;
         }
         foreach ( $data['r'] as $uri ) {
-            if ( ! is_string( $uri ) || $uri === '' || esc_url_raw( $uri, [ 'https', 'http' ] ) !== $uri ) {
+            if ( ! is_string( $uri ) || $uri === '' || self::sanitize_redirect_uri( $uri ) !== $uri ) {
                 return null;
             }
         }
@@ -546,7 +649,7 @@ class Cowboy_MCP_OAuth {
         if ( time() > (int) $rec['expires'] ) {
             return new WP_Error( 'expired_token', 'Access token expired.' );
         }
-        if ( (string) ( $rec['aud'] ?? '' ) !== self::resource_url() ) {
+        if ( ! self::resource_matches( (string) ( $rec['aud'] ?? '' ) ) ) {
             return new WP_Error( 'invalid_token', 'Access token audience mismatch.' );
         }
 
@@ -904,7 +1007,7 @@ class Cowboy_MCP_OAuth {
             if ( ! is_string( $uri ) || strlen( $uri ) > self::MAX_REDIRECT_URI_LEN ) {
                 return self::rest_error( 'invalid_redirect_uri', 'Each redirect_uri must be a string of at most ' . self::MAX_REDIRECT_URI_LEN . ' characters.', 400 );
             }
-            $uri = esc_url_raw( $uri, [ 'https', 'http' ] );
+            $uri = self::sanitize_redirect_uri( $uri );
             if ( $uri === '' ) {
                 continue;
             }
@@ -919,7 +1022,7 @@ class Cowboy_MCP_OAuth {
                 return self::rest_error(
                     'invalid_redirect_uri',
                     sprintf(
-                        '%s is not an allowed redirect host on this site. Known AI apps (%s) and localhost are accepted over https; an administrator can add other hosts under Settings > Cowboy MCP > Desktop Connector.',
+                        '%s is not an allowed redirect host on this site. Known AI apps (%s) and localhost are accepted over https, plus Cursor\'s own callback; an administrator can add other hosts under Settings > Cowboy MCP > Desktop Connector.',
                         implode( ', ', array_unique( $dropped ) ),
                         implode( ', ', self::DEFAULT_REDIRECT_HOSTS )
                     ),
@@ -1015,7 +1118,7 @@ class Cowboy_MCP_OAuth {
     private static function token_authorization_code( WP_REST_Request $request ) {
         $code         = sanitize_text_field( (string) $request->get_param( 'code' ) );
         $verifier     = (string) $request->get_param( 'code_verifier' );
-        $redirect_uri = esc_url_raw( (string) $request->get_param( 'redirect_uri' ), [ 'https', 'http' ] );
+        $redirect_uri = self::sanitize_redirect_uri( (string) $request->get_param( 'redirect_uri' ) );
         $client_id    = sanitize_text_field( (string) $request->get_param( 'client_id' ) );
 
         if ( $code === '' ) {
@@ -1093,7 +1196,7 @@ class Cowboy_MCP_OAuth {
         $src = $is_post ? $_POST : $_GET;
 
         $client_id    = sanitize_text_field( wp_unslash( $src['client_id'] ?? '' ) );
-        $redirect_uri = esc_url_raw( wp_unslash( $src['redirect_uri'] ?? '' ), [ 'https', 'http' ] );
+        $redirect_uri = self::sanitize_redirect_uri( (string) wp_unslash( $src['redirect_uri'] ?? '' ) );
         $state        = sanitize_text_field( wp_unslash( $src['state'] ?? '' ) );
         $challenge    = sanitize_text_field( wp_unslash( $src['code_challenge'] ?? '' ) );
         $challenge_m  = sanitize_text_field( wp_unslash( $src['code_challenge_method'] ?? '' ) );
@@ -1150,7 +1253,7 @@ class Cowboy_MCP_OAuth {
             self::authorize_fatal( __( 'This connection request is missing a required security parameter (PKCE S256). Start the connection again from your AI app.', 'cowboy-mcp' ) );
         }
         // RFC 8707 audience: only this server's resource is supported.
-        if ( $resource !== self::resource_url() ) {
+        if ( ! self::resource_matches( $resource ) ) {
             self::authorize_fatal( __( 'This connection request is for a different address than this site\'s MCP endpoint. Check the server URL in your AI app.', 'cowboy-mcp' ) );
         }
 
@@ -1199,7 +1302,7 @@ class Cowboy_MCP_OAuth {
                 'code_challenge_method' => 'S256',
                 'user_id'               => get_current_user_id(),
                 'scope'                 => $scope,
-                'aud'                   => $resource,
+                'aud'                   => self::resource_url(),
             ] );
 
             $scope_mode   = sanitize_text_field( wp_unslash( $_POST['cowboy_mcp_oauth_scope_mode'] ?? 'full' ) );
