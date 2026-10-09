@@ -296,7 +296,8 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 * Connection Doctor no longer flags local development sites that sign in terminal tools over plain http, and counts OAuth connections as credentials.
 * Claude Code and Codex now identify themselves with an OAuth Client ID Metadata Document (the current MCP standard), so they connect without the "New connections" switch and without registering a client on the site.
 * The OAuth connector is now called "Browser sign-in" everywhere, since every app without a key uses it; any by-hand setup can switch it on from the Connections tab.
-* Claude Desktop on a local site signs in through the mcp-remote bridge in your browser - no API key in the config file. Gemini CLI setup is a settings.json snippet that signs in on first start.
+* Claude Desktop on a local site signs in through the mcp-remote bridge in your browser - no API key in the config file.
+* Every setup step is now a command you run - Gemini CLI, Opencode and VS Code use their own add commands, Claude Desktop gets a one-line installer for its bridge - and editing a config file by hand is the collapsed fallback.
 * Connection Doctor no longer warns about the New-connections switch being off unless an app was actually refused.
 * Security: the plugin's own transients (the New-connections window, sign-in codes, the identity-document cache) can no longer be written through the option tools or WP-CLI, Power mode included.
 
