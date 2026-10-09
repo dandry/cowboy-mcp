@@ -426,6 +426,224 @@ class Cowboy_MCP_OAuth {
         return false;
     }
 
+    /* ── Client ID Metadata Documents (CIMD) ───────────────── */
+
+    const CIMD_MAX_ID_LEN    = 512;
+    const CIMD_MAX_DOC_BYTES = 16384;   // draft §6.6 recommends ~5 KB; this is our own upper bound
+    const CIMD_CACHE_MIN     = 300;     // seconds; Codex serves max-age=300
+    const CIMD_CACHE_MAX     = DAY_IN_SECONDS;
+    const CIMD_CACHE_PREFIX  = 'cowboy_mcp_cimd_';
+
+    /**
+     * Whether a client_id is a Client ID Metadata Document URL
+     * (draft-ietf-oauth-client-id-metadata-document-00 §3): https, a host, a path
+     * component, no fragment, no credentials, no dot segments.
+     */
+    public static function is_cimd_client_id( string $id ): bool {
+        if ( $id === '' || strlen( $id ) > self::CIMD_MAX_ID_LEN || preg_match( '/[\s<>"\'\\\\]/', $id ) ) {
+            return false;
+        }
+        $p = wp_parse_url( $id );
+        if ( ! is_array( $p ) || strtolower( (string) ( $p['scheme'] ?? '' ) ) !== 'https' || empty( $p['host'] ) ) {
+            return false;
+        }
+        if ( isset( $p['fragment'] ) || isset( $p['user'] ) || isset( $p['pass'] ) ) {
+            return false;
+        }
+        $path = (string) ( $p['path'] ?? '' );
+        if ( $path === '' || $path === '/' ) {
+            return false;
+        }
+        foreach ( explode( '/', $path ) as $seg ) {
+            if ( $seg === '.' || $seg === '..' ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Trust policy (draft §6.4, MCP "Trust Policies"): a metadata document is fetched only
+     * from a known AI-app host (the same list that may receive an authorization code), or
+     * from any host when the administrator has turned the allowlist off. Never loopback.
+     */
+    public static function cimd_host_allowed( string $host ): bool {
+        $host = strtolower( trim( $host, '[]' ) );
+        if ( $host === '' || in_array( $host, self::LOOPBACK_HOSTS, true ) ) {
+            return false;
+        }
+        if ( ! self::redirect_allowlist_enabled() ) {
+            return true;
+        }
+        $allowed = apply_filters( 'cowboy_mcp_oauth_redirect_hosts', array_merge( self::DEFAULT_REDIRECT_HOSTS, self::extra_redirect_hosts() ) );
+        foreach ( (array) $allowed as $a ) {
+            $a = strtolower( trim( (string) $a ) );
+            if ( $a !== '' && ( $host === $a || str_ends_with( $host, '.' . $a ) ) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Fetch, validate and cache a Client ID Metadata Document. Returns a client row
+     * (same shape as a DCR row, plus `cimd`) or a WP_Error. Error responses and invalid
+     * documents are never cached (draft §4.4). Called only after an administrator is
+     * logged in (handle_authorize), so an unauthenticated visitor can never make this
+     * site fetch anything.
+     *
+     * @return array|WP_Error
+     */
+    public static function fetch_client_metadata( string $url ): array|WP_Error {
+        if ( ! self::is_cimd_client_id( $url ) ) {
+            return new WP_Error( 'cimd_id', 'Not a client metadata URL.' );
+        }
+        $host = (string) wp_parse_url( $url, PHP_URL_HOST );
+        if ( ! self::cimd_host_allowed( $host ) ) {
+            return new WP_Error( 'cimd_host', $host );
+        }
+        /**
+         * Short-circuits the fetch: return an array (treated as the raw JSON document) or a
+         * WP_Error. Used to pin documents in automation and tests.
+         *
+         * @param null|array|WP_Error $pre
+         * @param string              $url
+         */
+        $pre = apply_filters( 'cowboy_mcp_oauth_cimd_document', null, $url );
+        $key = self::CIMD_CACHE_PREFIX . md5( $url );
+        if ( null === $pre ) {
+            $cached = get_transient( $key );
+            if ( is_array( $cached ) && ( $cached['client_id'] ?? '' ) === $url ) {
+                return $cached;
+            }
+            $ssrf = Cowboy_MCP_Security::validate_url_ssrf( $url );
+            if ( is_wp_error( $ssrf ) ) {
+                return new WP_Error( 'cimd_ssrf', $ssrf->get_error_message() );
+            }
+            $res = wp_safe_remote_get( $url, [
+                'timeout'             => 5,
+                'redirection'         => 0,
+                'limit_response_size' => self::CIMD_MAX_DOC_BYTES,
+                'headers'             => [ 'Accept' => 'application/json' ],
+                'user-agent'          => 'Cowboy MCP/' . COWBOY_MCP_VERSION . '; ' . home_url(),
+            ] );
+            if ( is_wp_error( $res ) ) {
+                return new WP_Error( 'cimd_fetch', $res->get_error_message() );
+            }
+            $code = (int) wp_remote_retrieve_response_code( $res );
+            if ( 200 !== $code ) {
+                return new WP_Error( 'cimd_status', (string) $code );
+            }
+            $body = (string) wp_remote_retrieve_body( $res );
+            if ( strlen( $body ) >= self::CIMD_MAX_DOC_BYTES ) {
+                return new WP_Error( 'cimd_too_large', (string) strlen( $body ) );
+            }
+            $doc = json_decode( $body, true );
+            $ttl = self::cimd_cache_ttl( (string) wp_remote_retrieve_header( $res, 'cache-control' ) );
+        } else {
+            if ( is_wp_error( $pre ) ) {
+                return $pre;
+            }
+            $doc = $pre;
+            $ttl = 0;
+        }
+        $row = self::validate_client_metadata( $url, $doc );
+        if ( is_wp_error( $row ) ) {
+            return $row;
+        }
+        if ( $ttl > 0 ) {
+            set_transient( $key, $row, $ttl );
+        }
+        return $row;
+    }
+
+    /** max-age clamped to [CIMD_CACHE_MIN, CIMD_CACHE_MAX]; no header = the minimum. */
+    private static function cimd_cache_ttl( string $cache_control ): int {
+        $ttl = self::CIMD_CACHE_MIN;
+        if ( preg_match( '/max-age=(\d+)/i', $cache_control, $m ) ) {
+            $ttl = (int) $m[1];
+        }
+        if ( stripos( $cache_control, 'no-store' ) !== false ) {
+            $ttl = self::CIMD_CACHE_MIN;
+        }
+        return (int) max( self::CIMD_CACHE_MIN, min( self::CIMD_CACHE_MAX, $ttl ) );
+    }
+
+    /** Document → client row, or WP_Error (draft §4.1, MCP client-registration "MUST" list). */
+    private static function validate_client_metadata( string $url, $doc ): array|WP_Error {
+        if ( ! is_array( $doc ) ) {
+            return new WP_Error( 'cimd_json', 'The client metadata document is not a JSON object.' );
+        }
+        if ( ( $doc['client_id'] ?? null ) !== $url ) {
+            return new WP_Error( 'cimd_id_mismatch', 'client_id in the document does not match its URL.' );
+        }
+        $method = (string) ( $doc['token_endpoint_auth_method'] ?? 'none' );
+        if ( $method !== 'none' || isset( $doc['client_secret'] ) || isset( $doc['client_secret_expires_at'] ) ) {
+            return new WP_Error( 'cimd_auth_method', 'Only public clients (token_endpoint_auth_method "none") are supported.' );
+        }
+        $uris = [];
+        foreach ( (array) ( $doc['redirect_uris'] ?? [] ) as $u ) {
+            if ( ! is_string( $u ) || strlen( $u ) > self::MAX_REDIRECT_URI_LEN ) {
+                continue;
+            }
+            $u = self::sanitize_redirect_uri( $u );
+            if ( $u !== '' && ! in_array( $u, $uris, true ) ) {
+                $uris[] = $u;
+            }
+            if ( count( $uris ) >= self::MAX_REDIRECT_URIS ) {
+                break;
+            }
+        }
+        if ( empty( $uris ) ) {
+            return new WP_Error( 'cimd_redirects', 'The client metadata document lists no usable redirect_uris.' );
+        }
+        $raw_name = $doc['client_name'] ?? '';
+        $name     = sanitize_text_field( substr( is_string( $raw_name ) ? $raw_name : '', 0, 4 * self::MAX_CLIENT_NAME_LEN ) );
+        $name     = function_exists( 'mb_substr' ) ? mb_substr( $name, 0, self::MAX_CLIENT_NAME_LEN ) : substr( $name, 0, self::MAX_CLIENT_NAME_LEN );
+        if ( $name === '' ) {
+            $name = (string) wp_parse_url( $url, PHP_URL_HOST );
+        }
+        return [
+            'client_id'                  => $url,
+            'client_name'                => $name,
+            'redirect_uris'              => $uris,
+            'created'                    => time(),
+            'last_used'                  => null,
+            'token_endpoint_auth_method' => 'none',
+            'cimd'                       => time(),
+        ];
+    }
+
+    /**
+     * redirect_uri match against a metadata document: exact, or - for loopback hosts -
+     * any port (RFC 8252 §7.3; the Claude Code and Codex documents list the port-less
+     * form and the client picks an ephemeral port). Path, scheme and host still must match.
+     */
+    public static function cimd_redirect_matches( string $uri, array $registered ): bool {
+        if ( in_array( $uri, $registered, true ) ) {
+            return true;
+        }
+        $p = wp_parse_url( $uri );
+        if ( ! is_array( $p ) || empty( $p['host'] ) ) {
+            return false;
+        }
+        $host = strtolower( trim( (string) $p['host'], '[]' ) );
+        if ( ! in_array( $host, self::LOOPBACK_HOSTS, true ) ) {
+            return false;
+        }
+        $norm = static function ( array $q ): string {
+            return strtolower( (string) ( $q['scheme'] ?? '' ) ) . '://' . strtolower( trim( (string) ( $q['host'] ?? '' ), '[]' ) ) . ( $q['path'] ?? '/' ) . ( isset( $q['query'] ) ? '?' . $q['query'] : '' );
+        };
+        $want = $norm( $p );
+        foreach ( $registered as $r ) {
+            $rp = is_string( $r ) ? wp_parse_url( $r ) : null;
+            if ( is_array( $rp ) && ! empty( $rp['host'] ) && $norm( $rp ) === $want ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* ── PKCE helpers ──────────────────────────────────────── */
 
     public static function base64url_encode( string $data ): string {
