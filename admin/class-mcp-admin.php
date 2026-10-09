@@ -147,7 +147,10 @@ class Cowboy_MCP_Admin {
         }
         if ( 'oauth' === $mode && class_exists( 'Cowboy_MCP_OAuth' ) ) {
             self::enable_oauth_connector();
-            Cowboy_MCP_OAuth::open_registration_window();
+            // CIMD clients (Claude Code, Codex) never register, so their Copy leaves the window alone.
+            if ( empty( $reg[ $client ]['cimd'] ) ) {
+                Cowboy_MCP_OAuth::open_registration_window();
+            }
         }
         Cowboy_MCP_Admin_Connections::set_connect_watch( Cowboy_MCP_Admin_Connections::connect_watch_slug( $client, Cowboy_MCP_Admin_Connections::site_looks_local() ), $mode );
         $w  = Cowboy_MCP_Admin_Connections::connect_watch();

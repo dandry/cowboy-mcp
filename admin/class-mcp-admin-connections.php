@@ -151,8 +151,10 @@ class Cowboy_MCP_Admin_Connections {
             'claude-ai'      => [ 'label' => 'claude.ai',      'group' => 'no-terminal', 'type' => 'oauth',      'watch' => 'claude',      'local' => 'tunnel' ],
             'claude-desktop' => [ 'label' => 'Claude Desktop', 'group' => 'no-terminal', 'type' => 'oauth',      'watch' => 'claude',      'local' => 'bridge' ],
             'chatgpt'        => [ 'label' => 'ChatGPT',        'group' => 'no-terminal', 'type' => 'oauth',      'watch' => 'chatgpt',     'local' => 'tunnel' ],
-            'claude-code'    => [ 'label' => 'Claude Code',    'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'claude-code', 'local' => 'works' ],
-            'codex'          => [ 'label' => 'Codex',          'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'codex',       'local' => 'works' ],
+            // 'cimd': the client identifies itself with a Client ID Metadata Document, so it never
+            // registers and the "New connections" window is irrelevant to it (verified 2026-10-09).
+            'claude-code'    => [ 'label' => 'Claude Code',    'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'claude-code', 'local' => 'works', 'cimd' => true ],
+            'codex'          => [ 'label' => 'Codex',          'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'codex',       'local' => 'works', 'cimd' => true ],
             'cursor'         => [ 'label' => 'Cursor',         'group' => 'terminal',    'type' => 'oauth-link', 'watch' => 'cursor',      'local' => 'works' ],
             'vscode'         => [ 'label' => 'VS Code',        'group' => 'terminal',    'type' => 'oauth-link', 'watch' => 'vscode',      'local' => 'works' ],
             'gemini-cli'     => [ 'label' => 'Gemini CLI',     'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'gemini-cli',  'local' => 'works' ],
@@ -640,7 +642,7 @@ class Cowboy_MCP_Admin_Connections {
                 <?php endif; ?>
                 <?php self::render_key_fallback( $slug, $label, $keys, $endpoint, $new_key, $is_local ); ?>
         <?php self::step_close(); ?>
-        <?php self::render_approve_step( $oauth_on ); ?>
+        <?php self::render_approve_step( $oauth_on, $slug ); ?>
         <?php self::render_verify_step_with_prompt( $slug, $domain ); ?>
         <?php
     }
@@ -681,13 +683,24 @@ class Cowboy_MCP_Admin_Connections {
         <?php
     }
 
-    /** Step 2 for every OAuth terminal/IDE client (+ the New-connections gate while the connector is on). */
-    private static function render_approve_step( bool $oauth_on ): void {
+    /**
+     * Step 2 for every OAuth terminal/IDE client. DCR clients get the New-connections gate
+     * while the connector is on; CIMD clients (registry 'cimd') never need it.
+     */
+    private static function render_approve_step( bool $oauth_on, string $slug = '' ): void {
+        $cimd = ! empty( self::client_registry()[ $slug ]['cimd'] );
         ?>
         <?php self::step_open( '2', __( 'Approve access', 'cowboy-mcp' ), '' ); ?>
                 <p><?php echo wp_kses( __( 'A sign-in page opens on <strong>your site</strong>. Review what it is asking for, pick the access level and click <strong>Approve</strong>. You are back in your tool a moment later.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
                 <?php
-                if ( $oauth_on ) {
+                if ( $cimd ) {
+                    ?>
+                    <p class="description"><?php
+                        /* translators: 1: AI app name, 2: host that publishes its identity document, e.g. claude.ai */
+                        echo esc_html( sprintf( __( '%1$s identifies itself with a document published by %2$s, so it needs no "New connections" switch — the sign-in page shows that identity.', 'cowboy-mcp' ), self::client_registry()[ $slug ]['label'] ?? $slug, 'codex' === $slug ? 'chatgpt.com' : 'claude.ai' ) );
+                    ?></p>
+                    <?php
+                } elseif ( $oauth_on ) {
                     self::render_connections_gate( true, true );
                 }
                 ?>
