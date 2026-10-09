@@ -1287,7 +1287,7 @@ class Cowboy_MCP_OAuth {
                 return self::rest_error(
                     'invalid_redirect_uri',
                     sprintf(
-                        '%s is not an allowed redirect host on this site. Known AI apps (%s) and localhost are accepted over https, plus Cursor\'s own callback; an administrator can add other hosts under Settings > Cowboy MCP > Desktop Connector.',
+                        '%s is not an allowed redirect host on this site. Known AI apps (%s) and localhost are accepted over https, plus Cursor\'s own callback; an administrator can add other hosts under Settings > Cowboy MCP > Settings > Browser sign-in.',
                         implode( ', ', array_unique( $dropped ) ),
                         implode( ', ', self::DEFAULT_REDIRECT_HOSTS )
                     ),
@@ -1553,7 +1553,7 @@ class Cowboy_MCP_OAuth {
         if ( ! self::redirect_uri_allowed( $redirect_uri ) ) {
             self::authorize_fatal( sprintf(
                 /* translators: %s: host name the app asked to be sent back to */
-                __( 'This connection would send you to %s, which is not an allowed destination on this site. If you trust that app, an administrator can add its host under Settings > Cowboy MCP > Desktop Connector.', 'cowboy-mcp' ),
+                __( 'This connection would send you to %s, which is not an allowed destination on this site. If you trust that app, an administrator can add its host under Settings > Cowboy MCP > Settings > Browser sign-in.', 'cowboy-mcp' ),
                 (string) wp_parse_url( $redirect_uri, PHP_URL_HOST )
             ) );
         }

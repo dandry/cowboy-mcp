@@ -33,10 +33,10 @@ class Cowboy_MCP_Admin_Settings {
             </section>
 
             <section class="cmcp-sect">
-                <h2><?php esc_html_e( 'Desktop Connector', 'cowboy-mcp' ); ?></h2>
+                <h2><?php esc_html_e( 'Browser sign-in', 'cowboy-mcp' ); ?></h2>
                 <div class="cmcp-card">
                     <?php
-                    self::switch_row( 'cmcp-oauth', 'cowboy_mcp_oauth_enabled', $on( 'oauth_enabled', false ), __( 'Allow connecting via Claude Desktop / web (OAuth)', 'cowboy-mcp' ), __( 'Turns on the one-click browser sign-in used by the &#8220;Claude Desktop&#8221; connection path. This exposes public OAuth discovery, registration, and token endpoints — no tokens are issued until an administrator approves in the browser. Leave off if you only connect via the terminal.', 'cowboy-mcp' ) );
+                    self::switch_row( 'cmcp-oauth', 'cowboy_mcp_oauth_enabled', $on( 'oauth_enabled', false ), __( 'Let apps sign in through the browser (OAuth)', 'cowboy-mcp' ), __( 'Used by every app that connects without an API key: Claude Code, Codex, Cursor, VS Code, claude.ai, ChatGPT and more. Exposes public OAuth discovery, registration and token endpoints; nothing is granted until an administrator approves in the browser. The Connections tab turns this on when you connect an app.', 'cowboy-mcp' ) );
                     $hosts_desc = sprintf(
                         /* translators: %s: comma-separated list of host names */
                         esc_html__( 'Anyone can start a connection request, so the site only sends approval back to %s, and to localhost for command-line tools. Turning this off accepts any https address.', 'cowboy-mcp' ),

@@ -160,7 +160,7 @@ class Cowboy_MCP_Doctor {
 				$public ? null : 'For claude.ai or ChatGPT, host the site on a public HTTPS address or use a tunnel/staging URL. Nothing to do for terminal tools.'
 			);
 		} else {
-			$out[] = self::result( 'oauth_prereqs', 'OAuth connector prerequisites', 'skip', 'Desktop Connector is disabled - connector checks skipped.' );
+			$out[] = self::result( 'oauth_prereqs', 'OAuth connector prerequisites', 'skip', 'Browser sign-in is off - connector checks skipped.' );
 		}
 
 		// registration_window (safety lock) - the "New connections" switch on the Connections tab
@@ -337,7 +337,7 @@ class Cowboy_MCP_Doctor {
 		// well_known_* (OAuth discovery at site root)
 		foreach ( [ 'well_known_pr' => '/.well-known/oauth-protected-resource', 'well_known_as' => '/.well-known/oauth-authorization-server' ] as $id => $path ) {
 			if ( ! $oauth_on ) {
-				$checks[] = self::result( $id, 'OAuth discovery: ' . $path, 'skip', 'Desktop Connector disabled - skipped.' );
+				$checks[] = self::result( $id, 'OAuth discovery: ' . $path, 'skip', 'Browser sign-in off - skipped.' );
 				continue;
 			}
 			$r = self::loopback( 'GET', home_url( $path ) );

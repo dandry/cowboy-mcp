@@ -364,7 +364,7 @@ class Cowboy_MCP_Admin {
             }
         }
 
-        // Explicitly enable the Desktop Connector (fallback button on the desktop path).
+        // Explicitly enable browser sign-in (fallback button on the by-hand paths).
         if ( isset( $_POST['cowboy_mcp_toggle_connections'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ?? '' ) ), 'cowboy_mcp_toggle_connections' ) ) {
             if ( 'enable' === sanitize_text_field( wp_unslash( $_POST['cowboy_mcp_toggle_connections'] ) ) ) {
                 Cowboy_MCP_OAuth::open_registration_window();
@@ -397,7 +397,7 @@ class Cowboy_MCP_Admin {
         }
 
         if ( isset( $_POST['cowboy_mcp_enable_oauth'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ?? '' ) ), 'cowboy_mcp_enable_oauth' ) ) {
-            self::enable_oauth_connector( __( 'Desktop Connector enabled.', 'cowboy-mcp' ) );
+            self::enable_oauth_connector( __( 'Browser sign-in enabled.', 'cowboy-mcp' ) );
         }
 
         // Save settings.

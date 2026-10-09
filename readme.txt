@@ -83,13 +83,13 @@ Headless or CI? Use an API key from the Connections tab: `claude mcp add --trans
 
 = Connect Claude to WordPress (claude.ai and Claude Desktop) =
 
-No terminal and no key to paste: turn on the **Desktop Connector** under **Settings > Cowboy MCP > Settings**, click **Add to Claude** on the Connections tab, and approve the sign-in on your own site as an administrator. The consent screen lets you choose full access, read-only, or a hand-picked list of tools. This is a standard OAuth 2.1 flow and needs a public HTTPS site.
+No terminal and no key to paste: click **Add to Claude** on the Connections tab (it switches browser sign-in on for you), and approve the sign-in on your own site as an administrator. The consent screen lets you choose full access, read-only, or a hand-picked list of tools. This is a standard OAuth 2.1 flow and needs a public HTTPS site.
 
 = Connect ChatGPT to WordPress =
 
 ChatGPT connects with the same one-click sign-in. You need ChatGPT on the web with a Plus, Pro, Business, Enterprise or Edu plan, and a public HTTPS site.
 
-1. On your site, turn on the **Desktop Connector** under **Settings > Cowboy MCP**, open the ChatGPT panel on the Connections tab and copy your connection link. If "New connections" shows as disabled there, click **Enable for 30 minutes**.
+1. On your site, open the ChatGPT panel on the Connections tab and click **Open ChatGPT** (it copies your connection link and switches browser sign-in on for 30 minutes).
 2. In ChatGPT, open **Settings > Security and login** and turn on **Developer mode**. On Business and Enterprise workspaces an admin has to allow Developer mode first.
 3. Go to **Plugins**, click **+** and choose **Add custom MCP server**. Paste your connection link as the MCP server URL and choose **OAuth**.
 4. ChatGPT opens a sign-in page on your site. Review it and click **Approve**.
@@ -188,7 +188,7 @@ Questions and connection problems: post in the [support forum](https://wordpress
 
 Headless or CI? Click **Generate API key** on the Connections tab (it is shown once - copy it) and add `--header "Authorization: Bearer YOUR_API_KEY"` to the first line instead of running the second.
 
-**Claude desktop / web (no terminal):** enable the OAuth connector under **Settings > Cowboy MCP > Settings > Desktop Connector**, click **Add to Claude** on the Connections tab (Claude opens with your site already filled in), and approve with one click. (Requires a public HTTPS site; on a local site use the `mcp-remote` bridge shown on the Connections tab.)
+**Claude desktop / web (no terminal):** click **Add to Claude** on the Connections tab (Claude opens with your site already filled in; browser sign-in is switched on for you) and approve with one click. (Requires a public HTTPS site; on a local site use the `mcp-remote` bridge shown on the Connections tab.)
 
 **Cursor, Codex, Gemini CLI, ChatGPT and other clients:** the Connections tab shows a ready-to-copy setup for each, and the connection guides at [cowboymcp.com](https://cowboymcp.com) walk through every client step by step.
 
@@ -200,11 +200,11 @@ A plugin that lets AI assistants act on your site through the Model Context Prot
 
 = How do I connect ChatGPT to my WordPress site? =
 
-Turn on the Desktop Connector in Cowboy MCP and copy your connection link from the ChatGPT panel on the Connections tab. In ChatGPT on the web, turn on **Developer mode** under **Settings > Security and login**, then go to **Plugins**, click **+ > Add custom MCP server**, paste the link and choose OAuth. Approve the sign-in on your site as an administrator, then pick **Developer mode** from the **+** menu in a chat. It needs a Plus, Pro, Business, Enterprise or Edu plan and a public HTTPS site.
+Click **Open ChatGPT** on the ChatGPT panel of the Connections tab in Cowboy MCP; it copies your connection link and switches browser sign-in on. In ChatGPT on the web, turn on **Developer mode** under **Settings > Security and login**, then go to **Plugins**, click **+ > Add custom MCP server**, paste the link and choose OAuth. Approve the sign-in on your site as an administrator, then pick **Developer mode** from the **+** menu in a chat. It needs a Plus, Pro, Business, Enterprise or Edu plan and a public HTTPS site.
 
 = How do I connect Claude to my WordPress site? =
 
-For the Claude desktop and web apps, enable the Desktop Connector, click **Add to Claude** on the Connections tab and approve the one-click sign-in - no terminal needed. For Claude Code, run the two lines shown ready to copy on the Connections tab and sign in in your browser - no key to copy. For headless or CI use, generate an API key there instead.
+For the Claude desktop and web apps, click **Add to Claude** on the Connections tab and approve the one-click sign-in - no terminal needed. For Claude Code, run the two lines shown ready to copy on the Connections tab and sign in in your browser - no key to copy. For headless or CI use, generate an API key there instead.
 
 = Is it free? =
 
@@ -272,7 +272,7 @@ Start with the **Connection Doctor** on the Connections tab. It tests HTTPS, the
 
 * **"Registration is closed"** - new AI apps can register only while "New connections" is on: on the Connections tab pick the app ("Connect another app" if the list is not shown), click "Enable for 30 minutes", then add the connector.
 * **Connector stopped after a staging sync or database restore** - click "Enable for 30 minutes", then Reconnect in the AI app and approve again. Nothing needs removing.
-* **"Not an allowed redirect host"** - the connector only returns approvals to known AI apps and localhost; add another OAuth client's host (for example a self-hosted n8n) under Desktop Connector > Additional allowed hosts.
+* **"Not an allowed redirect host"** - the connector only returns approvals to known AI apps and localhost; add another OAuth client's host (for example a self-hosted n8n) under Settings > Browser sign-in > Additional allowed hosts.
 * **Connected, but "no tools"** - the agent sees two gateway tools and discovers the rest on demand; ask it to "discover tools for WooCommerce". If even those are missing, check the key's scope.
 
 Still stuck? Paste the Doctor report into a new topic in the [support forum](https://wordpress.org/support/plugin/cowboy-mcp/) - topics are usually answered within a day.

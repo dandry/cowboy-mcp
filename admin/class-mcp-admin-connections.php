@@ -308,11 +308,11 @@ class Cowboy_MCP_Admin_Connections {
         if ( ! $oauth_on && ! $quick && ! $chatgpt_quick ) :
             // Browsing never flips settings — enabling the connector is an explicit click.
             ?>
-            <?php self::step_open( '1', __( 'Turn on the Desktop Connector', 'cowboy-mcp' ), '' ); ?>
+            <?php self::step_open( '1', __( 'Turn on browser sign-in', 'cowboy-mcp' ), '' ); ?>
                     <p><?php echo esc_html( $enable_text ); ?></p>
                     <form method="post" class="mcp-inline-form">
                         <?php wp_nonce_field( 'cowboy_mcp_enable_oauth' ); ?>
-                        <button type="submit" name="cowboy_mcp_enable_oauth" class="cmcp-btn cmcp-btn--primary"><?php esc_html_e( 'Enable Desktop Connector', 'cowboy-mcp' ); ?></button>
+                        <button type="submit" name="cowboy_mcp_enable_oauth" class="cmcp-btn cmcp-btn--primary"><?php esc_html_e( 'Turn on browser sign-in', 'cowboy-mcp' ); ?></button>
                     </form>
             <?php self::step_close(); ?>
             <?php
@@ -403,8 +403,8 @@ class Cowboy_MCP_Admin_Connections {
         ?>
         <form method="post" class="mcp-inline-form cmcp-enable-first">
             <?php wp_nonce_field( 'cowboy_mcp_enable_oauth' ); ?>
-            <p><?php esc_html_e( 'Turn on connections first:', 'cowboy-mcp' ); ?>
-            <button type="submit" name="cowboy_mcp_enable_oauth" class="cmcp-btn cmcp-btn--sm"><?php esc_html_e( 'Enable Desktop Connector', 'cowboy-mcp' ); ?></button></p>
+            <p><?php esc_html_e( 'Turn on sign-in first:', 'cowboy-mcp' ); ?>
+            <button type="submit" name="cowboy_mcp_enable_oauth" class="cmcp-btn cmcp-btn--sm"><?php esc_html_e( 'Turn on browser sign-in', 'cowboy-mcp' ); ?></button></p>
         </form>
         <?php
     }
@@ -1073,6 +1073,13 @@ class Cowboy_MCP_Admin_Connections {
                         echo Cowboy_MCP_Admin::icon( 'copy' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG literal.
                     ?></button>
                 </div>
+                <?php
+                // A client added by hand signs in like the listed ones, so it needs sign-in on too.
+                $s = get_option( 'cowboy_mcp_settings', [] );
+                if ( class_exists( 'Cowboy_MCP_OAuth' ) && ! empty( $s['enabled'] ) && empty( $s['oauth_enabled'] ) ) {
+                    self::render_enable_first();
+                }
+                ?>
             </div>
         </div>
         <?php
