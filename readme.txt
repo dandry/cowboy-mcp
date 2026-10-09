@@ -298,6 +298,7 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 * The OAuth connector is now called "Browser sign-in" everywhere, since every app without a key uses it; any by-hand setup can switch it on from the Connections tab.
 * Claude Desktop on a local site signs in through the mcp-remote bridge in your browser - no API key in the config file. Gemini CLI setup is a settings.json snippet that signs in on first start.
 * Connection Doctor no longer warns about the New-connections switch being off unless an app was actually refused.
+* Security: the plugin's own transients (the New-connections window, sign-in codes, the identity-document cache) can no longer be written through the option tools or WP-CLI, Power mode included.
 
 = Earlier versions =
 

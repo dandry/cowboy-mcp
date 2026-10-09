@@ -437,6 +437,14 @@ class Cowboy_MCP_OAuth {
     const CIMD_CACHE_MIN     = 300;     // seconds; Codex serves max-age=300
     const CIMD_CACHE_MAX     = DAY_IN_SECONDS;
     const CIMD_CACHE_PREFIX  = 'cowboy_mcp_cimd_';
+    /**
+     * Hosts whose Client ID Metadata Documents this site trusts (draft §6.4 trust policy):
+     * only the vendors that actually publish one. Deliberately NOT the redirect-host list —
+     * that includes multi-tenant hosts (n8n.cloud, vscode.dev) where any tenant could serve
+     * a JSON document claiming to be "Claude Code". Administrators extend it with the same
+     * extra-hosts setting as redirects, or via the cowboy_mcp_oauth_cimd_hosts filter.
+     */
+    const CIMD_DOCUMENT_HOSTS = [ 'claude.ai', 'claude.com', 'anthropic.com', 'chatgpt.com', 'openai.com' ];
 
     /**
      * Whether a client_id is a Client ID Metadata Document URL
@@ -468,8 +476,8 @@ class Cowboy_MCP_OAuth {
 
     /**
      * Trust policy (draft §6.4, MCP "Trust Policies"): a metadata document is fetched only
-     * from a known AI-app host (the same list that may receive an authorization code), or
-     * from any host when the administrator has turned the allowlist off. Never loopback.
+     * from a vendor that publishes one (CIMD_DOCUMENT_HOSTS) or an administrator-added host,
+     * or from any host when the administrator has turned the allowlist off. Never loopback.
      */
     public static function cimd_host_allowed( string $host ): bool {
         $host = strtolower( trim( $host, '[]' ) );
@@ -479,7 +487,12 @@ class Cowboy_MCP_OAuth {
         if ( ! self::redirect_allowlist_enabled() ) {
             return true;
         }
-        $allowed = apply_filters( 'cowboy_mcp_oauth_redirect_hosts', array_merge( self::DEFAULT_REDIRECT_HOSTS, self::extra_redirect_hosts() ) );
+        /**
+         * Filters the hosts whose Client ID Metadata Documents are trusted (subdomains match).
+         *
+         * @param string[] $hosts Vendor document hosts plus administrator-added hosts.
+         */
+        $allowed = apply_filters( 'cowboy_mcp_oauth_cimd_hosts', array_merge( self::CIMD_DOCUMENT_HOSTS, self::extra_redirect_hosts() ) );
         foreach ( (array) $allowed as $a ) {
             $a = strtolower( trim( (string) $a ) );
             if ( $a !== '' && ( $host === $a || str_ends_with( $host, '.' . $a ) ) ) {
@@ -516,8 +529,11 @@ class Cowboy_MCP_OAuth {
         $pre = apply_filters( 'cowboy_mcp_oauth_cimd_document', null, $url );
         $key = self::CIMD_CACHE_PREFIX . md5( $url );
         if ( null === $pre ) {
+            // The cache row is an option (`_transient_cowboy_mcp_cimd_*`) and is only as
+            // trustworthy as its HMAC: a row without this site's signature is ignored, so
+            // nothing that can write options can forge a vendor's identity.
             $cached = get_transient( $key );
-            if ( is_array( $cached ) && ( $cached['client_id'] ?? '' ) === $url ) {
+            if ( is_array( $cached ) && ( $cached['client_id'] ?? '' ) === $url && self::cimd_row_signed( $cached ) ) {
                 return $cached;
             }
             $ssrf = Cowboy_MCP_Security::validate_url_ssrf( $url );
@@ -556,9 +572,24 @@ class Cowboy_MCP_OAuth {
             return $row;
         }
         if ( $ttl > 0 ) {
-            set_transient( $key, $row, $ttl );
+            set_transient( $key, self::cimd_sign_row( $row ), $ttl );
         }
         return $row;
+    }
+
+    /** HMAC (site salt + issuer, see client_signing_key()) over the cached row's identity fields. */
+    private static function cimd_sign_row( array $row ): array {
+        unset( $row['sig'] );
+        $row['sig'] = self::client_signature( (string) wp_json_encode( [ $row['client_id'] ?? '', $row['client_name'] ?? '', $row['redirect_uris'] ?? [], $row['token_endpoint_auth_method'] ?? '' ] ) );
+        return $row;
+    }
+
+    private static function cimd_row_signed( array $row ): bool {
+        $sig = (string) ( $row['sig'] ?? '' );
+        if ( $sig === '' ) {
+            return false;
+        }
+        return hash_equals( self::cimd_sign_row( $row )['sig'], $sig );
     }
 
     /** max-age clamped to [CIMD_CACHE_MIN, CIMD_CACHE_MAX]; no header = the minimum. */

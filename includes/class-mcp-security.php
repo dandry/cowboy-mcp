@@ -54,8 +54,11 @@ class Cowboy_MCP_Security {
         }
         // Plugin internals, role/capability maps (matches {prefix}user_roles on any
         // table prefix), mail relay, secrets, and WooCommerce payment-gateway groups.
+        // The plugin's transients live in the options table as _transient_cowboy_mcp_* /
+        // _transient_timeout_cowboy_mcp_* (and _site_transient_… on multisite): the OAuth
+        // registration window, auth codes, rate-limit buckets and the CIMD document cache.
         return (bool) preg_match(
-            '/^cowboy_mcp_|user_roles$|^mailserver_|secret|_api_key|^auth_|password|^woocommerce_.+_settings$/',
+            '/^cowboy_mcp_|^(_site)?_transient_(timeout_)?cowboy_mcp_|user_roles$|^mailserver_|secret|_api_key|^auth_|password|^woocommerce_.+_settings$/',
             $name
         );
     }
@@ -84,7 +87,7 @@ class Cowboy_MCP_Security {
             return true;
         }
         return (bool) preg_match(
-            '/^cowboy_mcp_|^mailserver_|secret|_api_key|^auth_|password|nonce|token/',
+            '/^cowboy_mcp_|^(_site)?_transient_(timeout_)?cowboy_mcp_|^mailserver_|secret|_api_key|^auth_|password|nonce|token/',
             $name
         );
     }
@@ -628,11 +631,16 @@ class Cowboy_MCP_Security {
         // 2. WP-CLI writes to the plugin's own cowboy_mcp_ options are never allowed,
         //    Power mode included — preserves the cowboy_mcp_settings bootstrap
         //    invariant (an agent can never widen its own scope via the wp_cli escape hatch).
-        if ( isset( $positionals[0] ) && strtolower( $positionals[0] ) === 'option' ) {
+        //    The plugin's transients (registration window, auth codes, CIMD document cache)
+        //    are options too — `_transient_cowboy_mcp_*` via `option`, or `cowboy_mcp_*`
+        //    via `transient set|delete` — and are covered the same way.
+        $noun = isset( $positionals[0] ) ? strtolower( $positionals[0] ) : '';
+        if ( 'option' === $noun || 'transient' === $noun ) {
             $verb           = isset( $positionals[1] ) ? strtolower( $positionals[1] ) : '';
             $name           = isset( $positionals[2] ) ? strtolower( $positionals[2] ) : '';
-            $is_write_verb  = in_array( $verb, [ 'update', 'delete', 'add' ], true ) && str_starts_with( $name, 'cowboy_mcp_' );
-            $is_patch_touch = $verb === 'patch' && self::cli_tokens_contain( $t['tokens'], 'cowboy_mcp_' );
+            $own            = str_starts_with( $name, 'cowboy_mcp_' ) || (bool) preg_match( '/^(_site)?_transient_(timeout_)?cowboy_mcp_/', $name );
+            $is_write_verb  = in_array( $verb, [ 'update', 'delete', 'add', 'set' ], true ) && $own;
+            $is_patch_touch = 'option' === $noun && $verb === 'patch' && self::cli_tokens_contain( $t['tokens'], 'cowboy_mcp_' );
             if ( $is_write_verb || $is_patch_touch ) {
                 return [
                     'blocked' => true,
