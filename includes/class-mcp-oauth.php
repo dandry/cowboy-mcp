@@ -61,6 +61,7 @@ class Cowboy_MCP_OAuth {
         'cursor'      => 'Cursor',
         'vscode'      => 'VS Code',
         'opencode'    => 'Opencode',
+        'mcp-remote'  => 'Claude Desktop', // the mcp-remote bridge is offered for Claude Desktop on local sites (DCR name "MCP CLI Client")
         'perplexity'  => 'Perplexity',
         'n8n'         => 'n8n',
         'grok'        => 'Grok',
@@ -239,7 +240,7 @@ class Cowboy_MCP_OAuth {
             return null;
         }
         $name = strtolower( trim( (string) ( $row['client_name'] ?? '' ) ) );
-        foreach ( [ 'claude code' => 'claude-code', 'codex' => 'codex', 'gemini cli' => 'gemini-cli', 'visual studio code' => 'vscode', 'cursor' => 'cursor', 'opencode' => 'opencode', 'zed' => 'zed', 'cline' => 'cline', 'goose' => 'goose', 'amp' => 'amp', 'kiro' => 'kiro', 'qwen code' => 'qwen-code', 'kilo' => 'kilo', 'raycast' => 'raycast', 'windsurf' => 'windsurf', 'devin' => 'windsurf' ] as $prefix => $slug ) {
+        foreach ( [ 'claude code' => 'claude-code', 'codex' => 'codex', 'gemini cli' => 'gemini-cli', 'visual studio code' => 'vscode', 'cursor' => 'cursor', 'opencode' => 'opencode', 'mcp cli client' => 'mcp-remote', 'zed' => 'zed', 'cline' => 'cline', 'goose' => 'goose', 'amp' => 'amp', 'kiro' => 'kiro', 'qwen code' => 'qwen-code', 'kilo' => 'kilo', 'raycast' => 'raycast', 'windsurf' => 'windsurf', 'devin' => 'windsurf' ] as $prefix => $slug ) {
             if ( str_starts_with( $name, $prefix ) ) {
                 return $slug;
             }
@@ -1212,6 +1213,10 @@ class Cowboy_MCP_OAuth {
             'code_challenge_methods_supported'      => [ 'S256' ],
             'token_endpoint_auth_methods_supported' => [ 'none' ],
             'scopes_supported'                      => [ 'mcp' ],
+            // Client ID Metadata Documents (MCP spec; replaces DCR for Claude Code, Codex, mcp-remote …).
+            'client_id_metadata_document_supported' => true,
+            // RFC 9207: `iss` is sent on every authorization response (clients that see this flag reject responses without it).
+            'authorization_response_iss_parameter_supported' => true,
         ] );
     }
 
@@ -1350,7 +1355,8 @@ class Cowboy_MCP_OAuth {
                 $active_ids[ $r['client_id'] ] = true;
             }
         }
-        $unused = array_filter( $clients, fn( $c ) => empty( $active_ids[ $c['client_id'] ] ) );
+        // A row written seconds ago (a CIMD client approved but not yet exchanged) is not unused.
+        $unused = array_filter( $clients, fn( $c ) => empty( $active_ids[ $c['client_id'] ] ) && (int) ( $c['created'] ?? 0 ) < $now - 5 * MINUTE_IN_SECONDS );
         uasort( $unused, fn( $a, $b ) => ( (int) $a['created'] ) <=> ( (int) $b['created'] ) );
         // Remove up to half of MAX_CLIENTS worth of the oldest unused clients.
         $remove = array_slice( array_keys( $unused ), 0, (int) ceil( self::MAX_CLIENTS / 2 ) );
@@ -1468,7 +1474,10 @@ class Cowboy_MCP_OAuth {
         // Verify only: this runs for unauthenticated visitors and must not write.
         $client   = self::resolve_client( $client_id );
         $adopting = false;
-        if ( null === $client ) {
+        // Client ID Metadata Document: the id is the https URL of a document the vendor
+        // hosts. Its identity is fetched below, only once an administrator is logged in.
+        $cimd = ( null === $client || ! empty( $client['cimd'] ) ) && self::is_cimd_client_id( $client_id );
+        if ( null === $client && ! $cimd ) {
             // Rescue: an id this site cannot verify (registered before 1.6.8, then lost to
             // a database overwrite). It may be adopted on an administrator's Approve,
             // under exactly the rules a new registration gets: only while "New
@@ -1493,7 +1502,7 @@ class Cowboy_MCP_OAuth {
                 'adopted'                    => time(),
             ];
         }
-        if ( $redirect_uri === '' || ! in_array( $redirect_uri, $client['redirect_uris'], true ) ) {
+        if ( ! $cimd && ( $redirect_uri === '' || ! in_array( $redirect_uri, $client['redirect_uris'], true ) ) ) {
             self::authorize_fatal( __( 'Invalid redirect_uri for this client.', 'cowboy-mcp' ) );
         }
 
@@ -1504,6 +1513,26 @@ class Cowboy_MCP_OAuth {
         }
         if ( ! current_user_can( 'manage_options' ) ) {
             self::authorize_fatal( __( 'You must be an administrator to authorize this connection.', 'cowboy-mcp' ) );
+        }
+
+        if ( $cimd ) {
+            // Identity comes from a document the vendor hosts at the client_id URL (MCP spec;
+            // draft-ietf-oauth-client-id-metadata-document-00). Fetched only now, with an
+            // administrator logged in, so unauthenticated visitors can never make this site
+            // fetch URLs. No registration window: nothing is written before Approve, and the
+            // document host must pass the same allowlist as a redirect host (trust policy).
+            $doc = self::fetch_client_metadata( $client_id );
+            if ( is_wp_error( $doc ) ) {
+                Cowboy_MCP_Auth::log( 'oauth_cimd_rejected', [ 'args' => [ 'code' => $doc->get_error_code(), 'host' => (string) wp_parse_url( $client_id, PHP_URL_HOST ) ] ] );
+                self::authorize_fatal( self::cimd_error_message( $doc, $client_id ) );
+            }
+            if ( $redirect_uri === '' || ! self::cimd_redirect_matches( $redirect_uri, $doc['redirect_uris'] ) ) {
+                Cowboy_MCP_Auth::log( 'oauth_cimd_rejected', [ 'args' => [ 'code' => 'redirect_uri', 'host' => (string) wp_parse_url( $client_id, PHP_URL_HOST ) ] ] );
+                self::authorize_fatal( __( 'Invalid redirect_uri for this client.', 'cowboy-mcp' ) );
+            }
+            // Name and redirect_uris always come from the document; the stored row only
+            // carries what this site decided (scope, timestamps).
+            $client = array_merge( $doc, array_intersect_key( (array) $client, [ 'tool_scope' => 1, 'created' => 1, 'last_used' => 1 ] ) );
         }
 
         // Malformed requests get an error page, never a redirect: anyone can register a
@@ -1531,7 +1560,7 @@ class Cowboy_MCP_OAuth {
 
         // An administrator is present: a signature-only client may now be persisted
         // (this also clears any token that outlived its row — see resolve_client()).
-        $client  = self::resolve_client( $client_id, true ) ?? $client;
+        $client  = $cimd ? $client : ( self::resolve_client( $client_id, true ) ?? $client );
         $clients = get_option( self::CLIENTS_OPTION, [] );
 
         if ( $is_post ) {
@@ -1554,6 +1583,20 @@ class Cowboy_MCP_OAuth {
                 $clients[ $client_id ] = $client;
                 update_option( self::CLIENTS_OPTION, $clients, false );
                 Cowboy_MCP_Auth::log( 'oauth_client_adopted', [ 'redirect_host' => (string) wp_parse_url( $redirect_uri, PHP_URL_HOST ) ] );
+            }
+            if ( $cimd ) {
+                // First write for a metadata-document client: the row exists only so the
+                // code exchange, refreshes, listing, revocation and scoping find it.
+                $clients = get_option( self::CLIENTS_OPTION, [] );
+                $fresh   = empty( $clients[ $client_id ] );
+                if ( $fresh && count( $clients ) >= self::MAX_CLIENTS ) {
+                    $clients = self::prune_unused_clients( $clients );
+                }
+                $clients[ $client_id ] = array_merge( (array) ( $clients[ $client_id ] ?? [] ), $client );
+                update_option( self::CLIENTS_OPTION, $clients, false );
+                if ( $fresh ) {
+                    Cowboy_MCP_Auth::log( 'oauth_client_cimd', [ 'args' => [ 'client_name' => $client['client_name'], 'host' => (string) wp_parse_url( $client_id, PHP_URL_HOST ) ] ] );
+                }
             }
 
             $code = self::issue_authorization_code( [
@@ -1584,7 +1627,7 @@ class Cowboy_MCP_OAuth {
             update_option( self::CLIENTS_OPTION, $clients, false );
 
             $sep = ( strpos( $redirect_uri, '?' ) === false ) ? '?' : '&';
-            $loc = $redirect_uri . $sep . http_build_query( [ 'code' => $code, 'state' => $state ] );
+            $loc = $redirect_uri . $sep . http_build_query( [ 'code' => $code, 'state' => $state, 'iss' => self::issuer() ] );
             wp_redirect( $loc ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- redirect_uri validated against the registered client
             exit;
         }
@@ -1603,9 +1646,29 @@ class Cowboy_MCP_OAuth {
 
     private static function authorize_redirect_error( string $redirect_uri, string $state, string $error, string $desc ): void {
         $sep = ( strpos( $redirect_uri, '?' ) === false ) ? '?' : '&';
-        $loc = $redirect_uri . $sep . http_build_query( [ 'error' => $error, 'error_description' => $desc, 'state' => $state ] );
+        $loc = $redirect_uri . $sep . http_build_query( [ 'error' => $error, 'error_description' => $desc, 'state' => $state, 'iss' => self::issuer() ] );
         wp_redirect( $loc ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- redirect_uri validated against the registered client
         exit;
+    }
+
+    /** Administrator-facing explanation for a rejected Client ID Metadata Document. */
+    private static function cimd_error_message( WP_Error $e, string $client_id ): string {
+        $host = (string) wp_parse_url( $client_id, PHP_URL_HOST );
+        switch ( $e->get_error_code() ) {
+            case 'cimd_host':
+                /* translators: %s: host name */
+                return sprintf( __( 'This app identifies itself with a document hosted on %s, which is not a known AI-app host on this site. If you trust that app, an administrator can add its host under Settings > Cowboy MCP > Settings > Browser sign-in.', 'cowboy-mcp' ), $host );
+            case 'cimd_ssrf':
+                /* translators: %s: host name */
+                return sprintf( __( 'This app\'s identity document on %s points to a private or unreachable address, so it was not fetched.', 'cowboy-mcp' ), $host );
+            case 'cimd_fetch':
+            case 'cimd_status':
+                /* translators: %s: host name */
+                return sprintf( __( 'This site could not download the app\'s identity document from %s. Check that the site can make outbound HTTPS requests, then start the connection again from your AI app.', 'cowboy-mcp' ), $host );
+            default:
+                /* translators: %s: host name */
+                return sprintf( __( 'The app\'s identity document on %s is invalid, so this connection was refused. Start the connection again from your AI app; if it keeps failing, the app vendor has to fix the document.', 'cowboy-mcp' ), $host );
+        }
     }
 
     /** Render a minimal standalone error page (not the admin settings page). */
@@ -1678,7 +1741,14 @@ wp_print_styles( 'cowboy-mcp-oauth-consent' );
     /* translators: %s: host name of the address the browser is sent to after approval, e.g. chatgpt.com */
     printf( esc_html__( 'After you approve, you will be sent to %s', 'cowboy-mcp' ), '<strong>' . esc_html( $dest_host ) . '</strong>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
  ?></div>
+ <?php if ( ! empty( $client['cimd'] ) ) : ?>
+ <p class="muted note"><?php
+    /* translators: %s: host name the identity document was fetched from, e.g. claude.ai */
+    printf( esc_html__( 'Identity published by %s. Approve only if you just started this connection yourself.', 'cowboy-mcp' ), '<strong>' . esc_html( (string) wp_parse_url( (string) $client['client_id'], PHP_URL_HOST ) ) . '</strong>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+ ?></p>
+ <?php else : ?>
  <p class="muted note"><?php esc_html_e( 'The app name above is supplied by the app and is not verified. Approve only if you just started this connection yourself.', 'cowboy-mcp' ); ?></p>
+ <?php endif; ?>
  <?php if ( ! empty( $client['rehydrated'] ) ) : ?>
  <p class="muted note"><?php esc_html_e( 'This site has no stored record of this connection. That is normal after a database restore or a staging sync. If you did not just start this from your AI app, choose Deny.', 'cowboy-mcp' ); ?></p>
  <?php elseif ( ! empty( $client['adopted'] ) && empty( get_option( self::CLIENTS_OPTION, [] )[ $client['client_id'] ] ) ) : ?>
