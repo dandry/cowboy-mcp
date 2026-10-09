@@ -95,11 +95,10 @@ class Cowboy_MCP_Doctor {
 		// https
 		if ( $is_https ) {
 			$out[] = self::result( 'https', 'Site uses HTTPS', 'pass', 'Site address uses https.', [ 'home_url: ' . home_url() ] );
-		} elseif ( $local && ! $oauth_on ) {
-			// Plain http on a local dev site is normal; terminal clients on the
-			// same machine do not need TLS. Cloud-connector intent (oauth_on)
-			// keeps the hard requirement.
-			$out[] = self::result( 'https', 'Site uses HTTPS', 'pass', 'Site address uses plain http - normal for a local development site.', [ 'home_url: ' . home_url() ] );
+		} elseif ( $local ) {
+			// Plain http on a local dev site is normal: loopback OAuth and API keys
+			// work without TLS for terminal and IDE tools on the same machine.
+			$out[] = self::result( 'https', 'Site uses HTTPS', 'pass', 'Site address uses plain http - normal for a local development site. Terminal and IDE tools on this computer sign in fine; claude.ai and ChatGPT need public HTTPS.', [ 'home_url: ' . home_url() ] );
 		} else {
 			$out[] = self::result(
 				'https',
@@ -135,29 +134,30 @@ class Cowboy_MCP_Doctor {
 			'' !== $pretty ? null : 'Set any pretty structure under Settings > Permalinks. API-key clients can fall back to ?rest_route=, but OAuth discovery needs /wp-json/ to resolve.'
 		);
 
-		// api_keys
-		$has_keys = count( Cowboy_MCP_Auth::list_keys() ) > 0;
-		$out[]    = self::result(
-			'api_keys',
-			'At least one API key exists',
-			$has_keys ? 'pass' : 'warn',
-			$has_keys ? 'API key(s) present.' : 'No API keys generated yet.',
+		// credentials - API keys or OAuth connections (OAuth-first terminal clients may never mint a key)
+		$has_keys  = count( Cowboy_MCP_Auth::list_keys() ) > 0;
+		$has_oauth = $oauth_on && class_exists( 'Cowboy_MCP_OAuth' ) && count( Cowboy_MCP_OAuth::list_connections() ) > 0;
+		$out[]     = self::result(
+			'credentials',
+			'At least one credential exists',
+			( $has_keys || $has_oauth ) ? 'pass' : 'warn',
+			$has_keys && $has_oauth ? 'API key(s) and OAuth connection(s) present.' : ( $has_keys ? 'API key(s) present.' : ( $has_oauth ? 'OAuth connection(s) present.' : 'No API keys or OAuth connections yet.' ) ),
 			[],
 			null,
-			$has_keys ? null : 'Generate a key on the Connections tab, or use the OAuth Desktop Connector instead.'
+			( $has_keys || $has_oauth ) ? null : 'Pick an app on the Connections tab: terminal and IDE tools sign in with OAuth from the command shown; API keys are the fallback for headless use.'
 		);
 
 		// oauth_prereqs
 		if ( $oauth_on ) {
-			$ok    = $is_https && ! $local;
-			$out[] = self::result(
+			$public = $is_https && ! $local;
+			$out[]  = self::result(
 				'oauth_prereqs',
 				'OAuth connector prerequisites',
-				$ok ? 'pass' : 'fail',
-				$ok ? 'Desktop Connector prerequisites met (public HTTPS).' : 'Desktop Connector is enabled but the site is not public HTTPS.',
+				$public ? 'pass' : 'warn',
+				$public ? 'Connector prerequisites met (public HTTPS).' : 'Connector is on but the site is not on a public HTTPS address. Terminal and IDE tools on this computer can sign in; claude.ai and ChatGPT cannot reach this site.',
 				[],
 				null,
-				$ok ? null : 'The Desktop Connector requires a public HTTPS hostname. Fix the checks above or disable the connector.'
+				$public ? null : 'For claude.ai or ChatGPT, host the site on a public HTTPS address or use a tunnel/staging URL. Nothing to do for terminal tools.'
 			);
 		} else {
 			$out[] = self::result( 'oauth_prereqs', 'OAuth connector prerequisites', 'skip', 'Desktop Connector is disabled - connector checks skipped.' );
