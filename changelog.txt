@@ -3,6 +3,13 @@
 Full version history for Cowboy MCP. The readme.txt lists the most recent
 release; older entries are kept here.
 
+= 1.7.2 =
+* Claude Code, Codex, Gemini CLI and Opencode now connect with a sign-in in your browser - no API key to copy. The key stays available for headless and CI use.
+* Add to Cursor and Install in VS Code buttons on the Connections tab.
+* The live Connected confirmation now works for every app and names the one that connected.
+* Fixed Cursor desktop failing to sign in (its callback address is now accepted), and sign-ins from apps that write the server address with a trailing slash.
+* Connection Doctor no longer flags local development sites that sign in terminal tools over plain http, and counts OAuth connections as credentials.
+
 = 1.7.1 =
 * Fix: resolved a bug where restoring a checkpoint could alter values containing % signs (permalinks, page-builder data). Restores now keep every value exactly as saved and are verified against the checkpoint before they replace your data.
 * Fix: media uploads are now fully self-sufficient, with no dependency on other plugins or WordPress admin files.

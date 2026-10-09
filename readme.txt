@@ -5,7 +5,7 @@ Tags: mcp, ai-agent, model-context-protocol, claude, claude-code
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,11 +74,14 @@ Plus 17 read-only MCP resources, 4 resource templates and 8 guided workflow prom
 
 = Connect Claude Code to WordPress =
 
-Generate an API key under **Settings > Cowboy MCP**, then run one command in your terminal:
+Run two lines in your terminal - no key to copy:
 
-    claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"
+    claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
+    claude mcp login your-site
 
-The Connections tab shows this command pre-filled with your site's endpoint.
+The Connections tab has these ready to copy and switches on sign-in for your site.
+
+Headless or CI? Use an API key from the Connections tab: `claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"`.
 
 = Connect Claude to WordPress (claude.ai and Claude Desktop) =
 
@@ -90,13 +93,17 @@ ChatGPT connects with the same one-click sign-in. You need ChatGPT on the web wi
 
 1. On your site, turn on the **Desktop Connector** under **Settings > Cowboy MCP**, open the ChatGPT panel on the Connections tab and copy your connection link. If "New connections" shows as disabled there, click **Enable for 30 minutes**.
 2. In ChatGPT, open **Settings > Security and login** and turn on **Developer mode**. On Business and Enterprise workspaces an admin has to allow Developer mode first.
-3. Go to **Plugins**, click **+** and choose **Create MCP App**. Paste your connection link as the MCP server URL and choose **OAuth**.
+3. Go to **Plugins**, click **+** and choose **Add custom MCP server**. Paste your connection link as the MCP server URL and choose **OAuth**.
 4. ChatGPT opens a sign-in page on your site. Review it and click **Approve**.
 5. In a chat, open the **+** menu, pick **Developer mode** and select your site.
 
-= Connect Cursor, VS Code and GitHub Copilot, Windsurf, Cline and Zed =
+= Connect Cursor and VS Code =
 
-Add one block to your editor's MCP config (for Cursor, `~/.cursor/mcp.json`), then restart the editor:
+Click **Add to Cursor** or **Install in VS Code** on the Connections tab, then sign in in your browser. By hand: Cursor `~/.cursor/mcp.json` `{"mcpServers":{"your-site":{"url":"https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint"}}}`; VS Code `.vscode/mcp.json` `{"servers":{"your-site":{"type":"http","url":"https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint"}}}`.
+
+= Windsurf, Cline, Zed and other editors =
+
+Add one block to your editor's MCP config, then restart the editor:
 
     {
       "mcpServers": {
@@ -107,30 +114,33 @@ Add one block to your editor's MCP config (for Cursor, `~/.cursor/mcp.json`), th
       }
     }
 
-Windsurf (now Devin Desktop) uses the same block in `~/.config/devin/mcp_config.json`; Cline adds `"type": "streamableHttp"`; VS Code takes it in `.vscode/mcp.json` under `servers` with `"type": "http"`, for GitHub Copilot's agent mode; Zed takes `url` and `headers` under `context_servers`. Any Streamable HTTP client with a Bearer header works.
+Windsurf (now Devin Desktop) uses this block in `~/.config/devin/mcp_config.json`; Cline adds `"type": "streamableHttp"`; Zed takes `url` and `headers` under `context_servers`.
 
 = Connect Codex CLI =
 
-    export COWBOY_MCP_API_KEY="YOUR_API_KEY"
-    codex mcp add your-site --url https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --bearer-token-env-var COWBOY_MCP_API_KEY
+    codex mcp add your-site --url https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
 
-Codex reads the key at every start, so also add the `export` line to your shell profile (e.g. `~/.zshrc`).
+Codex opens your browser to sign in.
+
+Headless or CI? Add `--bearer-token-env-var COWBOY_MCP_API_KEY` and export your key in your shell profile.
 
 = Connect Gemini CLI =
 
-    gemini mcp add --scope user --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"
+    gemini mcp add -s user -t http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
+
+Then start `gemini` and run `/mcp auth your-site` to sign in.
 
 = n8n, Opencode and other MCP clients =
 
-Cowboy MCP is a standard Streamable HTTP MCP server (JSON-RPC 2.0). Point any MCP client - n8n, Opencode, LibreChat, your own agent - at `/wp-json/cowboy-mcp/v1/endpoint` with an `Authorization: Bearer` header. In Opencode, also set `"oauth": false` so it uses the key.
+Cowboy MCP is a standard Streamable HTTP MCP server (JSON-RPC 2.0). Point any MCP client - n8n, Opencode, LibreChat, your own agent - at `/wp-json/cowboy-mcp/v1/endpoint` with an `Authorization: Bearer` header. Opencode signs in with OAuth; set `"oauth": false` only for a key.
 
 = Local development sites =
 
-Local, Studio, MAMP, DevKinsta, wp-env, Docker - it works the same. Terminal tools connect with an API key, no public URL or tunnel needed; Claude Desktop uses the `mcp-remote` bridge shown on the Connections tab. Only claude.ai and ChatGPT need a public HTTPS address.
+Local, Studio, MAMP, DevKinsta, wp-env, Docker - it works the same. Terminal and IDE tools sign in on this computer - no public URL or tunnel; Claude Desktop uses the `mcp-remote` bridge shown on the Connections tab. Only claude.ai and ChatGPT need a public HTTPS address.
 
 = Secure by design: built for live sites =
 
-You are handing an AI real control, so Cowboy MCP is built to keep you in charge:
+Built to keep you in charge when an AI has real control:
 
 * **Safe mode** (on by default) - destructive tools refuse to run until the agent resends the call with explicit confirmation, with a preview of what would happen.
 * **Dry run** - every non-read-only tool accepts a dry-run flag that reports exactly what would change without touching anything.
@@ -148,8 +158,8 @@ You are handing an AI real control, so Cowboy MCP is built to keep you in charge
 * **Nothing in the middle.** Some WordPress MCP products route requests through their own cloud relay, meter actions in credits, or need a hosted account or paid plan. Cowboy MCP runs on your server, on any host: no account, no relay, no quota.
 * **Every tool is free.** Some plugins gate the useful tools - plugins, themes, the database, WooCommerce - behind a Pro licence. Cowboy MCP ships all of them, GPL-licensed, with no paid tier.
 * **Typed tools with undo, not a PHP shell.** Tools that let an agent execute arbitrary PHP are built for development copies. Cowboy MCP gives the agent typed tools wrapped in safe mode, dry run, undo and checkpoints, so it can be trusted on the site that pays the bills. (Want the comparison? See [Cowboy MCP vs Novamira](https://cowboymcp.com/compare/cowboy-mcp-vs-novamira).)
-* **A full safety net, not just an undo button.** Many MCP plugins now promise undo - often a time-limited token, or edits made on a duplicate first. Cowboy MCP adds a per-change journal with conflict detection, whole-database checkpoints, automatic restore of broken updates, dry run, safe mode and an always-on audit log - preview what will happen, see what did, reverse one change or all of them.
-* **A complete server today, wired into the official pieces.** The Abilities API and the official MCP adapter are a framework; Cowboy MCP is the turnkey server - install, generate a key, connect - and on WordPress 6.9+ it bridges both ways. Needs WordPress 6.2+, no Composer, Node.js or build step.
+* **A full safety net, not just an undo button.** Many MCP plugins now promise undo - often a time-limited token, or edits made on a duplicate first. Cowboy MCP adds a per-change journal with conflict detection, whole-database checkpoints, automatic restore of broken updates, dry run, safe mode and an always-on audit log.
+* **A complete server today, wired into the official pieces.** The Abilities API and the official MCP adapter are a framework; Cowboy MCP is the turnkey server - install and connect - and on WordPress 6.9+ it bridges both ways. Needs WordPress 6.2+, no Composer, Node.js or build step.
 
 Setup guides for every client, the security model and head-to-head comparisons live at [cowboymcp.com](https://cowboymcp.com).
 
@@ -187,11 +197,11 @@ A plugin that lets AI assistants act on your site through the Model Context Prot
 
 = How do I connect ChatGPT to my WordPress site? =
 
-Turn on the Desktop Connector in Cowboy MCP and copy your connection link from the ChatGPT panel on the Connections tab. In ChatGPT on the web, turn on **Developer mode** under **Settings > Security and login**, then go to **Plugins**, click **+ > Create MCP App**, paste the link and choose OAuth. Approve the sign-in on your site as an administrator, then pick **Developer mode** from the **+** menu in a chat. It needs a Plus, Pro, Business, Enterprise or Edu plan and a public HTTPS site.
+Turn on the Desktop Connector in Cowboy MCP and copy your connection link from the ChatGPT panel on the Connections tab. In ChatGPT on the web, turn on **Developer mode** under **Settings > Security and login**, then go to **Plugins**, click **+ > Add custom MCP server**, paste the link and choose OAuth. Approve the sign-in on your site as an administrator, then pick **Developer mode** from the **+** menu in a chat. It needs a Plus, Pro, Business, Enterprise or Edu plan and a public HTTPS site.
 
 = How do I connect Claude to my WordPress site? =
 
-For the Claude desktop and web apps, enable the Desktop Connector, click **Add to Claude** on the Connections tab and approve the one-click sign-in - no terminal needed. For Claude Code, generate an API key under **Settings > Cowboy MCP** and run the one-line command shown ready to copy on the Connections tab.
+For the Claude desktop and web apps, enable the Desktop Connector, click **Add to Claude** on the Connections tab and approve the one-click sign-in - no terminal needed. For Claude Code, run the two lines shown ready to copy on the Connections tab and sign in in your browser - no key to copy. For headless or CI use, generate an API key there instead.
 
 = Is it free? =
 
@@ -223,7 +233,7 @@ Yes. When The Events Calendar is active, your agent can create and edit events, 
 
 = Does it work on a local development site (Local, Studio, MAMP, DevKinsta)? =
 
-Yes. Terminal tools like Claude Code, Cursor, Codex and Gemini CLI run on the same computer as your local site, so they connect with an API key exactly like on a live site - no public URL needed. Claude Desktop connects through a small local bridge (`mcp-remote`); the Connections tab detects local sites and shows the ready-to-copy config. Only the cloud-side apps - claude.ai and ChatGPT - require a public HTTPS address, because they connect from the vendor's servers; a tunnel works for temporary testing, but be aware it exposes your whole dev site while it runs.
+Yes. Terminal tools like Claude Code, Cursor, Codex and Gemini CLI run on the same computer as your local site, so they sign in with OAuth in your browser - no public URL needed. An API key works too, for headless use. Claude Desktop connects through a small local bridge (`mcp-remote`); the Connections tab detects local sites and shows the ready-to-copy config. Only the cloud-side apps - claude.ai and ChatGPT - require a public HTTPS address, because they connect from the vendor's servers; a tunnel works for temporary testing, but be aware it exposes your whole dev site while it runs.
 
 = My host or Jetpack already offers MCP. Do I need this? =
 
@@ -275,12 +285,12 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 
 == Changelog ==
 
-= 1.7.1 =
-* Fix: resolved a bug where restoring a checkpoint could alter values containing % signs (permalinks, page-builder data). Restores now keep every value exactly as saved and are verified against the checkpoint before they replace your data.
-* Fix: media uploads are now fully self-sufficient, with no dependency on other plugins or WordPress admin files.
-* New: Cowboy MCP checks values restored by earlier versions and offers a one-click repair where needed (checkpointed and undoable).
-* New: the Connections tab shows when an app such as ChatGPT tries to connect while new connections are off, with the switch right there.
-* New: Add to Claude turns the connector on in the same click, a new Open ChatGPT button copies your link and opens ChatGPT, and the page confirms live when the app is connected.
+= 1.7.2 =
+* Claude Code, Codex, Gemini CLI and Opencode now connect with a sign-in in your browser - no API key to copy. The key stays available for headless and CI use.
+* Add to Cursor and Install in VS Code buttons on the Connections tab.
+* The live Connected confirmation now works for every app and names the one that connected.
+* Fixed Cursor desktop failing to sign in (its callback address is now accepted), and sign-ins from apps that write the server address with a trailing slash.
+* Connection Doctor no longer flags local development sites that sign in terminal tools over plain http, and counts OAuth connections as credentials.
 
 = Earlier versions =
 
