@@ -450,24 +450,20 @@
 	});
 	/* ── "New connections" countdown (Connections tab) ─────── */
 
-	( function() {
-		var els = document.querySelectorAll( '[data-mcp-lock-until]' );
+	// Ticks every "mm:ss left" on the page: the live status strip's "New connections open" note and the
+	// by-hand paths' "New connections are on" line. Re-run (cmcp:countdown) when a strip is inserted after a click.
+	function startCountdown() {
+		var els = document.querySelectorAll( '[data-mcp-lock-until]:not([data-mcp-ticking])' );
 		if ( ! els.length ) {
 			return;
 		}
+		Array.prototype.forEach.call( els, function( el ) { el.setAttribute( 'data-mcp-ticking', '1' ); } );
 		var first = els[ 0 ].textContent.split( ':' ),
 			skew  = Math.floor( Date.now() / 1000 ) - ( parseInt( els[ 0 ].getAttribute( 'data-mcp-lock-until' ), 10 ) - parseInt( first[ 0 ], 10 ) * 60 - parseInt( first[ 1 ], 10 ) );
 		function expire( el ) {
-			var gate = el.closest( '.mcp-conn-gate' ), l10n = window.cowboyMcpAdmin || {};
-			if ( ! gate ) {
-				return;
-			}
-			gate.classList.remove( 'mcp-conn-gate--on' );
-			gate.classList.add( 'mcp-conn-gate--off' );
-			var label = gate.querySelector( '.mcp-conn-gate-label' ), timer = gate.querySelector( '.mcp-conn-gate-timer' ), btn = gate.querySelector( 'button[name="cowboy_mcp_toggle_connections"]' );
-			if ( label ) { label.textContent = l10n.gateOff || 'New connections: disabled'; }
-			if ( timer ) { timer.remove(); }
-			if ( btn ) { btn.value = 'enable'; btn.textContent = l10n.gateEnable || 'Enable for 30 minutes'; btn.classList.add( 'cmcp-btn--primary' ); }
+			// The window closed on its own: drop the note; the next page load shows the switch again where it is needed.
+			var note = el.closest( '[data-cmcp-conn-open]' );
+			if ( note ) { note.remove(); }
 		}
 		function tick() {
 			var now = Math.floor( Date.now() / 1000 ) - skew, live = false;
@@ -486,7 +482,9 @@
 			}
 		}
 		setTimeout( tick, 1000 );
-	} )();
+	}
+	startCountdown();
+	document.addEventListener( 'cmcp:countdown', startCountdown );
 })();
 /* ── In-page confirmations: <form data-cmcp-confirm="…"> (replaces window.confirm) ── */
 ( function() {
@@ -899,6 +897,7 @@ document.addEventListener( 'click', function( e ) {
 					if ( ! lede ) { return; }
 					lede.parentNode.insertBefore( strip, lede );
 				}
+				document.dispatchEvent( new CustomEvent( 'cmcp:countdown' ) ); // the strip carries the window countdown
 				startWatch( strip );
 			} )
 			.catch( function() {} );

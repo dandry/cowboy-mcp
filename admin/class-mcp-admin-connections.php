@@ -133,11 +133,24 @@ class Cowboy_MCP_Admin_Connections {
         if ( ! $w ) {
             return;
         }
-        $st = self::connect_status( $w );
+        $st   = self::connect_status( $w );
+        $left = class_exists( 'Cowboy_MCP_OAuth' ) ? Cowboy_MCP_OAuth::registration_seconds_left() : 0;
         ?>
         <div class="cmcp-connect-status cmcp-connect-status--<?php echo esc_attr( $st['stage'] ); ?>" aria-live="polite" data-cmcp-connect-watch data-stage="<?php echo esc_attr( $st['stage'] ); ?>">
             <span class="cmcp-connect-status-text"><?php echo esc_html( self::connect_status_text( $st ) ); ?></span>
             <a class="cmcp-connect-status-refresh" href="<?php echo esc_url( Cowboy_MCP_Admin::url( [ 'tab' => 'connection' ] ) ); ?>" <?php echo 'connected' === $st['stage'] ? '' : 'hidden'; ?>><?php esc_html_e( 'Refresh list', 'cowboy-mcp' ); ?></a>
+            <?php if ( $left > 0 ) : // The New-connections window this click opened: visible only while it is open. ?>
+                <span class="cmcp-connect-status-window" data-cmcp-conn-open>
+                    <span><?php
+                        /* translators: %s: countdown such as 29:59 */
+                        printf( esc_html__( 'New connections open · %s left', 'cowboy-mcp' ), '<span data-mcp-lock-until="' . esc_attr( (string) ( time() + $left ) ) . '">' . esc_html( gmdate( 'i:s', $left ) ) . '</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped piecewise above.
+                    ?></span>
+                    <form method="post" class="mcp-inline-form">
+                        <?php wp_nonce_field( 'cowboy_mcp_toggle_connections' ); ?>
+                        <button type="submit" name="cowboy_mcp_toggle_connections" value="disable" class="cmcp-linkbtn"><?php esc_html_e( 'Turn off', 'cowboy-mcp' ); ?></button>
+                    </form>
+                </span>
+            <?php endif; ?>
         </div>
         <?php
     }
@@ -191,44 +204,70 @@ class Cowboy_MCP_Admin_Connections {
     }
 
     /**
-     * "New connections" switch (safety lock): the only time the connector accepts a
-     * registration from a new AI app. Rendered at the top of each OAuth client
-     * panel (claude.ai, Claude app, ChatGPT) once the connector is on - API-key
-     * tools never see it because they never register.
+     * "New connections" (the 30-minute DCR registration window). Every Add / Install / Copy action
+     * opens it itself (handle_actions() + ajax_start_connect()), so the normal flows never mention it.
+     * It is offered only where a person bypasses those buttons — the by-hand paths — and reported on
+     * the live status strip while it is open. CIMD clients (Claude Code, Codex) never need it.
      */
-    /** $quick: the panel offers "Add to Claude", which opens the window itself. $cli: a terminal/IDE panel whose Copy (Task 4) opens it. */
-    private static function render_connections_gate( bool $quick = false, bool $cli = false ): void {
+    private static function render_connections_first(): void {
         $settings = get_option( 'cowboy_mcp_settings', [] );
         if ( ! class_exists( 'Cowboy_MCP_OAuth' ) || empty( $settings['enabled'] ) || empty( $settings['oauth_enabled'] ) ) {
             return;
         }
         $left = Cowboy_MCP_OAuth::registration_seconds_left();
-        $on   = $left > 0;
+        if ( $left > 0 ) {
+            ?>
+            <p class="description cmcp-conn-first" data-cmcp-conn-open><?php
+                /* translators: %s: countdown such as 29:59 */
+                printf( esc_html__( 'New connections are on (%s left).', 'cowboy-mcp' ), '<span data-mcp-lock-until="' . esc_attr( (string) ( time() + $left ) ) . '">' . esc_html( gmdate( 'i:s', $left ) ) . '</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped piecewise above.
+            ?></p>
+            <?php
+            return;
+        }
         ?>
-        <div class="cmcp-gate mcp-conn-gate <?php echo $on ? 'mcp-conn-gate--on' : 'mcp-conn-gate--off'; ?>">
-                <form method="post" class="mcp-conn-gate-form">
-                    <?php wp_nonce_field( 'cowboy_mcp_toggle_connections' ); ?>
-                    <span class="mcp-conn-gate-status"><span class="cmcp-dot mcp-conn-gate-dot" aria-hidden="true"></span>
-                        <strong class="mcp-conn-gate-label"><?php echo $on ? esc_html__( 'New connections: enabled', 'cowboy-mcp' ) : esc_html__( 'New connections: disabled', 'cowboy-mcp' ); ?></strong>
-                        <?php if ( $on ) : ?>
-                            <span class="mcp-conn-gate-timer"><?php
-                                /* translators: %s: countdown such as 29:59 */
-                                printf( esc_html__( '%s left', 'cowboy-mcp' ), '<span data-mcp-lock-until="' . esc_attr( (string) ( time() + $left ) ) . '">' . esc_html( gmdate( 'i:s', $left ) ) . '</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                            ?></span>
-                        <?php endif; ?>
-                    </span>
-                    <button type="submit" name="cowboy_mcp_toggle_connections" value="<?php echo $on ? 'disable' : 'enable'; ?>" class="cmcp-btn <?php echo ( $on || $quick ) ? '' : 'cmcp-btn--primary'; ?>"><?php
-                        echo $on ? esc_html__( 'Disable now', 'cowboy-mcp' ) : esc_html__( 'Enable for 30 minutes', 'cowboy-mcp' );
-                    ?></button>
-                </form>
-                <p class="description"><?php
-                    echo $cli
-                        ? esc_html__( 'The Copy or Add button above turns this on for you. Adding it by hand? Enable it first. It switches itself off after 30 minutes, and connections that already exist keep working either way.', 'cowboy-mcp' )
-                        : ( $quick
-                        ? esc_html__( 'Add to Claude below turns this on for you. Adding it by hand? Enable it first. It switches itself off after 30 minutes, and connections that already exist keep working either way.', 'cowboy-mcp' )
-                        : esc_html__( 'Step one when adding ChatGPT or a Claude app: enable this, then add the app. It switches itself off after 30 minutes. API keys do not use it, and connections that already exist keep working either way.', 'cowboy-mcp' ) );
-                ?></p>
-        </div>
+        <form method="post" class="mcp-inline-form cmcp-conn-first">
+            <?php wp_nonce_field( 'cowboy_mcp_toggle_connections' ); ?>
+            <p><strong><?php esc_html_e( 'Turn on new connections first:', 'cowboy-mcp' ); ?></strong>
+            <button type="submit" name="cowboy_mcp_toggle_connections" value="enable" class="cmcp-btn cmcp-btn--sm"><?php esc_html_e( 'Enable for 30 minutes', 'cowboy-mcp' ); ?></button>
+            <span class="description"><?php esc_html_e( 'It switches itself off after 30 minutes.', 'cowboy-mcp' ); ?></span></p>
+        </form>
+        <?php
+    }
+
+    /** By-hand paths: the sign-in switch while it is off (turning it on also opens the window), else the New-connections switch while closed. */
+    private static function render_manual_prereq( bool $oauth_on ): void {
+        if ( ! $oauth_on ) {
+            self::render_enable_first();
+            return;
+        }
+        self::render_connections_first();
+    }
+
+    /** One callout for sites the cloud apps cannot reach (local, private or plain http); the sidebar hints already say which clients work locally. */
+    private static function render_unreachable_callout( string $slug ): void {
+        $text = ( 'chatgpt' === $slug )
+            ? __( 'This site does not appear to be on a public HTTPS address, so ChatGPT cannot reach it from OpenAI\'s cloud. Use a terminal tool from the sidebar instead, or set the WordPress Site Address to a tunnel or staging URL.', 'cowboy-mcp' )
+            : __( 'This site does not appear to be on a public HTTPS address, so the Claude apps cannot reach it from Anthropic\'s cloud. Use a terminal tool or Claude Desktop from the sidebar instead, or set the WordPress Site Address to a tunnel or staging URL.', 'cowboy-mcp' );
+        ?>
+        <div class="cmcp-callout"><p><?php echo esc_html( $text ); ?></p></div>
+        <?php
+    }
+
+    /** Collapsed under "Approve access": the re-connect hint, the plan notes and (public sites) the organization-wide install link. */
+    private static function render_claude_plan_details( bool $oauth_on, bool $org ): void {
+        ?>
+        <details class="mcp-local-details">
+            <summary><?php esc_html_e( 'Already added, or on a Team or Enterprise plan?', 'cowboy-mcp' ); ?></summary>
+            <div class="mcp-local-details-body">
+                <?php if ( ! $oauth_on ) { self::render_enable_first(); } ?>
+                <p><?php echo wp_kses( __( 'Already added? Claude reports that a connector with this URL already exists. Find it under <strong>Customize → Connectors</strong> and click <strong>Connect</strong>.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
+                <p><?php echo wp_kses( __( 'Custom connectors work on every Claude plan (Free is limited to one). On Team and Enterprise, an organization owner adds the connector first under <strong>Organization settings → Connectors</strong>; members then click <strong>Connect</strong>.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
+                <?php if ( $org ) : ?>
+                    <div class="cmcp-org-add"><?php esc_html_e( 'Organization owner on Team or Enterprise?', 'cowboy-mcp' ); ?>
+                        <?php self::render_add_to_claude_form( 'org', 'cmcp-linkbtn', __( 'Add it for your organization', 'cowboy-mcp' ) ); ?></div>
+                <?php endif; ?>
+            </div>
+        </details>
         <?php
     }
 
@@ -249,7 +288,7 @@ class Cowboy_MCP_Admin_Connections {
             return;
         }
         if ( $is_local ) {
-            self::render_local_oauth_guidance( $slug );
+            self::render_unreachable_callout( $slug );
             self::render_oauth_connector_flow( $slug, $endpoint, false );
             return;
         }
@@ -269,43 +308,26 @@ class Cowboy_MCP_Admin_Connections {
 
         // Whole sentences per client (not sprintf'd names) so translators get
         // complete, grammatical strings.
-        $warning_text = $is_chatgpt
-            ? __( '<strong>Heads up:</strong> this site does not appear to be on a public HTTPS address. ChatGPT connects from OpenAI\'s cloud, so it cannot reach local, private, or non-HTTPS sites. A terminal tool works here instead, or connect through a tunnel/staging URL.', 'cowboy-mcp' )
-            : __( '<strong>Heads up:</strong> this site does not appear to be on a public HTTPS address. The Claude apps connect from Anthropic\'s cloud, so they cannot reach local, private, or non-HTTPS sites. A terminal tool works here instead, or connect through a tunnel/staging URL.', 'cowboy-mcp' );
         $enable_text  = $is_chatgpt
             ? __( 'This opens a secure sign-in so ChatGPT can connect without a terminal. No access is granted until you approve it in your browser.', 'cowboy-mcp' )
             : __( 'This opens a secure sign-in so the Claude apps can connect without a terminal. No access is granted until you approve it in your browser.', 'cowboy-mcp' );
-        $paste_hint   = $is_chatgpt
-            ? __( "You'll paste this into ChatGPT in the next step.", 'cowboy-mcp' )
-            : __( "You'll paste this into Claude in the next step.", 'cowboy-mcp' );
         $step2_title  = match ( true ) {
             $is_chatgpt => __( 'Add it in ChatGPT', 'cowboy-mcp' ),
             $is_desktop => __( 'Add it in the Claude app', 'cowboy-mcp' ),
             default     => __( 'Add it on claude.ai', 'cowboy-mcp' ),
         };
         $approve_text = $is_chatgpt
-            ? __( 'ChatGPT opens a sign-in page on <strong>your site</strong>. Review what it is asking for and click <strong>Approve</strong>. To use it, open the <strong>+</strong> menu in a chat, choose <strong>Developer mode</strong> and select your site.', 'cowboy-mcp' )
-            : __( 'Claude opens a sign-in page on <strong>your site</strong>. Review what it is asking for and click <strong>Approve</strong>. To use it, click <strong>+</strong> in a chat, open <strong>Connectors</strong> and make sure your site is switched on.', 'cowboy-mcp' );
-        $plan_note    = $is_chatgpt
-            ? __( 'Requires a ChatGPT <strong>Plus, Pro, Business, Enterprise or Edu</strong> plan, on the web. On Business and Enterprise workspaces an admin has to allow Developer mode first.', 'cowboy-mcp' )
-            : __( 'Custom connectors work on every Claude plan (Free is limited to one). On Team and Enterprise, an organization owner adds the connector first under <strong>Organization settings → Connectors</strong>; members then click <strong>Connect</strong>.', 'cowboy-mcp' );
+            ? __( 'ChatGPT opens a sign-in page on <strong>your site</strong>. Click <strong>Approve</strong>, then pick your site under <strong>+ → Developer mode</strong> in a chat.', 'cowboy-mcp' )
+            : __( 'Claude opens a sign-in page on <strong>your site</strong>. Click <strong>Approve</strong>, then switch the connector on under <strong>+ → Connectors</strong> in a chat.', 'cowboy-mcp' );
 
-        if ( $show_warning && ! $reachable ) :
-            ?>
-            <div class="cmcp-callout"><p><?php
-                echo wp_kses( $warning_text, [ 'strong' => [] ] );
-            ?></p></div>
-            <?php
-        endif;
+        if ( $show_warning && ! $reachable ) {
+            self::render_unreachable_callout( $slug );
+        }
 
         // Claude's install link only works where Claude can reach the site: public HTTPS
         // (its dialog rejects http://, and it connects from Anthropic's cloud).
-        $quick = ! $is_chatgpt && $oauth_avail && $reachable;
+        $quick         = ! $is_chatgpt && $oauth_avail && $reachable;
         $chatgpt_quick = $is_chatgpt && $oauth_avail && $reachable;
-
-        if ( $oauth_on ) {
-            self::render_connections_gate( $quick );
-        }
 
         if ( ! $oauth_on && ! $quick && ! $chatgpt_quick ) :
             // Browsing never flips settings — enabling the connector is an explicit click.
@@ -328,19 +350,15 @@ class Cowboy_MCP_Admin_Connections {
                     <p><?php
                         echo wp_kses(
                             $is_desktop
-                                /* translators: %s: this site's MCP endpoint URL */
-                                ? sprintf( __( 'Opens claude.ai in a new tab with this site filled in, and turns on new connections for 30 minutes. Check the address is <code>%s</code>, then click <strong>Continue</strong> and <strong>Add</strong>. The connector then shows up in the Claude app too.', 'cowboy-mcp' ), esc_html( $endpoint ) )
-                                /* translators: %s: this site's MCP endpoint URL */
-                                : sprintf( __( 'Opens claude.ai in a new tab with this site filled in, and turns on new connections for 30 minutes. Check the address is <code>%s</code>, then click <strong>Continue</strong> and <strong>Add</strong>.', 'cowboy-mcp' ), esc_html( $endpoint ) ),
-                            [ 'code' => [], 'strong' => [] ]
+                                ? __( 'Opens claude.ai with this site filled in. Check the address, then click <strong>Continue</strong> and <strong>Add</strong>. The connector shows up in the Claude app too.', 'cowboy-mcp' )
+                                : __( 'Opens claude.ai with this site filled in. Check the address, then click <strong>Continue</strong> and <strong>Add</strong>.', 'cowboy-mcp' ),
+                            [ 'strong' => [] ]
                         );
                     ?></p>
-                    <p class="description"><?php echo wp_kses( __( 'Already added? Claude reports that a connector with this URL already exists. Find it under <strong>Customize → Connectors</strong> and click <strong>Connect</strong>.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
-                    <?php if ( ! $oauth_on ) { self::render_enable_first(); } ?>
                     <details class="mcp-local-details">
                         <summary><?php esc_html_e( 'Add it by hand instead', 'cowboy-mcp' ); ?></summary>
                         <div class="mcp-local-details-body">
-                            <?php if ( ! $oauth_on ) { self::render_enable_first(); } ?>
+                            <?php self::render_manual_prereq( $oauth_on ); ?>
                             <?php self::render_code( 'mcp-oauth-url-' . $slug, $endpoint, __( 'Connection link', 'cowboy-mcp' ), __( 'Copy connector URL', 'cowboy-mcp' ) ); ?>
                             <?php self::render_claude_manual_substeps( $is_desktop, true ); ?>
                         </div>
@@ -349,9 +367,7 @@ class Cowboy_MCP_Admin_Connections {
 
             <?php self::step_open( '2', __( 'Approve access', 'cowboy-mcp' ), '' ); ?>
                     <p><?php echo wp_kses( $approve_text, [ 'strong' => [] ] ); ?></p>
-                    <p class="description"><?php echo wp_kses( $plan_note, [ 'strong' => [] ] ); ?></p>
-                    <div class="description cmcp-org-add"><?php esc_html_e( 'Organization owner on Team or Enterprise?', 'cowboy-mcp' ); ?>
-                        <?php self::render_add_to_claude_form( 'org', 'cmcp-linkbtn', __( 'Add it for your organization', 'cowboy-mcp' ) ); ?></div>
+                    <?php self::render_claude_plan_details( $oauth_on, true ); ?>
             <?php self::step_close(); ?>
             <?php
             return;
@@ -367,15 +383,15 @@ class Cowboy_MCP_Admin_Connections {
                     ?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'cowboy-mcp' ); ?></span></button>
                 </form>
                 <p class="cmcp-copy-note" data-cmcp-copy-note hidden><?php esc_html_e( 'Connection link copied — paste it into ChatGPT as the MCP server URL.', 'cowboy-mcp' ); ?></p>
-                <p><?php esc_html_e( 'Copies your connection link, turns on new connections for 30 minutes and opens ChatGPT in a new tab.', 'cowboy-mcp' ); ?></p>
+                <p><?php esc_html_e( 'Copies your connection link and opens ChatGPT in a new tab.', 'cowboy-mcp' ); ?></p>
                 <details class="mcp-local-details">
                     <summary><?php esc_html_e( 'Copy the link yourself', 'cowboy-mcp' ); ?></summary>
-                    <div class="mcp-local-details-body"><?php if ( ! $oauth_on ) { self::render_enable_first(); } ?><?php self::render_code( 'mcp-oauth-url-' . $slug, $endpoint, __( 'Connection link', 'cowboy-mcp' ), __( 'Copy connector URL', 'cowboy-mcp' ) ); ?></div>
+                    <div class="mcp-local-details-body"><?php self::render_manual_prereq( $oauth_on ); ?><?php self::render_code( 'mcp-oauth-url-' . $slug, $endpoint, __( 'Connection link', 'cowboy-mcp' ), __( 'Copy connector URL', 'cowboy-mcp' ) ); ?></div>
                 </details>
         <?php self::step_close(); ?>
         <?php else : ?>
         <?php self::step_open( '1', __( 'Copy your connection link', 'cowboy-mcp' ), '' ); ?>
-                <p><?php echo esc_html( $paste_hint ); ?></p>
+                <?php self::render_manual_prereq( $oauth_on ); ?>
                 <?php self::render_code( 'mcp-oauth-url-' . $slug, $endpoint, __( 'Connection link', 'cowboy-mcp' ), __( 'Copy connector URL', 'cowboy-mcp' ) ); ?>
         <?php self::step_close(); ?>
         <?php endif; ?>
@@ -383,10 +399,10 @@ class Cowboy_MCP_Admin_Connections {
         <?php self::step_open( '2', $step2_title, '' ); ?>
                 <?php if ( $is_chatgpt ) : ?>
                     <ol class="mcp-substeps">
-                        <li><?php echo wp_kses( __( 'Go to <code>chatgpt.com</code> in your browser and sign in (MCP apps work on the web only).', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></li>
-                        <li><?php echo wp_kses( __( 'Go to <code>Settings → Security and login</code> and turn on <strong>Developer mode</strong> (one-time).', 'cowboy-mcp' ), [ 'code' => [], 'strong' => [] ] ); ?></li>
+                        <li><?php echo wp_kses( __( 'Go to <code>chatgpt.com</code> and sign in (MCP apps work on the web only).', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></li>
+                        <li><?php echo wp_kses( __( 'Under <code>Settings → Security and login</code>, turn on <strong>Developer mode</strong> (once).', 'cowboy-mcp' ), [ 'code' => [], 'strong' => [] ] ); ?></li>
                         <li><?php echo wp_kses( __( 'Go to <code>Plugins</code>, click <strong>+</strong> and choose <strong>Add custom MCP server</strong>.', 'cowboy-mcp' ), [ 'code' => [], 'strong' => [] ] ); ?></li>
-                        <li><?php echo wp_kses( __( 'Give it a name, paste the link from step 1 as the <strong>MCP server URL</strong>, set Authentication to <strong>OAuth</strong>, and create it.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
+                        <li><?php echo wp_kses( __( 'Name it, paste the link as the <strong>MCP server URL</strong>, set Authentication to <strong>OAuth</strong> and create it.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
                     </ol>
                 <?php else : ?>
                     <?php self::render_claude_manual_substeps( $is_desktop ); ?>
@@ -395,7 +411,14 @@ class Cowboy_MCP_Admin_Connections {
 
         <?php self::step_open( '3', __( 'Approve access', 'cowboy-mcp' ), '' ); ?>
                 <p><?php echo wp_kses( $approve_text, [ 'strong' => [] ] ); ?></p>
-                <p class="description"><?php echo wp_kses( $plan_note, [ 'strong' => [] ] ); ?></p>
+                <?php if ( $is_chatgpt ) : ?>
+                    <details class="mcp-local-details">
+                        <summary><?php esc_html_e( 'Which ChatGPT plans work?', 'cowboy-mcp' ); ?></summary>
+                        <div class="mcp-local-details-body"><p><?php echo wp_kses( __( 'Requires a ChatGPT <strong>Plus, Pro, Business, Enterprise or Edu</strong> plan, on the web. On Business and Enterprise workspaces an admin has to allow Developer mode first.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p></div>
+                    </details>
+                <?php else : ?>
+                    <?php self::render_claude_plan_details( $oauth_on, false ); ?>
+                <?php endif; ?>
         <?php self::step_close(); ?>
         <?php
     }
@@ -415,18 +438,20 @@ class Cowboy_MCP_Admin_Connections {
     private static function render_claude_manual_substeps( bool $is_desktop, bool $link_above = false ): void {
         ?>
         <ol class="mcp-substeps">
-            <?php if ( $is_desktop ) : ?>
-                <li><?php echo wp_kses( __( 'Open the <strong>Claude</strong> desktop app and sign in.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
-            <?php else : ?>
-                <li><?php echo wp_kses( __( 'Go to <code>claude.ai</code> in your browser and sign in.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></li>
-            <?php endif; ?>
-            <li><?php echo wp_kses( __( 'Go to <code>Customize → Connectors</code>.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></li>
+            <li><?php
+                echo wp_kses(
+                    $is_desktop
+                        ? __( 'In the <strong>Claude</strong> desktop app, go to <code>Customize → Connectors</code>.', 'cowboy-mcp' )
+                        : __( 'On <code>claude.ai</code>, go to <code>Customize → Connectors</code>.', 'cowboy-mcp' ),
+                    [ 'code' => [], 'strong' => [] ]
+                );
+            ?></li>
             <li><?php echo wp_kses( __( 'Click <strong>+ Add</strong>, then <strong>Add custom connector</strong>.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
             <li><?php
                 echo wp_kses(
                     $link_above
-                        ? __( 'Give it a name, paste the link above, click <strong>Continue</strong> and then <strong>Add</strong>. If Claude asks which OAuth client to use, choose <strong>Register automatically</strong>.', 'cowboy-mcp' )
-                        : __( 'Give it a name, paste the link from step 1, click <strong>Continue</strong> and then <strong>Add</strong>. If Claude asks which OAuth client to use, choose <strong>Register automatically</strong>.', 'cowboy-mcp' ),
+                        ? __( 'Name it, paste the link above, click <strong>Continue</strong> and then <strong>Add</strong>. If Claude asks which OAuth client to use, choose <strong>Register automatically</strong>.', 'cowboy-mcp' )
+                        : __( 'Name it, paste the link from step 1, click <strong>Continue</strong> and then <strong>Add</strong>. If Claude asks which OAuth client to use, choose <strong>Register automatically</strong>.', 'cowboy-mcp' ),
                     [ 'strong' => [] ]
                 );
             ?></li>
@@ -470,24 +495,6 @@ class Cowboy_MCP_Admin_Connections {
         return 'https://claude.ai/' . ( $org ? 'admin-settings/connectors' : 'customize/connectors' ) . '?' . $query;
     }
 
-    private static function render_local_oauth_guidance( string $slug ): void {
-        // Same two msgids the connector flow uses, so existing translations carry over.
-        $warning_text = ( 'chatgpt' === $slug )
-            ? __( '<strong>Heads up:</strong> this site does not appear to be on a public HTTPS address. ChatGPT connects from OpenAI\'s cloud, so it cannot reach local, private, or non-HTTPS sites. A terminal tool works here instead, or connect through a tunnel/staging URL.', 'cowboy-mcp' )
-            : __( '<strong>Heads up:</strong> this site does not appear to be on a public HTTPS address. The Claude apps connect from Anthropic\'s cloud, so they cannot reach local, private, or non-HTTPS sites. A terminal tool works here instead, or connect through a tunnel/staging URL.', 'cowboy-mcp' );
-        ?>
-        <div class="cmcp-callout"><p><?php echo wp_kses( $warning_text, [ 'strong' => [] ] ); ?></p></div>
-        <div class="mcp-local-guidance">
-            <p><strong><?php esc_html_e( 'What works on a local site:', 'cowboy-mcp' ); ?></strong></p>
-            <ul>
-                <li><?php echo wp_kses( __( '<strong>Terminal and IDE tools</strong> (Claude Code, Codex, Cursor, VS Code, Gemini CLI) — connect right now; the sign-in opens in your browser on this computer. Pick one in the sidebar.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
-                <li><?php echo wp_kses( __( '<strong>Claude Desktop</strong> — connects through a local bridge that runs on this computer. Pick it in the sidebar for instructions.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
-                <li><?php echo wp_kses( __( '<strong>claude.ai and ChatGPT</strong> — cloud-only: they need a public HTTPS address. A tunnel (e.g. ngrok or Cloudflare Tunnel) works temporarily, but it exposes your entire dev site to the internet while it runs, and the WordPress Site Address must be set to the tunnel URL for the sign-in to work.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
-            </ul>
-        </div>
-        <?php
-    }
-
     private static function render_desktop_bridge_flow( string $endpoint, array $keys, $new_key ): void {
         $host        = (string) wp_parse_url( home_url(), PHP_URL_HOST );
         $domain      = str_replace( '.', '-', $host );
@@ -501,21 +508,21 @@ class Cowboy_MCP_Admin_Connections {
             && Cowboy_MCP_Security::host_is_loopback_shaped( $host );
         ?>
         <div class="cmcp-callout cmcp-callout--info"><p><?php
-            echo wp_kses( __( 'This site runs on your computer, so the cloud connector cannot reach it. Connect Claude Desktop through a <strong>local bridge</strong> instead: a small helper that runs on this computer and forwards Claude Desktop to the site. It signs in in your browser like the terminal tools — no key to paste — and nothing is exposed to the internet.', 'cowboy-mcp' ), [ 'strong' => [] ] );
+            echo wp_kses( __( 'This site runs on your computer, so the cloud connector cannot reach it. Claude Desktop connects through a <strong>local bridge</strong> instead: the open-source <code>mcp-remote</code> package, started with <code>npx</code> (needs Node.js). It signs in in your browser, and nothing is exposed to the internet.', 'cowboy-mcp' ), [ 'strong' => [], 'code' => [] ] );
         ?></p></div>
         <?php self::step_open( '1', __( 'Add the bridge to Claude Desktop', 'cowboy-mcp' ), '' ); ?>
-                <p><?php esc_html_e( 'Run this in Terminal (macOS) or PowerShell (Windows), then fully quit and reopen the Claude app. It opens your browser to sign in the first time it connects.', 'cowboy-mcp' ); ?></p>
+                <p><?php esc_html_e( 'Run this in Terminal (macOS) or PowerShell (Windows), then fully quit and reopen the Claude app.', 'cowboy-mcp' ); ?></p>
                 <?php self::render_code( 'mcp-oauth-cmd-claude-desktop', self::bridge_command_snippet( $domain, $endpoint, '' ), __( 'terminal', 'cowboy-mcp' ), __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => 'claude-desktop', 'mode' => 'oauth' ] ); ?>
-                <p class="description"><?php echo wp_kses( __( 'Requires Node.js on this computer — the bridge is the standard open-source <code>mcp-remote</code> package, started on demand via <code>npx</code>. It connects only from your computer to this site.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
                 <?php
                 if ( $offer_http ) {
                     self::render_cert_error_details( 'claude-desktop', self::bridge_command_snippet( $domain, set_url_scheme( $endpoint, 'http' ), '' ), __( 'terminal', 'cowboy-mcp' ) );
                 }
                 ?>
+                <div class="cmcp-inline-sum">
                 <details class="mcp-local-details">
-                    <summary><?php esc_html_e( 'Prefer to edit the config file?', 'cowboy-mcp' ); ?></summary>
+                    <summary><?php esc_html_e( 'Edit the config file instead', 'cowboy-mcp' ); ?></summary>
                     <div class="mcp-local-details-body">
-                        <p><?php echo wp_kses( __( 'Add this to <code>claude_desktop_config.json</code> (create the file if it does not exist), then fully quit and restart the Claude app:', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                        <p><?php echo wp_kses( __( 'Add this to <code>claude_desktop_config.json</code>, then fully quit and reopen the Claude app.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
                         <?php self::render_code( 'mcp-oauth-cfg-claude-desktop', self::bridge_config_snippet( $domain, $endpoint, '' ), 'claude_desktop_config.json', __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => 'claude-desktop', 'mode' => 'oauth' ] ); ?>
                         <p class="description cmcp-os-paths">
                             <?php echo wp_kses( __( 'macOS: <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>', 'cowboy-mcp' ), [ 'code' => [] ] ); ?><br>
@@ -524,12 +531,13 @@ class Cowboy_MCP_Admin_Connections {
                     </div>
                 </details>
                 <details class="mcp-local-details cmcp-key-fallback" <?php echo $new_key ? 'open' : ''; ?>>
-                    <summary><?php esc_html_e( "Headless, CI, or a tool that can't open a browser? Use an API key instead", 'cowboy-mcp' ); ?></summary>
+                    <summary><?php esc_html_e( 'Use an API key instead', 'cowboy-mcp' ); ?></summary>
                     <div class="mcp-local-details-body cmcp-key-fallback-body">
+                        <p class="description"><?php esc_html_e( 'For headless setups, CI, or a tool that cannot open a browser.', 'cowboy-mcp' ); ?></p>
                         <?php self::render_key_step( 'claude-desktop', 'Claude Desktop', $new_key, $has_keys, 'a' ); ?>
                         <p><?php esc_html_e( 'Then run this instead, with the key in a header:', 'cowboy-mcp' ); ?></p>
                         <?php self::render_code( 'mcp-cmd-claude-desktop', self::bridge_command_snippet( $domain, $endpoint, $key_display ), __( 'terminal', 'cowboy-mcp' ), __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => 'claude-desktop', 'mode' => 'key' ] ); ?>
-                        <p class="description"><?php echo wp_kses( __( 'Your API key is stored in plain text in that file, so prefer a <strong>read-only</strong> key unless this connection needs to make changes — and revoke it here when you no longer use it.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
+                        <p class="description"><?php echo wp_kses( __( 'The key is stored in plain text in that file, so prefer a <strong>read-only</strong> key unless this connection needs to make changes, and revoke it here when you no longer use it.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
                         <?php
                         if ( $offer_http ) {
                             self::render_cert_error_details( 'claude-desktop-key', self::bridge_command_snippet( $domain, set_url_scheme( $endpoint, 'http' ), $key_display ), __( 'terminal', 'cowboy-mcp' ) );
@@ -537,12 +545,13 @@ class Cowboy_MCP_Admin_Connections {
                         ?>
                     </div>
                 </details>
+                </div>
         <?php self::step_close(); ?>
         <?php self::render_approve_step( $oauth_on ); ?>
         <?php self::step_open( '3', __( 'Check it worked', 'cowboy-mcp' ), '' ); ?>
                 <p><?php
                     /* translators: %s: the MCP server name shown in the client. */
-                    echo wp_kses( sprintf( __( 'Open a new chat in Claude Desktop and click the tools icon — <code>%s</code> should be listed. The first start can take a moment while the bridge downloads.', 'cowboy-mcp' ), esc_html( $domain ) ), [ 'code' => [] ] );
+                    echo wp_kses( sprintf( __( 'Open a new chat in Claude Desktop and click the tools icon — <code>%s</code> should be listed. The first start takes a moment while the bridge downloads.', 'cowboy-mcp' ), esc_html( $domain ) ), [ 'code' => [] ] );
                 ?></p>
         <?php self::step_close(); ?>
         <?php
@@ -584,7 +593,7 @@ class Cowboy_MCP_Admin_Connections {
         <details class="mcp-local-details">
             <summary><?php esc_html_e( 'Getting a certificate error?', 'cowboy-mcp' ); ?></summary>
             <div class="mcp-local-details-body">
-                <p><?php echo wp_kses( __( 'Local sites usually use a self-signed certificate that AI tools reject. Since this site runs on this same computer, you can use the plain <code>http://</code> address instead — the connection never leaves your machine. Avoid the <code>NODE_TLS_REJECT_UNAUTHORIZED=0</code> workaround you may see online: it disables certificate checks for everything that tool connects to.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                <p><?php echo wp_kses( __( 'Local sites usually use a self-signed certificate that AI tools reject. Since this site runs on this computer, use the plain <code>http://</code> address instead: the connection never leaves your machine. Avoid the <code>NODE_TLS_REJECT_UNAUTHORIZED=0</code> workaround: it disables certificate checks for everything that tool connects to.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
                 <?php self::render_code( $alt_id, $alt_snippet, $title, __( 'Copy setup command', 'cowboy-mcp' ) ); ?>
             </div>
         </details>
@@ -626,13 +635,15 @@ class Cowboy_MCP_Admin_Connections {
                 <p><?php echo $intro; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped per-branch above. ?></p>
                 <?php self::render_code( 'mcp-oauth-cmd-' . $slug, self::oauth_snippet( $slug, $domain, $endpoint ), __( 'terminal', 'cowboy-mcp' ), __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'oauth' ] ); ?>
                 <?php if ( 'claude-code' === $slug ) : ?>
-                    <p class="description"><?php echo wp_kses( __( 'Working over SSH? Add <code>--no-browser</code> to the second line and open the printed URL in a local browser.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                    <p class="description"><?php echo wp_kses( __( 'Over SSH? Add <code>--no-browser</code> to the second line and open the printed URL in a local browser.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
                 <?php endif; ?>
-                <?php self::render_file_fallback( $slug, $domain, $endpoint ); ?>
                 <?php if ( $is_local && 'https' === wp_parse_url( $endpoint, PHP_URL_SCHEME ) ) : ?>
-                    <p class="description"><?php echo wp_kses( __( 'Local https sites usually use a self-signed certificate that these tools reject. Either trust the certificate in your tool, or set the WordPress Site Address to the <code>http://</code> URL — the sign-in discovery addresses are built from it.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                    <p class="description"><?php echo wp_kses( __( 'Local https sites usually use a self-signed certificate that these tools reject: trust it in your tool, or set the WordPress Site Address to the <code>http://</code> URL.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
                 <?php endif; ?>
+                <div class="cmcp-inline-sum">
+                <?php self::render_file_fallback( $slug, $domain, $endpoint ); ?>
                 <?php self::render_key_fallback( $slug, $label, $keys, $endpoint, $new_key, $is_local ); ?>
+                </div>
         <?php self::step_close(); ?>
         <?php self::render_approve_step( $oauth_on, $slug ); ?>
         <?php self::render_verify_step_with_prompt( $slug, $domain ); ?>
@@ -648,8 +659,8 @@ class Cowboy_MCP_Admin_Connections {
         $cursor   = ( 'cursor' === $slug );
         $btn      = $cursor ? __( 'Add to Cursor', 'cowboy-mcp' ) : __( 'Install in VS Code', 'cowboy-mcp' );
         $after    = $cursor
-            ? __( 'Opens Cursor and asks you to add this site. Accept, then Cursor opens your browser to sign in.', 'cowboy-mcp' )
-            : __( 'Opens VS Code and asks you to add this site. Confirm, trust the server when asked, then VS Code opens your browser to sign in.', 'cowboy-mcp' );
+            ? __( 'Accept in Cursor. It opens your browser to sign in.', 'cowboy-mcp' )
+            : __( 'Confirm in VS Code and trust the server. It opens your browser to sign in.', 'cowboy-mcp' );
         ?>
         <?php self::step_open( '1', $btn, '' ); ?>
                 <p><a class="cmcp-btn cmcp-btn--primary cmcp-install" href="<?php echo esc_url( self::install_link( $slug, $domain, $endpoint ), [ 'https', 'cursor' ] ); ?>"<?php echo $cursor ? '' : ' target="_blank" rel="noopener"'; ?> data-cmcp-start="<?php echo esc_attr( $slug ); ?>" data-cmcp-mode="oauth"><?php
@@ -657,48 +668,40 @@ class Cowboy_MCP_Admin_Connections {
                     echo Cowboy_MCP_Admin::icon( 'external' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
                 ?></a></p>
                 <p><?php echo esc_html( $after ); ?></p>
-                <?php if ( $cursor ) : ?>
+                <div class="cmcp-inline-sum">
+                <?php if ( ! $cursor ) : ?>
                     <details class="mcp-local-details">
-                        <summary><?php esc_html_e( 'Add it by hand instead', 'cowboy-mcp' ); ?></summary>
-                        <div class="mcp-local-details-body">
-                            <p><?php
-                                /* translators: %s: config file path */
-                                echo wp_kses( sprintf( __( 'Add this to <code>%s</code> (create the file if it does not exist), then restart the editor. It signs in on first use.', 'cowboy-mcp' ), esc_html( self::file_title( $slug ) ) ), [ 'code' => [] ] );
-                            ?></p>
-                            <?php self::render_code( 'mcp-oauth-cfg-' . $slug, self::file_snippet( $slug, $domain, $endpoint ), self::file_title( $slug ), __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'oauth' ] ); ?>
-                        </div>
-                    </details>
-                <?php else : ?>
-                    <details class="mcp-local-details">
-                        <summary><?php esc_html_e( 'Prefer a command?', 'cowboy-mcp' ); ?></summary>
+                        <summary><?php esc_html_e( 'Use a command instead', 'cowboy-mcp' ); ?></summary>
                         <div class="mcp-local-details-body">
                             <p><?php echo wp_kses( __( 'Run this in your terminal (the <code>code</code> command ships with VS Code), then open Copilot Chat. It signs in on first use.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
                             <?php self::render_code( 'mcp-oauth-cli-' . $slug, self::oauth_snippet( $slug, $domain, $endpoint ), __( 'terminal', 'cowboy-mcp' ), __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'oauth' ] ); ?>
                         </div>
                     </details>
-                    <?php self::render_file_fallback( $slug, $domain, $endpoint ); ?>
                 <?php endif; ?>
+                <?php self::render_file_fallback( $slug, $domain, $endpoint, $cursor ? __( 'Add this to <code>%s</code>, then restart Cursor. It signs in on first use.', 'cowboy-mcp' ) : '' ); ?>
                 <?php self::render_key_fallback( $slug, $label, $keys, $endpoint, $new_key, $is_local ); ?>
+                </div>
         <?php self::step_close(); ?>
         <?php self::render_approve_step( $oauth_on ); ?>
         <?php self::render_verify_step_with_prompt( $slug, $domain ); ?>
         <?php
     }
 
-    /** Collapsed "edit the file instead" fallback under a command (clients with a config file). */
-    private static function render_file_fallback( string $slug, string $domain, string $endpoint ): void {
+    /** Collapsed "edit the file instead" fallback under a command (clients with a config file). $text: an optional sprintf template with %s = file path. */
+    private static function render_file_fallback( string $slug, string $domain, string $endpoint, string $text = '' ): void {
         $file = self::file_title( $slug );
         if ( '' === $file || '' === self::file_snippet( $slug, $domain, $endpoint ) ) {
             return;
         }
+        if ( '' === $text ) {
+            /* translators: %s: config file path */
+            $text = __( 'Add this to <code>%s</code>, then restart the app. It signs in on first use.', 'cowboy-mcp' );
+        }
         ?>
         <details class="mcp-local-details">
-            <summary><?php esc_html_e( 'Prefer to edit the config file?', 'cowboy-mcp' ); ?></summary>
+            <summary><?php esc_html_e( 'Edit the config file instead', 'cowboy-mcp' ); ?></summary>
             <div class="mcp-local-details-body">
-                <p><?php
-                    /* translators: %s: config file path */
-                    echo wp_kses( sprintf( __( 'Add this to <code>%s</code> (create the file if it does not exist), then restart the app. It signs in on first use.', 'cowboy-mcp' ), esc_html( $file ) ), [ 'code' => [] ] );
-                ?></p>
+                <p><?php echo wp_kses( sprintf( $text, esc_html( $file ) ), [ 'code' => [] ] ); ?></p>
                 <?php self::render_code( 'mcp-oauth-cfg-' . $slug, self::file_snippet( $slug, $domain, $endpoint ), $file, __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'oauth' ] ); ?>
             </div>
         </details>
@@ -706,26 +709,13 @@ class Cowboy_MCP_Admin_Connections {
     }
 
     /**
-     * Step 2 for every OAuth terminal/IDE client. DCR clients get the New-connections gate
-     * while the connector is on; CIMD clients (registry 'cimd') never need it.
+     * Step 2 for every OAuth terminal/IDE client: one sentence. The New-connections window is opened by
+     * the Copy / Add / Install click itself, so it is not mentioned here (see render_connections_first()).
      */
     private static function render_approve_step( bool $oauth_on, string $slug = '' ): void {
-        $cimd = ! empty( self::client_registry()[ $slug ]['cimd'] );
         ?>
         <?php self::step_open( '2', __( 'Approve access', 'cowboy-mcp' ), '' ); ?>
-                <p><?php echo wp_kses( __( 'A sign-in page opens on <strong>your site</strong>. Review what it is asking for, pick the access level and click <strong>Approve</strong>. You are back in your tool a moment later.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
-                <?php
-                if ( $cimd ) {
-                    ?>
-                    <p class="description"><?php
-                        /* translators: 1: AI app name, 2: host that publishes its identity document, e.g. claude.ai */
-                        echo esc_html( sprintf( __( '%1$s identifies itself with a document published by %2$s, so it needs no "New connections" switch — the sign-in page shows that identity.', 'cowboy-mcp' ), self::client_registry()[ $slug ]['label'] ?? $slug, 'codex' === $slug ? 'chatgpt.com' : 'claude.ai' ) );
-                    ?></p>
-                    <?php
-                } elseif ( $oauth_on ) {
-                    self::render_connections_gate( true, true );
-                }
-                ?>
+                <p><?php echo wp_kses( __( 'A sign-in page opens on <strong>your site</strong>. Pick the access level and click <strong>Approve</strong>.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
         <?php self::step_close(); ?>
         <?php
     }
@@ -739,7 +729,7 @@ class Cowboy_MCP_Admin_Connections {
         <?php
     }
 
-    /** API-key fallback for OAuth-first clients: the old key step + header snippet, collapsed. */
+    /** API-key fallback for OAuth-first clients: the key step + header snippet, collapsed. */
     private static function render_key_fallback( string $slug, string $label, array $keys, string $endpoint, $new_key, bool $is_local ): void {
         $host        = (string) wp_parse_url( home_url(), PHP_URL_HOST );
         $domain      = str_replace( '.', '-', $host );
@@ -747,8 +737,9 @@ class Cowboy_MCP_Admin_Connections {
         $offer_http  = $is_local && 'https' === wp_parse_url( $endpoint, PHP_URL_SCHEME ) && Cowboy_MCP_Security::host_is_loopback_shaped( $host );
         ?>
         <details class="mcp-local-details cmcp-key-fallback" <?php echo $new_key ? 'open' : ''; ?>>
-            <summary><?php esc_html_e( "Headless, CI, or a tool that can't open a browser? Use an API key instead", 'cowboy-mcp' ); ?></summary>
+            <summary><?php esc_html_e( 'Use an API key instead', 'cowboy-mcp' ); ?></summary>
             <div class="mcp-local-details-body cmcp-key-fallback-body">
+                <p class="description"><?php esc_html_e( 'For headless setups, CI, or a tool that cannot open a browser.', 'cowboy-mcp' ); ?></p>
                 <?php self::render_key_step( $slug, $label, $new_key, ! empty( $keys ), 'a' ); ?>
                 <p><?php esc_html_e( 'Then add the server with the key in a header:', 'cowboy-mcp' ); ?></p>
                 <?php self::render_code( 'mcp-cmd-' . $slug, self::install_snippet( $slug, $domain, $endpoint, $key_display ), self::snippet_title( $slug ), __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'key' ] ); ?>
@@ -925,7 +916,7 @@ class Cowboy_MCP_Admin_Connections {
     private static function render_verify_step( string $slug, string $domain ): void {
         $text = match ( $slug ) {
             /* translators: %s: the MCP server name shown in the client. */
-            'claude-code' => sprintf( __( 'Open a new Claude Code session and run <code>/mcp</code> — <code>%s</code> should be listed as connected.', 'cowboy-mcp' ), esc_html( $domain ) ),
+            'claude-code' => sprintf( __( 'Run <code>/mcp</code> in a new Claude Code session — <code>%s</code> should be listed as connected.', 'cowboy-mcp' ), esc_html( $domain ) ),
             /* translators: %s: the MCP server name shown in the client. */
             'codex'       => sprintf( __( 'Start Codex and run <code>/mcp</code> — <code>%s</code> should be listed with its tools.', 'cowboy-mcp' ), esc_html( $domain ) ),
             /* translators: %s: the MCP server name shown in the client. */
@@ -940,13 +931,21 @@ class Cowboy_MCP_Admin_Connections {
         };
         ?>
         <?php self::step_open( '3', __( 'Check it worked', 'cowboy-mcp' ), '' ); ?>
-                <p><?php echo wp_kses( $text, [ 'code' => [] ] ); ?></p>
-                <p class="description"><?php esc_html_e( 'Then try a read-only prompt:', 'cowboy-mcp' ); ?></p>
+                <p><?php echo wp_kses( $text, [ 'code' => [] ] ); ?> <?php esc_html_e( 'Then try:', 'cowboy-mcp' ); ?></p>
                 <?php
                 /* translators: %s: the MCP server name shown in the client. */
-                self::render_code( 'mcp-prompt-' . $slug, sprintf( __( "Using %s, tell me this site's name and WordPress version. Don't change anything.", 'cowboy-mcp' ), $domain ), __( 'prompt', 'cowboy-mcp' ), __( 'Copy prompt', 'cowboy-mcp' ) );
+                self::render_chip( 'mcp-prompt-' . $slug, sprintf( __( "Using %s, tell me this site's name and WordPress version. Don't change anything.", 'cowboy-mcp' ), $domain ), __( 'Copy prompt', 'cowboy-mcp' ) );
                 ?>
         <?php self::step_close(); ?>
+        <?php
+    }
+
+    /** One-line copyable text (the test prompt) — lighter than a terminal block. */
+    private static function render_chip( string $id, string $text, string $copy_label ): void {
+        ?>
+        <div class="cmcp-chip"><code id="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $text ); ?></code><button type="button" class="cmcp-icon-btn mcp-copy-btn" data-copy-target="<?php echo esc_attr( $id ); ?>" data-cmcp-icon aria-label="<?php echo esc_attr( $copy_label ); ?>"><?php
+            echo Cowboy_MCP_Admin::icon( 'copy' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG literal.
+        ?></button></div>
         <?php
     }
 

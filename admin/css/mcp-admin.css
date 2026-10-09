@@ -152,12 +152,14 @@ tr.cmcp-panel-row td { padding: 0 18px 14px; background: #fff; }
 .wrap.cmcp .cmcp-placeholder h3 { color: var(--cmcp-text); font-size: 15px; margin: 0 0 4px; }
 .cmcp-steps-head h3 { margin: 14px 0 6px; font-size: 16px; font-weight: 600; }
 .cmcp-step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid var(--cmcp-border); }
-.cmcp-steps-head + .cmcp-step, .cmcp-callout + .cmcp-step, .cmcp-gate + .cmcp-step { border-top: 0; }
+.cmcp-steps-head + .cmcp-step, .cmcp-callout + .cmcp-step { border-top: 0; }
 .cmcp-num { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--cmcp-border-strong); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: var(--cmcp-muted); background: var(--cmcp-surface); }
 .cmcp-step--done .cmcp-num { background: var(--cmcp-ok-bg); border-color: var(--cmcp-ok-border); color: var(--cmcp-ok); }
 .cmcp-step-body { min-width: 0; }
 .wrap.cmcp .cmcp-step-title { margin: 2px 0; font-size: 14px; font-weight: 600; }
-.cmcp-step-body > p { margin: 0 0 10px; color: var(--cmcp-muted); }
+/* Instructions read in the full text colour; .description lines (asides) and collapsed options stay quieter. */
+.cmcp-step-body > p { margin: 0 0 10px; color: var(--cmcp-text); }
+.wrap.cmcp .cmcp-step-body > p.description { color: var(--cmcp-muted); font-size: 13px; }
 .cmcp-step-body p code, .cmcp-step-body li code, .cmcp-callout code { font-size: 12.5px; background: #efefeb; border-radius: 4px; padding: 1px 5px; }
 .cmcp-term-wrap { border-radius: var(--cmcp-radius-sm); overflow: hidden; background: var(--cmcp-code-bg); margin: 4px 0 8px; }
 .cmcp-term-bar { display: flex; align-items: center; gap: 8px; height: 32px; padding-block: 0; padding-inline: 12px 6px; border-bottom: 1px solid #1d2a20; font-size: 12px; color: var(--cmcp-code-dim); font-family: var(--cmcp-mono); }
@@ -170,21 +172,26 @@ tr.cmcp-panel-row td { padding: 0 18px 14px; background: #fff; }
 .wrap.cmcp pre.cmcp-term { background: var(--cmcp-code-bg); color: var(--cmcp-code-text); font-family: var(--cmcp-mono); font-size: 13px; line-height: 1.6; padding: 12px 14px; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
 .cmcp-keybox { border: 1px solid var(--cmcp-ok-border); background: var(--cmcp-ok-bg); border-radius: var(--cmcp-radius-sm); padding: 10px 12px; }
 .cmcp-keybox-note { margin: 0 0 8px; color: var(--cmcp-ok); }
-.cmcp-gate { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1px solid var(--cmcp-border); border-radius: var(--cmcp-radius-sm); background: var(--cmcp-surface-2); margin: 8px 0; }
-.cmcp-gate .mcp-conn-gate-form { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.cmcp-gate .mcp-conn-gate-status { display: inline-flex; align-items: center; gap: 8px; }
-.cmcp-gate.mcp-conn-gate--off .cmcp-dot { background: #d93a2f; box-shadow: 0 0 0 3px rgba(217,58,47,.14); }
-.cmcp-gate .mcp-conn-gate-timer { color: var(--cmcp-muted); font-variant-numeric: tabular-nums; }
-.cmcp-gate .description { margin: 0; }
+/* "New connections" on the by-hand paths only: one line, not a box. */
+.wrap.cmcp .cmcp-conn-first { margin: 0 0 10px; }
+.wrap.cmcp .cmcp-conn-first p { margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.wrap.cmcp .cmcp-conn-first [data-mcp-lock-until] { font-variant-numeric: tabular-nums; }
+/* The test prompt: a copyable line instead of a terminal block. */
+.cmcp-chip { display: flex; align-items: flex-start; gap: 8px; border: 1px solid var(--cmcp-border); border-radius: var(--cmcp-radius-sm); background: var(--cmcp-surface-2); padding: 6px 6px 6px 10px; margin: 6px 0 0; max-width: 72ch; }
+.wrap.cmcp .cmcp-chip code { display: block; flex: 1 1 auto; min-width: 0; font-size: 12.5px; line-height: 1.5; background: none; padding: 1px 0; color: var(--cmcp-text); overflow-wrap: anywhere; }
+/* The "… instead" options sit on one row; an open one takes the full width. */
+.cmcp-inline-sum { display: flex; gap: 12px; flex-wrap: wrap; }
+.wrap.cmcp .cmcp-inline-sum .mcp-local-details { margin: 6px 0 0; }
+.wrap.cmcp .cmcp-inline-sum .mcp-local-details[open] { flex-basis: 100%; }
 .cmcp-step-body .mcp-substeps { margin: 4px 0 0; padding: 0; counter-reset: cmcpsub; list-style: none; }
 .cmcp-step-body .mcp-substeps li { position: relative; padding-block: 4px; padding-inline: 28px 0; color: var(--cmcp-text); }
 .cmcp-step-body .mcp-substeps li::before { counter-increment: cmcpsub; content: counter(cmcpsub); position: absolute; inset-inline-start: 0; top: 5px; width: 19px; height: 19px; border-radius: 50%; border: 1px solid var(--cmcp-border-strong); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; color: var(--cmcp-muted); }
 .wrap.cmcp .mcp-local-details { margin: 10px 0; }
-.wrap.cmcp .mcp-local-details > summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-.wrap.cmcp .mcp-local-details-body { border: 1px solid var(--cmcp-border); border-radius: var(--cmcp-radius-sm); padding: 12px; margin-top: 8px; }
+.wrap.cmcp .mcp-local-details > summary { cursor: pointer; font-size: 13px; color: var(--cmcp-muted); text-decoration: underline; text-decoration-color: var(--cmcp-border-strong); text-underline-offset: 3px; }
+.wrap.cmcp .mcp-local-details > summary:hover, .wrap.cmcp .mcp-local-details[open] > summary { color: var(--cmcp-text); }
+.wrap.cmcp .mcp-local-details-body { border: 1px solid var(--cmcp-border); border-radius: var(--cmcp-radius-sm); padding: 12px; margin-top: 8px; font-size: 13px; }
 .wrap.cmcp .cmcp-key-fallback-body .cmcp-step { padding-inline-start: 0 }
 .wrap.cmcp .cmcp-install { margin: 2px 0 }
-.wrap.cmcp .mcp-local-guidance ul { list-style: disc; margin-block: 8px 12px; margin-inline: 20px 0; }
 
 /* access (scope) */
 .cmcp-seg { display: inline-flex; border: 1px solid var(--cmcp-border-strong); border-radius: var(--cmcp-radius-sm); overflow: hidden; height: 34px; box-sizing: border-box; background: #fff; }
@@ -374,3 +381,7 @@ tr.cmcp-detail pre.cmcp-term { font-size: 12.5px; max-height: 320px; overflow: a
 .wrap.cmcp .cmcp-connect-status--connected { border-color: var(--cmcp-ok-border); background: var(--cmcp-ok-bg, #edfaef); color: var(--cmcp-ok); }
 .wrap.cmcp .cmcp-connect-status--blocked { border-color: var(--cmcp-warn-border); background: var(--cmcp-warn-bg); }
 .wrap.cmcp .cmcp-connect-status--registered, .wrap.cmcp .cmcp-connect-status--approved { border-color: var(--cmcp-accent, #2271b1); background: var(--cmcp-info-bg); }
+/* "New connections open · mm:ss left · Turn off": shown on the strip only while the window is open. */
+.wrap.cmcp .cmcp-connect-status-window { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 10px; color: var(--cmcp-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wrap.cmcp .cmcp-connect-status-window form { display: inline; margin: 0; }
+.wrap.cmcp .cmcp-connect-status-window .cmcp-linkbtn { font-size: 13px; }

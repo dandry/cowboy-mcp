@@ -217,8 +217,6 @@ class Cowboy_MCP_Admin {
             'startNonce'   => wp_create_nonce( 'cowboy_mcp_start_connect' ),
             'connNonce'    => wp_create_nonce( 'cowboy_mcp_set_conn_client' ),
             'blockedNonce' => wp_create_nonce( 'cowboy_mcp_dismiss_blocked' ),
-            'gateOff'      => __( 'New connections: disabled', 'cowboy-mcp' ),
-            'gateEnable'   => __( 'Enable for 30 minutes', 'cowboy-mcp' ),
             'cancel'       => __( 'Cancel', 'cowboy-mcp' ),
             'confirm'      => __( 'Confirm', 'cowboy-mcp' ),
             'copied'       => __( 'Copied!', 'cowboy-mcp' ),
