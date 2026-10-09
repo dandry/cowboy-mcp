@@ -74,12 +74,10 @@ Plus 17 read-only MCP resources, 4 resource templates and 8 guided workflow prom
 
 = Connect Claude Code to WordPress =
 
-Run two lines in your terminal - no key to copy:
+Open the Connections tab (it switches on sign-in), then run two lines in your terminal - no key to copy:
 
     claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
     claude mcp login your-site
-
-The Connections tab has these ready to copy and switches on sign-in for your site.
 
 Headless or CI? Use an API key from the Connections tab: `claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"`.
 
@@ -89,7 +87,7 @@ No terminal and no key to paste: turn on the **Desktop Connector** under **Setti
 
 = Connect ChatGPT to WordPress =
 
-ChatGPT connects with the same one-click sign-in. You need ChatGPT on the web with a Plus, Pro, Business, Enterprise or Edu plan, and a public HTTPS site, because ChatGPT connects from OpenAI's servers.
+ChatGPT connects with the same one-click sign-in. You need ChatGPT on the web with a Plus, Pro, Business, Enterprise or Edu plan, and a public HTTPS site.
 
 1. On your site, turn on the **Desktop Connector** under **Settings > Cowboy MCP**, open the ChatGPT panel on the Connections tab and copy your connection link. If "New connections" shows as disabled there, click **Enable for 30 minutes**.
 2. In ChatGPT, open **Settings > Security and login** and turn on **Developer mode**. On Business and Enterprise workspaces an admin has to allow Developer mode first.
@@ -130,24 +128,26 @@ Headless or CI? Add `--bearer-token-env-var COWBOY_MCP_API_KEY` and export your 
 
 Then start `gemini` and run `/mcp auth your-site` to sign in.
 
+Headless or CI? Use an API key: `gemini mcp add --scope user --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"`.
+
 = n8n, Opencode and other MCP clients =
 
 Cowboy MCP is a standard Streamable HTTP MCP server (JSON-RPC 2.0). Point any MCP client - n8n, Opencode, LibreChat, your own agent - at `/wp-json/cowboy-mcp/v1/endpoint` with an `Authorization: Bearer` header. Opencode signs in with OAuth; set `"oauth": false` only for a key.
 
 = Local development sites =
 
-Local, Studio, MAMP, DevKinsta, wp-env, Docker - it works the same. Terminal and IDE tools sign in on this computer - no public URL or tunnel; Claude Desktop uses the `mcp-remote` bridge shown on the Connections tab. Only claude.ai and ChatGPT need a public HTTPS address.
+Local, Studio, MAMP, DevKinsta, wp-env, Docker - it works the same. Terminal and IDE tools sign in with OAuth on this computer - no public URL or tunnel; Claude Desktop uses the `mcp-remote` bridge shown on the Connections tab. Only claude.ai and ChatGPT need a public HTTPS address.
 
 = Secure by design: built for live sites =
 
 Built to keep you in charge when an AI has real control:
 
-* **Safe mode** (on by default) - destructive tools refuse to run until the agent resends the call with explicit confirmation, with a preview of what would happen.
+* **Safe mode** (on by default) - destructive tools refuse to run until the agent confirms, with a preview of what would happen.
 * **Dry run** - every non-read-only tool accepts a dry-run flag that reports exactly what would change without touching anything.
 * **Per-change undo journal** - before-state snapshots for every journaled change; roll back one edit from the Activity tab or by asking your agent (seven days by default), with conflict detection.
 * **Database checkpoints** - one-click database snapshots, restorable in one click, taken automatically before plugin and theme updates and mutating WP-CLI commands (tables only, not uploads or code).
 * **Safe plugin and theme updates** - file backup first, database checkpoint, then a health check that automatically restores the previous version if the site breaks.
-* **Audit log** - every tool call, error and authentication event, with key, tool, arguments and result, on the Logs tab; pruned after 30 days.
+* **Audit log** - every tool call, error and authentication event on the Logs tab; pruned after 30 days.
 * **AI agent permissions** - each API key and each OAuth connection can be full access, read-only, or a custom list of tools; a read-only key cannot write even if the agent tries.
 * **Hashed keys, rate limits, origin checks** - keys are shown once and stored as one-way hashes, requests are rate-limited per key (120/minute by default), and requests from unknown browser origins are rejected.
 * **Guardrails you cannot talk your way past** - a denylist of sensitive options, dangerous SQL and WP-CLI commands, SSRF protection, file writes confined to `wp-content` with a PHP syntax check, and last-administrator protection. Power mode lifts some of these for rare jobs; only a human can switch it on in wp-admin, so the agent can never grant itself more power.
@@ -178,12 +178,15 @@ Questions and connection problems: post in the [support forum](https://wordpress
 == Installation ==
 
 1. Install and activate Cowboy MCP from the Plugins screen.
-2. Go to **Settings > Cowboy MCP** and click **Generate API Key** (it is shown once - copy it).
+2. Go to **Settings > Cowboy MCP**, open the **Connections** tab and pick your app.
 3. Connect your agent and start giving it instructions.
 
 **Claude Code:**
 
-    claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"
+    claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
+    claude mcp login your-site
+
+Headless or CI? Click **Generate API key** on the Connections tab (it is shown once - copy it) and add `--header "Authorization: Bearer YOUR_API_KEY"` to the first line instead of running the second.
 
 **Claude desktop / web (no terminal):** enable the OAuth connector under **Settings > Cowboy MCP > Settings > Desktop Connector**, click **Add to Claude** on the Connections tab (Claude opens with your site already filled in), and approve with one click. (Requires a public HTTPS site; on a local site use the `mcp-remote` bridge shown on the Connections tab.)
 
