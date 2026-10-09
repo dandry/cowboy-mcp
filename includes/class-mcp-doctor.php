@@ -174,14 +174,21 @@ class Cowboy_MCP_Doctor {
 				$mins  = max( 1, (int) round( ( time() - (int) $blocked[0]['at'] ) / 60 ) );
 				$extra = ' ' . $n . ( 1 === $n ? ' attempt' : ' attempts' ) . ' blocked in the last 24 h (latest: ' . $blocked[0]['app'] . ', ' . $mins . ' min ago).' . ( $open ? ' Earlier attempts were blocked; retry the app now.' : '' );
 			}
+			// Closed is the normal resting state: the Connections tab opens it when an app is
+			// connected, and Claude Code / Codex use Client ID Metadata Documents and never
+			// need it. Only an app that was actually refused makes this a warning.
 			$out[] = self::result(
 				'registration_window',
 				'New connections switch',
-				$open ? 'pass' : 'warn',
-				$open ? ( $left > 0 ? 'Open for another ' . (int) ceil( $left / 60 ) . ' min - new AI apps can register.' : 'Held open by a filter.' ) . $extra : 'Disabled. New AI apps cannot register until an administrator clicks "Enable for 30 minutes" in the app setup on the Connections tab; existing connections keep working.' . $extra,
+				( $open || ! $blocked ) ? 'pass' : 'warn',
+				$open
+					? ( $left > 0 ? 'Open for another ' . (int) ceil( $left / 60 ) . ' min - new AI apps can register.' : 'Held open by a filter.' ) . $extra
+					: ( $blocked
+						? 'Off, and an app was refused.' . $extra
+						: 'Off - normal. It switches on by itself when you connect an app from the Connections tab; Claude Code and Codex identify themselves with a metadata document and never need it. Existing connections keep working.' ),
 				[],
 				null,
-				$open ? null : 'Under Settings > Cowboy MCP > Connections, pick the app ("Connect another app" if the list is not shown) and click "Enable for 30 minutes" (New connections), then add the app.'
+				( $open || ! $blocked ) ? null : 'Under Settings > Cowboy MCP > Connections, pick the app ("Connect another app" if the list is not shown) and click "Enable for 30 minutes" (New connections), then add the app again.'
 			);
 		}
 
