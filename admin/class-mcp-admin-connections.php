@@ -161,7 +161,7 @@ class Cowboy_MCP_Admin_Connections {
     }
 
     /** Whether this site's host looks like a local development site (advisory, UI only). */
-    private static function site_looks_local(): bool {
+    public static function site_looks_local(): bool {
         return Cowboy_MCP_Security::host_looks_local( (string) wp_parse_url( home_url(), PHP_URL_HOST ) );
     }
 
@@ -491,32 +491,45 @@ class Cowboy_MCP_Admin_Connections {
         $domain      = str_replace( '.', '-', $host );
         $key_display = $new_key ?: 'YOUR_API_KEY';
         $has_keys    = ! empty( $keys );
-        // Offer the plain-http fallback only for loopback-shaped hosts: the key
-        // must never be suggested over plaintext on a real network.
+        $settings    = get_option( 'cowboy_mcp_settings', [] );
+        $oauth_on    = class_exists( 'Cowboy_MCP_OAuth' ) && ! empty( $settings['enabled'] ) && ! empty( $settings['oauth_enabled'] );
+        // Offer the plain-http fallback only for loopback-shaped hosts: nothing
+        // must ever be suggested over plaintext on a real network.
         $offer_http  = 'https' === wp_parse_url( $endpoint, PHP_URL_SCHEME )
             && Cowboy_MCP_Security::host_is_loopback_shaped( $host );
         ?>
         <div class="cmcp-callout cmcp-callout--info"><p><?php
-            echo wp_kses( __( 'This site runs on your computer, so the cloud connector cannot reach it. Connect Claude Desktop through a <strong>local bridge</strong> instead: a small helper that runs on this computer and forwards Claude Desktop to the site. Nothing is exposed to the internet.', 'cowboy-mcp' ), [ 'strong' => [] ] );
+            echo wp_kses( __( 'This site runs on your computer, so the cloud connector cannot reach it. Connect Claude Desktop through a <strong>local bridge</strong> instead: a small helper that runs on this computer and forwards Claude Desktop to the site. It signs in in your browser like the terminal tools — no key to paste — and nothing is exposed to the internet.', 'cowboy-mcp' ), [ 'strong' => [] ] );
         ?></p></div>
-        <?php
-        self::render_key_step( 'claude-desktop', 'Claude Desktop', $new_key, $has_keys );
-        ?>
-        <?php self::step_open( '2', __( 'Add the bridge to Claude Desktop', 'cowboy-mcp' ), '' ); ?>
-                <p><?php echo wp_kses( __( 'Add this to <code>claude_desktop_config.json</code> (create the file if it does not exist), then fully quit and restart the Claude app:', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
-                <?php self::render_code( 'mcp-cmd-claude-desktop', self::bridge_config_snippet( $domain, $endpoint, $key_display ), 'claude_desktop_config.json', __( 'Copy setup command', 'cowboy-mcp' ) ); ?>
+        <?php self::step_open( '1', __( 'Add the bridge to Claude Desktop', 'cowboy-mcp' ), '' ); ?>
+                <p><?php echo wp_kses( __( 'Add this to <code>claude_desktop_config.json</code> (create the file if it does not exist), then fully quit and restart the Claude app. It opens your browser to sign in the first time it connects.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                <?php self::render_code( 'mcp-oauth-cmd-claude-desktop', self::bridge_config_snippet( $domain, $endpoint, '' ), 'claude_desktop_config.json', __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => 'claude-desktop', 'mode' => 'oauth' ] ); ?>
                 <p class="description cmcp-os-paths">
                     <?php echo wp_kses( __( 'macOS: <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>', 'cowboy-mcp' ), [ 'code' => [] ] ); ?><br>
                     <?php echo wp_kses( __( 'Windows: <code>%APPDATA%\Claude\claude_desktop_config.json</code>', 'cowboy-mcp' ), [ 'code' => [] ] ); ?>
                 </p>
                 <p class="description"><?php echo wp_kses( __( 'Requires Node.js on this computer — the bridge is the standard open-source <code>mcp-remote</code> package, started on demand via <code>npx</code>. It connects only from your computer to this site.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
-                <p class="description"><?php echo wp_kses( __( 'Your API key is stored in plain text in that file, so prefer a <strong>read-only</strong> key unless this connection needs to make changes — and revoke it here when you no longer use it.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
                 <?php
                 if ( $offer_http ) {
-                    self::render_cert_error_details( 'claude-desktop', self::bridge_config_snippet( $domain, set_url_scheme( $endpoint, 'http' ), $key_display ), 'claude_desktop_config.json' );
+                    self::render_cert_error_details( 'claude-desktop', self::bridge_config_snippet( $domain, set_url_scheme( $endpoint, 'http' ), '' ), 'claude_desktop_config.json' );
                 }
                 ?>
+                <details class="mcp-local-details cmcp-key-fallback" <?php echo $new_key ? 'open' : ''; ?>>
+                    <summary><?php esc_html_e( "Headless, CI, or a tool that can't open a browser? Use an API key instead", 'cowboy-mcp' ); ?></summary>
+                    <div class="mcp-local-details-body cmcp-key-fallback-body">
+                        <?php self::render_key_step( 'claude-desktop', 'Claude Desktop', $new_key, $has_keys, 'a' ); ?>
+                        <p><?php esc_html_e( 'Then use this config instead, with the key in a header:', 'cowboy-mcp' ); ?></p>
+                        <?php self::render_code( 'mcp-cmd-claude-desktop', self::bridge_config_snippet( $domain, $endpoint, $key_display ), 'claude_desktop_config.json', __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => 'claude-desktop', 'mode' => 'key' ] ); ?>
+                        <p class="description"><?php echo wp_kses( __( 'Your API key is stored in plain text in that file, so prefer a <strong>read-only</strong> key unless this connection needs to make changes — and revoke it here when you no longer use it.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
+                        <?php
+                        if ( $offer_http ) {
+                            self::render_cert_error_details( 'claude-desktop-key', self::bridge_config_snippet( $domain, set_url_scheme( $endpoint, 'http' ), $key_display ), 'claude_desktop_config.json' );
+                        }
+                        ?>
+                    </div>
+                </details>
         <?php self::step_close(); ?>
+        <?php self::render_approve_step( $oauth_on ); ?>
         <?php self::step_open( '3', __( 'Check it worked', 'cowboy-mcp' ), '' ); ?>
                 <p><?php
                     /* translators: %s: the MCP server name shown in the client. */
@@ -526,11 +539,34 @@ class Cowboy_MCP_Admin_Connections {
         <?php
     }
 
-    /** claude_desktop_config.json snippet. The Authorization header value goes
-     *  through mcp-remote's ${VAR} env expansion so the space in "Bearer <key>"
-     *  survives Claude Desktop's Windows argument handling. */
+    /**
+     * claude_desktop_config.json snippet for the mcp-remote bridge. An empty $key_display
+     * means OAuth (mcp-remote registers and opens the browser itself); otherwise the
+     * Authorization header value goes through mcp-remote's ${VAR} env expansion so the
+     * space in "Bearer <key>" survives Claude Desktop's Windows argument handling.
+     * mcp-remote accepts plain http only for localhost/127.0.0.1 unless --allow-http is passed
+     * (src/lib/utils.ts), so other http hosts (e.g. mysite.test) get the flag.
+     */
     private static function bridge_config_snippet( string $domain, string $endpoint, string $key_display ): string {
-        return "{\n  \"mcpServers\": {\n    \"{$domain}\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"{$endpoint}\",\n        \"--header\", \"Authorization:\${AUTH_HEADER}\"],\n      \"env\": { \"AUTH_HEADER\": \"Bearer {$key_display}\" }\n    }\n  }\n}";
+        $host  = strtolower( (string) wp_parse_url( $endpoint, PHP_URL_HOST ) );
+        $http  = 'http' === strtolower( (string) wp_parse_url( $endpoint, PHP_URL_SCHEME ) ) && ! in_array( $host, [ 'localhost', '127.0.0.1' ], true );
+        $allow = $http ? ', "--allow-http"' : '';
+        if ( '' === $key_display ) {
+            return "{\n  \"mcpServers\": {\n    \"{$domain}\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"{$endpoint}\"{$allow}]\n    }\n  }\n}";
+        }
+        return "{\n  \"mcpServers\": {\n    \"{$domain}\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"{$endpoint}\"{$allow},\n        \"--header\", \"Authorization:\${AUTH_HEADER}\"],\n      \"env\": { \"AUTH_HEADER\": \"Bearer {$key_display}\" }\n    }\n  }\n}";
+    }
+
+    /**
+     * Which connection the live "Connected" strip should watch for a client. Claude Desktop
+     * on a local site connects through the mcp-remote bridge (DCR name "MCP CLI Client"),
+     * not through the hosted Claude connector.
+     */
+    public static function connect_watch_slug( string $client, bool $local ): string {
+        if ( 'claude-desktop' === $client && $local ) {
+            return 'mcp-remote';
+        }
+        return self::client_registry()[ $client ]['watch'] ?? $client;
     }
 
     private static function render_cert_error_details( string $slug, string $alt_snippet, string $title ): void {
@@ -571,18 +607,33 @@ class Cowboy_MCP_Admin_Connections {
         $intro    = match ( $slug ) {
             'claude-code' => esc_html__( 'Run these in your terminal. The second line opens your browser to sign in.', 'cowboy-mcp' ),
             'codex'       => esc_html__( 'Run this in your terminal. Codex opens your browser to sign in.', 'cowboy-mcp' ),
-            /* translators: %s: the MCP server name used in the command */
-            'gemini-cli'  => wp_kses( sprintf( __( 'Run this in your terminal, then start <code>gemini</code> and run <code>/mcp auth %s</code> to sign in.', 'cowboy-mcp' ), esc_html( $domain ) ), [ 'code' => [] ] ),
+            'gemini-cli'  => wp_kses( __( 'Add this to <code>~/.gemini/settings.json</code> (create the file if it does not exist), then start <code>gemini</code> — it opens your browser to sign in.', 'cowboy-mcp' ), [ 'code' => [] ] ),
             'opencode'    => wp_kses( __( 'Add this to <code>~/.config/opencode/opencode.json</code> (or a project <code>opencode.json</code>). Opencode opens your browser to sign in the first time it connects.', 'cowboy-mcp' ), [ 'code' => [] ] ),
             default       => '',
         };
-        $title    = 'opencode' === $slug ? '~/.config/opencode/opencode.json' : __( 'terminal', 'cowboy-mcp' );
+        $title    = match ( $slug ) {
+            'opencode'   => '~/.config/opencode/opencode.json',
+            'gemini-cli' => '~/.gemini/settings.json',
+            default      => __( 'terminal', 'cowboy-mcp' ),
+        };
         ?>
         <?php self::step_open( '1', __( 'Add the server', 'cowboy-mcp' ), '' ); ?>
                 <p><?php echo $intro; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped per-branch above. ?></p>
                 <?php self::render_code( 'mcp-oauth-cmd-' . $slug, self::oauth_snippet( $slug, $domain, $endpoint ), $title, __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'oauth' ] ); ?>
                 <?php if ( 'claude-code' === $slug ) : ?>
                     <p class="description"><?php echo wp_kses( __( 'Working over SSH? Add <code>--no-browser</code> to the second line and open the printed URL in a local browser.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                <?php endif; ?>
+                <?php if ( 'gemini-cli' === $slug ) : ?>
+                    <details class="mcp-local-details">
+                        <summary><?php esc_html_e( 'Prefer a command?', 'cowboy-mcp' ); ?></summary>
+                        <div class="mcp-local-details-body">
+                            <p><?php
+                                /* translators: %s: the MCP server name used in the command */
+                                echo wp_kses( sprintf( __( 'Run this in your terminal, then start <code>gemini</code> and run <code>/mcp auth %s</code> to sign in.', 'cowboy-mcp' ), esc_html( $domain ) ), [ 'code' => [] ] );
+                            ?></p>
+                            <?php self::render_code( 'mcp-oauth-cli-' . $slug, 'gemini mcp add -s user -t http ' . $domain . ' ' . $endpoint, __( 'terminal', 'cowboy-mcp' ), __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'oauth' ] ); ?>
+                        </div>
+                    </details>
                 <?php endif; ?>
                 <?php if ( $is_local && 'https' === wp_parse_url( $endpoint, PHP_URL_SCHEME ) ) : ?>
                     <p class="description"><?php echo wp_kses( __( 'Local https sites usually use a self-signed certificate that these tools reject. Either trust the certificate in your tool, or set the WordPress Site Address to the <code>http://</code> URL — the sign-in discovery addresses are built from it.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
@@ -756,7 +807,8 @@ class Cowboy_MCP_Admin_Connections {
         return match ( $slug ) {
             'claude-code' => 'claude mcp add --transport http ' . $domain . ' ' . $endpoint . "\n" . 'claude mcp login ' . $domain,
             'codex'       => 'codex mcp add ' . $domain . ' --url ' . $endpoint,
-            'gemini-cli'  => 'gemini mcp add -s user -t http ' . $domain . ' ' . $endpoint,
+            // Gemini CLI signs in at startup only with oauth.enabled (docs/tools/mcp-server.md; the `gemini mcp add` command has no OAuth flag).
+            'gemini-cli'  => "{\n  \"mcpServers\": {\n    \"{$domain}\": {\n      \"httpUrl\": \"{$endpoint}\",\n      \"oauth\": { \"enabled\": true }\n    }\n  }\n}",
             'opencode'    => "{\n  \"mcp\": {\n    \"{$domain}\": {\n      \"type\": \"remote\",\n      \"url\": \"{$endpoint}\"\n    }\n  }\n}",
             'cursor'      => "{\n  \"mcpServers\": {\n    \"{$domain}\": {\n      \"url\": \"{$endpoint}\"\n    }\n  }\n}",
             'vscode'      => "{\n  \"servers\": {\n    \"{$domain}\": {\n      \"type\": \"http\",\n      \"url\": \"{$endpoint}\"\n    }\n  }\n}",

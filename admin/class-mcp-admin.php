@@ -149,7 +149,7 @@ class Cowboy_MCP_Admin {
             self::enable_oauth_connector();
             Cowboy_MCP_OAuth::open_registration_window();
         }
-        Cowboy_MCP_Admin_Connections::set_connect_watch( $reg[ $client ]['watch'] ?? $client, $mode );
+        Cowboy_MCP_Admin_Connections::set_connect_watch( Cowboy_MCP_Admin_Connections::connect_watch_slug( $client, Cowboy_MCP_Admin_Connections::site_looks_local() ), $mode );
         $w  = Cowboy_MCP_Admin_Connections::connect_watch();
         $st = Cowboy_MCP_Admin_Connections::connect_status( (array) $w );
         ob_start();
