@@ -9,6 +9,10 @@ release; older entries are kept here.
 * The live Connected confirmation now works for every app and names the one that connected.
 * Fixed Cursor desktop failing to sign in (its callback address is now accepted), and sign-ins from apps that write the server address with a trailing slash.
 * Connection Doctor no longer flags local development sites that sign in terminal tools over plain http, and counts OAuth connections as credentials.
+* Claude Code and Codex now identify themselves with an OAuth Client ID Metadata Document (the current MCP standard), so they connect without the "New connections" switch and without registering a client on the site.
+* The OAuth connector is now called "Browser sign-in" everywhere, since every app without a key uses it; any by-hand setup can switch it on from the Connections tab.
+* Claude Desktop on a local site signs in through the mcp-remote bridge in your browser - no API key in the config file. Gemini CLI setup is a settings.json snippet that signs in on first start.
+* Connection Doctor no longer warns about the New-connections switch being off unless an app was actually refused.
 
 = 1.7.1 =
 * Fix: resolved a bug where restoring a checkpoint could alter values containing % signs (permalinks, page-builder data). Restores now keep every value exactly as saved and are verified against the checkpoint before they replace your data.

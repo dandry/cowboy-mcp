@@ -204,7 +204,7 @@ Click **Open ChatGPT** on the ChatGPT panel of the Connections tab in Cowboy MCP
 
 = How do I connect Claude to my WordPress site? =
 
-For the Claude desktop and web apps, click **Add to Claude** on the Connections tab and approve the one-click sign-in - no terminal needed. For Claude Code, run the two lines shown ready to copy on the Connections tab and sign in in your browser - no key to copy. For headless or CI use, generate an API key there instead.
+For the Claude desktop and web apps, click **Add to Claude** on the Connections tab and approve the one-click sign-in - no terminal needed. For Claude Code, run the two lines shown ready to copy on the Connections tab and sign in in your browser - no key to copy, and no switch to flip: Claude Code and Codex identify themselves with a Client ID Metadata Document (the current MCP standard). For headless or CI use, generate an API key there instead.
 
 = Is it free? =
 
@@ -294,6 +294,10 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 * The live Connected confirmation now works for every app and names the one that connected.
 * Fixed Cursor desktop failing to sign in (its callback address is now accepted), and sign-ins from apps that write the server address with a trailing slash.
 * Connection Doctor no longer flags local development sites that sign in terminal tools over plain http, and counts OAuth connections as credentials.
+* Claude Code and Codex now identify themselves with an OAuth Client ID Metadata Document (the current MCP standard), so they connect without the "New connections" switch and without registering a client on the site.
+* The OAuth connector is now called "Browser sign-in" everywhere, since every app without a key uses it; any by-hand setup can switch it on from the Connections tab.
+* Claude Desktop on a local site signs in through the mcp-remote bridge in your browser - no API key in the config file. Gemini CLI setup is a settings.json snippet that signs in on first start.
+* Connection Doctor no longer warns about the New-connections switch being off unless an app was actually refused.
 
 = Earlier versions =
 
