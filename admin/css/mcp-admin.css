@@ -182,7 +182,7 @@ tr.cmcp-panel-row td { padding: 0 18px 14px; background: #fff; }
 .wrap.cmcp .mcp-local-details { margin: 10px 0; }
 .wrap.cmcp .mcp-local-details > summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .wrap.cmcp .mcp-local-details-body { border: 1px solid var(--cmcp-border); border-radius: var(--cmcp-radius-sm); padding: 12px; margin-top: 8px; }
-.wrap.cmcp .cmcp-key-fallback-body .cmcp-step { padding-left: 0 }
+.wrap.cmcp .cmcp-key-fallback-body .cmcp-step { padding-inline-start: 0 }
 .wrap.cmcp .cmcp-install { margin: 2px 0 }
 .wrap.cmcp .mcp-local-guidance ul { list-style: disc; margin-block: 8px 12px; margin-inline: 20px 0; }
 

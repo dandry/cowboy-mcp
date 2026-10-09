@@ -221,7 +221,7 @@ class Cowboy_MCP_Admin_Connections {
                 </form>
                 <p class="description"><?php
                     echo $cli
-                        ? esc_html__( 'Copy above turns this on for you. Adding it by hand? Enable it first. It switches itself off after 30 minutes, and connections that already exist keep working either way.', 'cowboy-mcp' )
+                        ? esc_html__( 'The Copy or Add button above turns this on for you. Adding it by hand? Enable it first. It switches itself off after 30 minutes, and connections that already exist keep working either way.', 'cowboy-mcp' )
                         : ( $quick
                         ? esc_html__( 'Add to Claude below turns this on for you. Adding it by hand? Enable it first. It switches itself off after 30 minutes, and connections that already exist keep working either way.', 'cowboy-mcp' )
                         : esc_html__( 'Step one when adding ChatGPT or a Claude app: enable this, then add the app. It switches itself off after 30 minutes. API keys do not use it, and connections that already exist keep working either way.', 'cowboy-mcp' ) );

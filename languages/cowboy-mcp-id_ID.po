@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-08 21:08-0700\n"
+"POT-Creation-Date: 2026-10-09 10:11-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Indonesian\n"
@@ -191,7 +191,7 @@ msgid "Create checkpoint now"
 msgstr "Buat checkpoint sekarang"
 
 #: admin/class-mcp-admin-activity.php:335
-#: admin/class-mcp-admin-connections.php:1134
+#: admin/class-mcp-admin-connections.php:1135
 msgid "Created"
 msgstr "Dibuat"
 
@@ -208,7 +208,7 @@ msgid "Size"
 msgstr "Ukuran"
 
 #: admin/class-mcp-admin-activity.php:339
-#: admin/class-mcp-admin-connections.php:1136
+#: admin/class-mcp-admin-connections.php:1137
 msgid "Actions"
 msgstr "Tindakan"
 
@@ -247,77 +247,77 @@ msgid "the app"
 msgstr "aplikasi"
 
 #. translators: %s: AI app name, e.g. Claude Code
-#: admin/class-mcp-admin-connections.php:110
+#: admin/class-mcp-admin-connections.php:111
 #, php-format
 msgid "%s found your site — approve access on the sign-in page."
 msgstr "%s menemukan situs Anda — setujui akses di halaman masuk."
 
 #. translators: %s: AI app name, e.g. Claude Code
-#: admin/class-mcp-admin-connections.php:113
+#: admin/class-mcp-admin-connections.php:114
 #, php-format
 msgid "Approved — waiting for the first request from %s."
 msgstr "Disetujui — menunggu permintaan pertama dari %s."
 
 #. translators: %s: AI app name, e.g. Claude Code
-#: admin/class-mcp-admin-connections.php:117
+#: admin/class-mcp-admin-connections.php:118
 #, php-format
 msgid "✓ Connected — %s reused your earlier connection."
 msgstr "✓ Terhubung — %s menggunakan kembali koneksi Anda sebelumnya."
 
 #. translators: %s: AI app name, e.g. Claude Code
-#: admin/class-mcp-admin-connections.php:120
+#: admin/class-mcp-admin-connections.php:121
 #, php-format
 msgid "✓ Connected — %s can now use this site."
 msgstr "✓ Terhubung — %s sekarang dapat menggunakan situs ini."
 
 #. translators: %s: AI app name, e.g. Claude Code
-#: admin/class-mcp-admin-connections.php:123
+#: admin/class-mcp-admin-connections.php:124
 #, php-format
 msgid "%s tried to connect, but new connections were off."
 msgstr "%s mencoba terhubung, tetapi koneksi baru sedang nonaktif."
 
 #. translators: %s: AI app name, e.g. Claude Code
-#: admin/class-mcp-admin-connections.php:126
+#: admin/class-mcp-admin-connections.php:127
 #, php-format
 msgid "Waiting for %s…"
 msgstr "Menunggu %s…"
 
-#: admin/class-mcp-admin-connections.php:139
+#: admin/class-mcp-admin-connections.php:140
 msgid "Refresh list"
 msgstr "Muat ulang daftar"
 
-#: admin/class-mcp-admin-connections.php:209 admin/class-mcp-admin.php:217
+#: admin/class-mcp-admin-connections.php:210 admin/class-mcp-admin.php:217
 msgid "New connections: disabled"
 msgstr "Koneksi baru: nonaktif"
 
-#: admin/class-mcp-admin-connections.php:209
+#: admin/class-mcp-admin-connections.php:210
 msgid "New connections: enabled"
 msgstr "Koneksi baru: aktif"
 
 #. translators: %s: countdown such as 29:59
-#: admin/class-mcp-admin-connections.php:213
-#: admin/class-mcp-admin-connections.php:926
+#: admin/class-mcp-admin-connections.php:214
+#: admin/class-mcp-admin-connections.php:927
 #, php-format
 msgid "%s left"
 msgstr "%s tersisa"
 
-#: admin/class-mcp-admin-connections.php:218
+#: admin/class-mcp-admin-connections.php:219
 msgid "Disable now"
 msgstr "Nonaktifkan sekarang"
 
-#: admin/class-mcp-admin-connections.php:218
-#: admin/class-mcp-admin-connections.php:933 admin/class-mcp-admin.php:218
+#: admin/class-mcp-admin-connections.php:219
+#: admin/class-mcp-admin-connections.php:934 admin/class-mcp-admin.php:218
 msgid "Enable for 30 minutes"
 msgstr "Aktifkan selama 30 menit"
 
-#: admin/class-mcp-admin-connections.php:223
+#: admin/class-mcp-admin-connections.php:224
 msgid ""
-"Copy above turns this on for you. Adding it by hand? Enable it first. It "
-"switches itself off after 30 minutes, and connections that already exist "
-"keep working either way."
-msgstr "Tombol “Salin” di atas mengaktifkan ini untuk Anda. Menambahkan secara manual? Aktifkan ini terlebih dahulu. Akan mati sendiri setelah 30 menit, dan koneksi yang sudah ada tetap berfungsi apa pun keadaannya."
+"The Copy or Add button above turns this on for you. Adding it by hand? "
+"Enable it first. It switches itself off after 30 minutes, and connections "
+"that already exist keep working either way."
+msgstr "Tombol “Salin” atau “Tambahkan” di atas mengaktifkan ini untuk Anda. Menambahkan secara manual? Aktifkan ini terlebih dahulu. Akan mati sendiri setelah 30 menit, dan koneksi yang sudah ada tetap berfungsi apa pun keadaannya."
 
-#: admin/class-mcp-admin-connections.php:225
+#: admin/class-mcp-admin-connections.php:226
 msgid ""
 "Add to Claude below turns this on for you. Adding it by hand? Enable it "
 "first. It switches itself off after 30 minutes, and connections that already "
@@ -328,7 +328,7 @@ msgstr ""
 "setelah 30 menit, dan koneksi yang sudah ada tetap berfungsi apa pun "
 "keadaannya."
 
-#: admin/class-mcp-admin-connections.php:226
+#: admin/class-mcp-admin-connections.php:227
 msgid ""
 "Step one when adding ChatGPT or a Claude app: enable this, then add the app. "
 "It switches itself off after 30 minutes. API keys do not use it, and "
@@ -339,14 +339,14 @@ msgstr ""
 "tidak menggunakannya, dan koneksi yang sudah ada tetap berfungsi apa pun "
 "keadaannya."
 
-#: admin/class-mcp-admin-connections.php:240
+#: admin/class-mcp-admin-connections.php:241
 msgid ""
 "Site actually on a public HTTPS address? Use the cloud connector instead"
 msgstr ""
 "Situs sebenarnya berada di alamat HTTPS publik? Gunakan konektor cloud saja"
 
-#: admin/class-mcp-admin-connections.php:270
-#: admin/class-mcp-admin-connections.php:473
+#: admin/class-mcp-admin-connections.php:271
+#: admin/class-mcp-admin-connections.php:474
 msgid ""
 "<strong>Heads up:</strong> this site does not appear to be on a public HTTPS "
 "address. ChatGPT connects from OpenAI's cloud, so it cannot reach local, "
@@ -358,8 +358,8 @@ msgstr ""
 "situs lokal, privat, atau non-HTTPS. Alat terminal dapat digunakan di sini "
 "sebagai gantinya, atau hubungkan melalui URL tunnel/staging."
 
-#: admin/class-mcp-admin-connections.php:271
-#: admin/class-mcp-admin-connections.php:474
+#: admin/class-mcp-admin-connections.php:272
+#: admin/class-mcp-admin-connections.php:475
 msgid ""
 "<strong>Heads up:</strong> this site does not appear to be on a public HTTPS "
 "address. The Claude apps connect from Anthropic's cloud, so they cannot "
@@ -372,7 +372,7 @@ msgstr ""
 "digunakan di sini sebagai gantinya, atau hubungkan melalui URL tunnel/"
 "staging."
 
-#: admin/class-mcp-admin-connections.php:273
+#: admin/class-mcp-admin-connections.php:274
 msgid ""
 "This opens a secure sign-in so ChatGPT can connect without a terminal. No "
 "access is granted until you approve it in your browser."
@@ -381,7 +381,7 @@ msgstr ""
 "terminal. Tidak ada akses yang diberikan sampai Anda menyetujuinya di "
 "browser Anda."
 
-#: admin/class-mcp-admin-connections.php:274
+#: admin/class-mcp-admin-connections.php:275
 msgid ""
 "This opens a secure sign-in so the Claude apps can connect without a "
 "terminal. No access is granted until you approve it in your browser."
@@ -390,27 +390,27 @@ msgstr ""
 "tanpa terminal. Tidak ada akses yang diberikan sampai Anda menyetujuinya di "
 "browser Anda."
 
-#: admin/class-mcp-admin-connections.php:276
+#: admin/class-mcp-admin-connections.php:277
 msgid "You'll paste this into ChatGPT in the next step."
 msgstr "Anda akan menempelkan ini ke ChatGPT pada langkah berikutnya."
 
-#: admin/class-mcp-admin-connections.php:277
+#: admin/class-mcp-admin-connections.php:278
 msgid "You'll paste this into Claude in the next step."
 msgstr "Anda akan menempelkan ini ke Claude pada langkah berikutnya."
 
-#: admin/class-mcp-admin-connections.php:279
+#: admin/class-mcp-admin-connections.php:280
 msgid "Add it in ChatGPT"
 msgstr "Tambahkan di ChatGPT"
 
-#: admin/class-mcp-admin-connections.php:280
+#: admin/class-mcp-admin-connections.php:281
 msgid "Add it in the Claude app"
 msgstr "Tambahkan di aplikasi Claude"
 
-#: admin/class-mcp-admin-connections.php:281
+#: admin/class-mcp-admin-connections.php:282
 msgid "Add it on claude.ai"
 msgstr "Tambahkan di claude.ai"
 
-#: admin/class-mcp-admin-connections.php:284
+#: admin/class-mcp-admin-connections.php:285
 msgid ""
 "ChatGPT opens a sign-in page on <strong>your site</strong>. Review what it "
 "is asking for and click <strong>Approve</strong>. To use it, open the "
@@ -422,7 +422,7 @@ msgstr ""
 "buka menu <strong>+</strong> di obrolan, pilih <strong>Developer mode</"
 "strong>, lalu pilih situs Anda."
 
-#: admin/class-mcp-admin-connections.php:285
+#: admin/class-mcp-admin-connections.php:286
 msgid ""
 "Claude opens a sign-in page on <strong>your site</strong>. Review what it is "
 "asking for and click <strong>Approve</strong>. To use it, click <strong>+</"
@@ -434,7 +434,7 @@ msgstr ""
 "<strong>+</strong> di obrolan, buka <strong>Connectors</strong>, dan "
 "pastikan situs Anda aktif."
 
-#: admin/class-mcp-admin-connections.php:287
+#: admin/class-mcp-admin-connections.php:288
 msgid ""
 "Requires a ChatGPT <strong>Plus, Pro, Business, Enterprise or Edu</strong> "
 "plan, on the web. On Business and Enterprise workspaces an admin has to "
@@ -444,7 +444,7 @@ msgstr ""
 "strong>, di web. Di workspace Business dan Enterprise, admin harus "
 "mengizinkan Developer mode terlebih dahulu."
 
-#: admin/class-mcp-admin-connections.php:288
+#: admin/class-mcp-admin-connections.php:289
 msgid ""
 "Custom connectors work on every Claude plan (Free is limited to one). On "
 "Team and Enterprise, an organization owner adds the connector first under "
@@ -456,25 +456,25 @@ msgstr ""
 "<strong>Organization settings → Connectors</strong>; anggota kemudian "
 "mengklik <strong>Connect</strong>."
 
-#: admin/class-mcp-admin-connections.php:310
+#: admin/class-mcp-admin-connections.php:311
 msgid "Turn on the Desktop Connector"
 msgstr "Nyalakan Desktop Connector"
 
-#: admin/class-mcp-admin-connections.php:314
-#: admin/class-mcp-admin-connections.php:406
+#: admin/class-mcp-admin-connections.php:315
+#: admin/class-mcp-admin-connections.php:407
 msgid "Enable Desktop Connector"
 msgstr "Aktifkan Desktop Connector"
 
-#: admin/class-mcp-admin-connections.php:323
+#: admin/class-mcp-admin-connections.php:324
 msgid "Add it to Claude"
 msgstr "Tambahkan ke Claude"
 
-#: admin/class-mcp-admin-connections.php:324
+#: admin/class-mcp-admin-connections.php:325
 msgid "Add to Claude"
 msgstr "Tambahkan ke Claude"
 
 #. translators: %s: this site's MCP endpoint URL
-#: admin/class-mcp-admin-connections.php:329
+#: admin/class-mcp-admin-connections.php:330
 #, php-format
 msgid ""
 "Opens claude.ai in a new tab with this site filled in, and turns on new "
@@ -488,7 +488,7 @@ msgstr ""
 "itu konektornya juga muncul di aplikasi Claude."
 
 #. translators: %s: this site's MCP endpoint URL
-#: admin/class-mcp-admin-connections.php:331
+#: admin/class-mcp-admin-connections.php:332
 #, php-format
 msgid ""
 "Opens claude.ai in a new tab with this site filled in, and turns on new "
@@ -499,7 +499,7 @@ msgstr ""
 "mengaktifkan koneksi baru selama 30 menit. Pastikan alamatnya <code>%s</"
 "code>, lalu klik <strong>Continue</strong> dan <strong>Add</strong>."
 
-#: admin/class-mcp-admin-connections.php:335
+#: admin/class-mcp-admin-connections.php:336
 msgid ""
 "Already added? Claude reports that a connector with this URL already exists. "
 "Find it under <strong>Customize → Connectors</strong> and click "
@@ -509,52 +509,52 @@ msgstr ""
 "sudah ada. Temukan di <strong>Customize → Connectors</strong> lalu klik "
 "<strong>Connect</strong>."
 
-#: admin/class-mcp-admin-connections.php:338
-#: admin/class-mcp-admin-connections.php:616
+#: admin/class-mcp-admin-connections.php:339
+#: admin/class-mcp-admin-connections.php:617
 msgid "Add it by hand instead"
 msgstr "Tambahkan secara manual"
 
-#: admin/class-mcp-admin-connections.php:341
-#: admin/class-mcp-admin-connections.php:370
-#: admin/class-mcp-admin-connections.php:376
+#: admin/class-mcp-admin-connections.php:342
+#: admin/class-mcp-admin-connections.php:371
+#: admin/class-mcp-admin-connections.php:377
 msgid "Connection link"
 msgstr "Tautan koneksi"
 
-#: admin/class-mcp-admin-connections.php:341
-#: admin/class-mcp-admin-connections.php:370
-#: admin/class-mcp-admin-connections.php:376
+#: admin/class-mcp-admin-connections.php:342
+#: admin/class-mcp-admin-connections.php:371
+#: admin/class-mcp-admin-connections.php:377
 msgid "Copy connector URL"
 msgstr "Salin URL konektor"
 
-#: admin/class-mcp-admin-connections.php:347
-#: admin/class-mcp-admin-connections.php:393
-#: admin/class-mcp-admin-connections.php:635
+#: admin/class-mcp-admin-connections.php:348
+#: admin/class-mcp-admin-connections.php:394
+#: admin/class-mcp-admin-connections.php:636
 msgid "Approve access"
 msgstr "Setujui akses"
 
-#: admin/class-mcp-admin-connections.php:350
+#: admin/class-mcp-admin-connections.php:351
 msgid "Organization owner on Team or Enterprise?"
 msgstr "Pemilik organisasi di Team atau Enterprise?"
 
-#: admin/class-mcp-admin-connections.php:351
+#: admin/class-mcp-admin-connections.php:352
 msgid "Add it for your organization"
 msgstr "Tambahkan untuk organisasi Anda"
 
-#: admin/class-mcp-admin-connections.php:358
-#: admin/class-mcp-admin-connections.php:362
+#: admin/class-mcp-admin-connections.php:359
+#: admin/class-mcp-admin-connections.php:363
 msgid "Open ChatGPT"
 msgstr "Buka ChatGPT"
 
-#: admin/class-mcp-admin-connections.php:364
-#: admin/class-mcp-admin-connections.php:445
+#: admin/class-mcp-admin-connections.php:365
+#: admin/class-mcp-admin-connections.php:446
 msgid "(opens in a new tab)"
 msgstr "(terbuka di tab baru)"
 
-#: admin/class-mcp-admin-connections.php:366
+#: admin/class-mcp-admin-connections.php:367
 msgid "Connection link copied — paste it into ChatGPT as the MCP server URL."
 msgstr "Tautan koneksi disalin — tempelkan ke ChatGPT sebagai URL server MCP."
 
-#: admin/class-mcp-admin-connections.php:367
+#: admin/class-mcp-admin-connections.php:368
 msgid ""
 "Copies your connection link, turns on new connections for 30 minutes and "
 "opens ChatGPT in a new tab."
@@ -562,15 +562,15 @@ msgstr ""
 "Menyalin tautan koneksi Anda, mengaktifkan koneksi baru selama 30 menit, dan "
 "membuka ChatGPT di tab baru."
 
-#: admin/class-mcp-admin-connections.php:369
+#: admin/class-mcp-admin-connections.php:370
 msgid "Copy the link yourself"
 msgstr "Salin tautan sendiri"
 
-#: admin/class-mcp-admin-connections.php:374
+#: admin/class-mcp-admin-connections.php:375
 msgid "Copy your connection link"
 msgstr "Salin tautan koneksi Anda"
 
-#: admin/class-mcp-admin-connections.php:383
+#: admin/class-mcp-admin-connections.php:384
 msgid ""
 "Go to <code>chatgpt.com</code> in your browser and sign in (MCP apps work on "
 "the web only)."
@@ -578,7 +578,7 @@ msgstr ""
 "Buka <code>chatgpt.com</code> di browser Anda dan masuk (aplikasi MCP hanya "
 "berfungsi di web)."
 
-#: admin/class-mcp-admin-connections.php:384
+#: admin/class-mcp-admin-connections.php:385
 msgid ""
 "Go to <code>Settings → Security and login</code> and turn on "
 "<strong>Developer mode</strong> (one-time)."
@@ -586,7 +586,7 @@ msgstr ""
 "Buka <code>Settings → Security and login</code> dan aktifkan "
 "<strong>Developer mode</strong> (sekali saja)."
 
-#: admin/class-mcp-admin-connections.php:385
+#: admin/class-mcp-admin-connections.php:386
 msgid ""
 "Go to <code>Plugins</code>, click <strong>+</strong> and choose <strong>Add "
 "custom MCP server</strong>."
@@ -594,7 +594,7 @@ msgstr ""
 "Buka <code>Plugins</code>, klik <strong>+</strong>, lalu pilih <strong>Add "
 "custom MCP server</strong>."
 
-#: admin/class-mcp-admin-connections.php:386
+#: admin/class-mcp-admin-connections.php:387
 msgid ""
 "Give it a name, paste the link from step 1 as the <strong>MCP server URL</"
 "strong>, set Authentication to <strong>OAuth</strong>, and create it."
@@ -603,29 +603,29 @@ msgstr ""
 "strong>, atur Authentication ke <strong>OAuth</strong>, lalu buat "
 "aplikasinya."
 
-#: admin/class-mcp-admin-connections.php:405
+#: admin/class-mcp-admin-connections.php:406
 msgid "Turn on connections first:"
 msgstr "Aktifkan koneksi terlebih dahulu:"
 
-#: admin/class-mcp-admin-connections.php:416
+#: admin/class-mcp-admin-connections.php:417
 msgid "Open the <strong>Claude</strong> desktop app and sign in."
 msgstr "Buka aplikasi desktop <strong>Claude</strong> dan masuk."
 
-#: admin/class-mcp-admin-connections.php:418
+#: admin/class-mcp-admin-connections.php:419
 msgid "Go to <code>claude.ai</code> in your browser and sign in."
 msgstr "Buka <code>claude.ai</code> di browser Anda dan masuk."
 
-#: admin/class-mcp-admin-connections.php:420
+#: admin/class-mcp-admin-connections.php:421
 msgid "Go to <code>Customize → Connectors</code>."
 msgstr "Buka <code>Customize → Connectors</code>."
 
-#: admin/class-mcp-admin-connections.php:421
+#: admin/class-mcp-admin-connections.php:422
 msgid ""
 "Click <strong>+ Add</strong>, then <strong>Add custom connector</strong>."
 msgstr ""
 "Klik <strong>+ Add</strong>, lalu <strong>Add custom connector</strong>."
 
-#: admin/class-mcp-admin-connections.php:425
+#: admin/class-mcp-admin-connections.php:426
 msgid ""
 "Give it a name, paste the link above, click <strong>Continue</strong> and "
 "then <strong>Add</strong>. If Claude asks which OAuth client to use, choose "
@@ -635,7 +635,7 @@ msgstr ""
 "<strong>Add</strong>. Jika Claude menanyakan klien OAuth mana yang "
 "digunakan, pilih <strong>Register automatically</strong>."
 
-#: admin/class-mcp-admin-connections.php:426
+#: admin/class-mcp-admin-connections.php:427
 msgid ""
 "Give it a name, paste the link from step 1, click <strong>Continue</strong> "
 "and then <strong>Add</strong>. If Claude asks which OAuth client to use, "
@@ -645,18 +645,21 @@ msgstr ""
 "lalu <strong>Add</strong>. Jika Claude menanyakan klien OAuth mana yang "
 "digunakan, pilih <strong>Register automatically</strong>."
 
-#: admin/class-mcp-admin-connections.php:478
+#: admin/class-mcp-admin-connections.php:479
 msgid "What works on a local site:"
 msgstr "Yang berfungsi di situs lokal:"
 
-#: admin/class-mcp-admin-connections.php:480
+#: admin/class-mcp-admin-connections.php:481
 msgid ""
 "<strong>Terminal and IDE tools</strong> (Claude Code, Codex, Cursor, VS "
 "Code, Gemini CLI) — connect right now; the sign-in opens in your browser on "
 "this computer. Pick one in the sidebar."
-msgstr "<strong>Alat terminal dan IDE</strong> (Claude Code, Codex, Cursor, VS Code, Gemini CLI) — hubungkan sekarang juga; proses masuk terbuka di browser pada komputer ini. Pilih salah satu di bilah samping."
+msgstr ""
+"<strong>Alat terminal dan IDE</strong> (Claude Code, Codex, Cursor, VS Code, "
+"Gemini CLI) — hubungkan sekarang juga; proses masuk terbuka di browser pada "
+"komputer ini. Pilih salah satu di bilah samping."
 
-#: admin/class-mcp-admin-connections.php:481
+#: admin/class-mcp-admin-connections.php:482
 msgid ""
 "<strong>Claude Desktop</strong> — connects through a local bridge that runs "
 "on this computer. Pick it in the sidebar for instructions."
@@ -664,7 +667,7 @@ msgstr ""
 "<strong>Claude Desktop</strong> — terhubung melalui jembatan lokal yang "
 "berjalan di komputer ini. Pilih di bilah samping untuk petunjuknya."
 
-#: admin/class-mcp-admin-connections.php:482
+#: admin/class-mcp-admin-connections.php:483
 msgid ""
 "<strong>claude.ai and ChatGPT</strong> — cloud-only: they need a public "
 "HTTPS address. A tunnel (e.g. ngrok or Cloudflare Tunnel) works temporarily, "
@@ -677,7 +680,7 @@ msgstr ""
 "berjalan, dan Alamat Situs WordPress harus diubah ke URL tunnel agar proses "
 "masuk berfungsi."
 
-#: admin/class-mcp-admin-connections.php:499
+#: admin/class-mcp-admin-connections.php:500
 msgid ""
 "This site runs on your computer, so the cloud connector cannot reach it. "
 "Connect Claude Desktop through a <strong>local bridge</strong> instead: a "
@@ -689,11 +692,11 @@ msgstr ""
 "strong>: pembantu kecil yang berjalan di komputer ini dan meneruskan Claude "
 "Desktop ke situs. Tidak ada yang terekspos ke internet."
 
-#: admin/class-mcp-admin-connections.php:504
+#: admin/class-mcp-admin-connections.php:505
 msgid "Add the bridge to Claude Desktop"
 msgstr "Tambahkan jembatan ke Claude Desktop"
 
-#: admin/class-mcp-admin-connections.php:505
+#: admin/class-mcp-admin-connections.php:506
 msgid ""
 "Add this to <code>claude_desktop_config.json</code> (create the file if it "
 "does not exist), then fully quit and restart the Claude app:"
@@ -701,16 +704,16 @@ msgstr ""
 "Tambahkan ini ke <code>claude_desktop_config.json</code> (buat filenya jika "
 "belum ada), lalu tutup sepenuhnya dan mulai ulang aplikasi Claude:"
 
-#: admin/class-mcp-admin-connections.php:506
-#: admin/class-mcp-admin-connections.php:542
-#: admin/class-mcp-admin-connections.php:582
-#: admin/class-mcp-admin-connections.php:622
-#: admin/class-mcp-admin-connections.php:667
-#: admin/class-mcp-admin-connections.php:720
+#: admin/class-mcp-admin-connections.php:507
+#: admin/class-mcp-admin-connections.php:543
+#: admin/class-mcp-admin-connections.php:583
+#: admin/class-mcp-admin-connections.php:623
+#: admin/class-mcp-admin-connections.php:668
+#: admin/class-mcp-admin-connections.php:721
 msgid "Copy setup command"
 msgstr "Salin perintah penyiapan"
 
-#: admin/class-mcp-admin-connections.php:508
+#: admin/class-mcp-admin-connections.php:509
 msgid ""
 "macOS: <code>~/Library/Application Support/Claude/"
 "claude_desktop_config.json</code>"
@@ -718,11 +721,11 @@ msgstr ""
 "macOS: <code>~/Library/Application Support/Claude/"
 "claude_desktop_config.json</code>"
 
-#: admin/class-mcp-admin-connections.php:509
+#: admin/class-mcp-admin-connections.php:510
 msgid "Windows: <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>"
 msgstr "Windows: <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>"
 
-#: admin/class-mcp-admin-connections.php:511
+#: admin/class-mcp-admin-connections.php:512
 msgid ""
 "Requires Node.js on this computer — the bridge is the standard open-source "
 "<code>mcp-remote</code> package, started on demand via <code>npx</code>. It "
@@ -732,7 +735,7 @@ msgstr ""
 "standar <code>mcp-remote</code>, yang dijalankan sesuai kebutuhan lewat "
 "<code>npx</code>. Koneksinya hanya dari komputer Anda ke situs ini."
 
-#: admin/class-mcp-admin-connections.php:512
+#: admin/class-mcp-admin-connections.php:513
 msgid ""
 "Your API key is stored in plain text in that file, so prefer a <strong>read-"
 "only</strong> key unless this connection needs to make changes — and revoke "
@@ -742,13 +745,13 @@ msgstr ""
 "kunci <strong>hanya-baca</strong> kecuali koneksi ini perlu membuat "
 "perubahan — dan cabut di sini saat tidak lagi digunakan."
 
-#: admin/class-mcp-admin-connections.php:519
-#: admin/class-mcp-admin-connections.php:800
+#: admin/class-mcp-admin-connections.php:520
+#: admin/class-mcp-admin-connections.php:801
 msgid "Check it worked"
 msgstr "Periksa apakah berhasil"
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:522
+#: admin/class-mcp-admin-connections.php:523
 #, php-format
 msgid ""
 "Open a new chat in Claude Desktop and click the tools icon — <code>%s</code> "
@@ -759,11 +762,11 @@ msgstr ""
 "seharusnya tercantum. Mulai pertama bisa memakan waktu sejenak selama "
 "jembatan diunduh."
 
-#: admin/class-mcp-admin-connections.php:539
+#: admin/class-mcp-admin-connections.php:540
 msgid "Getting a certificate error?"
 msgstr "Mendapat galat sertifikat?"
 
-#: admin/class-mcp-admin-connections.php:541
+#: admin/class-mcp-admin-connections.php:542
 msgid ""
 "Local sites usually use a self-signed certificate that AI tools reject. "
 "Since this site runs on this same computer, you can use the plain "
@@ -779,150 +782,176 @@ msgstr ""
 "lihat di internet: itu menonaktifkan pemeriksaan sertifikat untuk semua "
 "koneksi alat tersebut."
 
-#: admin/class-mcp-admin-connections.php:571
+#: admin/class-mcp-admin-connections.php:572
 msgid ""
 "Run these in your terminal. The second line opens your browser to sign in."
-msgstr "Jalankan perintah berikut di terminal Anda. Baris kedua membuka browser Anda untuk masuk."
+msgstr ""
+"Jalankan perintah berikut di terminal Anda. Baris kedua membuka browser Anda "
+"untuk masuk."
 
-#: admin/class-mcp-admin-connections.php:572
+#: admin/class-mcp-admin-connections.php:573
 msgid "Run this in your terminal. Codex opens your browser to sign in."
 msgstr "Jalankan ini di terminal Anda. Codex membuka browser Anda untuk masuk."
 
 #. translators: %s: the MCP server name used in the command
-#: admin/class-mcp-admin-connections.php:574
+#: admin/class-mcp-admin-connections.php:575
 #, php-format
 msgid ""
 "Run this in your terminal, then start <code>gemini</code> and run <code>/mcp "
 "auth %s</code> to sign in."
-msgstr "Jalankan ini di terminal Anda, lalu mulai <code>gemini</code> dan jalankan <code>/mcp auth %s</code> untuk masuk."
+msgstr ""
+"Jalankan ini di terminal Anda, lalu mulai <code>gemini</code> dan jalankan "
+"<code>/mcp auth %s</code> untuk masuk."
 
-#: admin/class-mcp-admin-connections.php:575
+#: admin/class-mcp-admin-connections.php:576
 msgid ""
 "Add this to <code>~/.config/opencode/opencode.json</code> (or a project "
 "<code>opencode.json</code>). Opencode opens your browser to sign in the "
 "first time it connects."
-msgstr "Tambahkan ini ke <code>~/.config/opencode/opencode.json</code> (atau <code>opencode.json</code> proyek). Opencode membuka browser Anda untuk masuk saat pertama kali terhubung."
+msgstr ""
+"Tambahkan ini ke <code>~/.config/opencode/opencode.json</code> (atau "
+"<code>opencode.json</code> proyek). Opencode membuka browser Anda untuk "
+"masuk saat pertama kali terhubung."
 
-#: admin/class-mcp-admin-connections.php:578
-#: admin/class-mcp-admin-connections.php:736
+#: admin/class-mcp-admin-connections.php:579
+#: admin/class-mcp-admin-connections.php:737
 msgid "terminal"
 msgstr "terminal"
 
-#: admin/class-mcp-admin-connections.php:580
+#: admin/class-mcp-admin-connections.php:581
 msgid "Add the server"
 msgstr "Tambahkan server"
 
-#: admin/class-mcp-admin-connections.php:584
+#: admin/class-mcp-admin-connections.php:585
 msgid ""
 "Working over SSH? Add <code>--no-browser</code> to the second line and open "
 "the printed URL in a local browser."
-msgstr "Bekerja melalui SSH? Tambahkan <code>--no-browser</code> ke baris kedua dan buka URL yang ditampilkan di browser lokal."
+msgstr ""
+"Bekerja melalui SSH? Tambahkan <code>--no-browser</code> ke baris kedua dan "
+"buka URL yang ditampilkan di browser lokal."
 
-#: admin/class-mcp-admin-connections.php:587
+#: admin/class-mcp-admin-connections.php:588
 msgid ""
 "Local https sites usually use a self-signed certificate that these tools "
 "reject. Either trust the certificate in your tool, or set the WordPress Site "
 "Address to the <code>http://</code> URL — the sign-in discovery addresses "
 "are built from it."
-msgstr "Situs https lokal biasanya memakai sertifikat yang ditandatangani sendiri, yang ditolak oleh alat-alat ini. Percayai sertifikat itu di alat Anda, atau atur Alamat Situs WordPress ke URL <code>http://</code> — alamat penemuan untuk proses masuk dibuat dari nilai itu."
+msgstr ""
+"Situs https lokal biasanya memakai sertifikat yang ditandatangani sendiri, "
+"yang ditolak oleh alat-alat ini. Percayai sertifikat itu di alat Anda, atau "
+"atur Alamat Situs WordPress ke URL <code>http://</code> — alamat penemuan "
+"untuk proses masuk dibuat dari nilai itu."
 
-#: admin/class-mcp-admin-connections.php:603
+#: admin/class-mcp-admin-connections.php:604
 msgid "Add to Cursor"
 msgstr "Tambahkan ke Cursor"
 
-#: admin/class-mcp-admin-connections.php:603
+#: admin/class-mcp-admin-connections.php:604
 msgid "Install in VS Code"
 msgstr "Pasang di VS Code"
 
-#: admin/class-mcp-admin-connections.php:605
+#: admin/class-mcp-admin-connections.php:606
 msgid ""
 "Opens Cursor and asks you to add this site. Accept, then Cursor opens your "
 "browser to sign in."
-msgstr "Membuka Cursor dan meminta Anda menambahkan situs ini. Terima, lalu Cursor membuka browser Anda untuk masuk."
+msgstr ""
+"Membuka Cursor dan meminta Anda menambahkan situs ini. Terima, lalu Cursor "
+"membuka browser Anda untuk masuk."
 
-#: admin/class-mcp-admin-connections.php:606
+#: admin/class-mcp-admin-connections.php:607
 msgid ""
 "Opens VS Code and asks you to add this site. Confirm, trust the server when "
 "asked, then VS Code opens your browser to sign in."
-msgstr "Membuka VS Code dan meminta Anda menambahkan situs ini. Konfirmasi, percayai server saat diminta, lalu VS Code membuka browser Anda untuk masuk."
+msgstr ""
+"Membuka VS Code dan meminta Anda menambahkan situs ini. Konfirmasi, percayai "
+"server saat diminta, lalu VS Code membuka browser Anda untuk masuk."
 
 #. translators: %s: config file path
-#: admin/class-mcp-admin-connections.php:620
+#: admin/class-mcp-admin-connections.php:621
 #, php-format
 msgid ""
 "Add this to <code>%s</code> (create the file if it does not exist), then "
 "restart the editor. It signs in on first use."
-msgstr "Tambahkan ini ke <code>%s</code> (buat file jika belum ada), lalu mulai ulang editor. Proses masuk terjadi saat pertama kali digunakan."
+msgstr ""
+"Tambahkan ini ke <code>%s</code> (buat file jika belum ada), lalu mulai "
+"ulang editor. Proses masuk terjadi saat pertama kali digunakan."
 
-#: admin/class-mcp-admin-connections.php:636
+#: admin/class-mcp-admin-connections.php:637
 msgid ""
 "A sign-in page opens on <strong>your site</strong>. Review what it is asking "
 "for, pick the access level and click <strong>Approve</strong>. You are back "
 "in your tool a moment later."
-msgstr "Halaman masuk terbuka di <strong>situs Anda</strong>. Tinjau apa yang dimintanya, pilih tingkat akses, lalu klik <strong>Setujui</strong>. Sesaat kemudian Anda kembali ke alat Anda."
+msgstr ""
+"Halaman masuk terbuka di <strong>situs Anda</strong>. Tinjau apa yang "
+"dimintanya, pilih tingkat akses, lalu klik <strong>Setujui</strong>. Sesaat "
+"kemudian Anda kembali ke alat Anda."
 
-#: admin/class-mcp-admin-connections.php:663
+#: admin/class-mcp-admin-connections.php:664
 msgid ""
 "Headless, CI, or a tool that can't open a browser? Use an API key instead"
-msgstr "Headless, CI, atau alat yang tidak bisa membuka browser? Gunakan kunci API sebagai gantinya"
+msgstr ""
+"Headless, CI, atau alat yang tidak bisa membuka browser? Gunakan kunci API "
+"sebagai gantinya"
 
-#: admin/class-mcp-admin-connections.php:666
+#: admin/class-mcp-admin-connections.php:667
 msgid "Then add the server with the key in a header:"
 msgstr "Lalu tambahkan server dengan kunci di header:"
 
-#: admin/class-mcp-admin-connections.php:669
+#: admin/class-mcp-admin-connections.php:670
 msgid ""
 "Codex reads the key each time it starts, so also add the <code>export</code> "
 "line to your shell profile (e.g. <code>~/.zshrc</code>)."
-msgstr "Codex membaca kunci setiap kali dimulai, jadi tambahkan juga baris <code>export</code> ke profil shell Anda (mis. <code>~/.zshrc</code>)."
+msgstr ""
+"Codex membaca kunci setiap kali dimulai, jadi tambahkan juga baris "
+"<code>export</code> ke profil shell Anda (mis. <code>~/.zshrc</code>)."
 
-#: admin/class-mcp-admin-connections.php:683
+#: admin/class-mcp-admin-connections.php:684
 msgid "Create an API key"
 msgstr "Buat kunci API"
 
-#: admin/class-mcp-admin-connections.php:686
+#: admin/class-mcp-admin-connections.php:687
 msgid ""
 "<strong>Copy your key now</strong> — for security it will not be shown again."
 msgstr ""
 "<strong>Salin kunci Anda sekarang</strong> — demi keamanan, kunci tidak akan "
 "ditampilkan lagi."
 
-#: admin/class-mcp-admin-connections.php:687
-#: admin/class-mcp-admin-connections.php:1147
+#: admin/class-mcp-admin-connections.php:688
+#: admin/class-mcp-admin-connections.php:1148
 msgid "API key"
 msgstr "Kunci API"
 
-#: admin/class-mcp-admin-connections.php:687
+#: admin/class-mcp-admin-connections.php:688
 msgid "Copy API key"
 msgstr "Salin kunci API"
 
-#: admin/class-mcp-admin-connections.php:688
+#: admin/class-mcp-admin-connections.php:689
 msgid "I've saved my key"
 msgstr "Saya sudah menyimpan kunci saya"
 
-#: admin/class-mcp-admin-connections.php:691
+#: admin/class-mcp-admin-connections.php:692
 msgid "Give it a name so you can recognize it later, then generate."
 msgstr "Beri nama agar Anda dapat mengenalinya nanti, lalu buat."
 
 #. translators: %s: client name, e.g. "Claude Code"
-#: admin/class-mcp-admin-connections.php:696
+#: admin/class-mcp-admin-connections.php:697
 #, php-format
 msgid "e.g. %s on my laptop"
 msgstr "mis. %s di laptop saya"
 
-#: admin/class-mcp-admin-connections.php:699
+#: admin/class-mcp-admin-connections.php:700
 msgid "Generate API key"
 msgstr "Buat kunci API"
 
-#: admin/class-mcp-admin-connections.php:699
+#: admin/class-mcp-admin-connections.php:700
 msgid "Generate another key"
 msgstr "Buat kunci lain"
 
-#: admin/class-mcp-admin-connections.php:710
+#: admin/class-mcp-admin-connections.php:711
 msgid "Run this in your terminal:"
 msgstr "Jalankan ini di terminal Anda:"
 
-#: admin/class-mcp-admin-connections.php:711
+#: admin/class-mcp-admin-connections.php:712
 msgid ""
 "Run these in your terminal. Codex reads the key each time it starts, so also "
 "add the <code>export</code> line to your shell profile (e.g. <code>~/.zshrc</"
@@ -932,7 +961,7 @@ msgstr ""
 "dimulai, jadi tambahkan juga baris <code>export</code> ke profil shell Anda "
 "(mis. <code>~/.zshrc</code>):"
 
-#: admin/class-mcp-admin-connections.php:712
+#: admin/class-mcp-admin-connections.php:713
 msgid ""
 "Add this to <code>~/.config/opencode/opencode.json</code> (or a project "
 "<code>opencode.json</code>), then restart Opencode:"
@@ -940,7 +969,7 @@ msgstr ""
 "Tambahkan ini ke <code>~/.config/opencode/opencode.json</code> (atau "
 "<code>opencode.json</code> proyek), lalu mulai ulang Opencode:"
 
-#: admin/class-mcp-admin-connections.php:713
+#: admin/class-mcp-admin-connections.php:714
 msgid ""
 "Add this to <code>~/.cursor/mcp.json</code> (create the file if it does not "
 "exist), then restart Cursor:"
@@ -948,18 +977,20 @@ msgstr ""
 "Tambahkan ini ke <code>~/.cursor/mcp.json</code> (buat file tersebut jika "
 "belum ada), lalu mulai ulang Cursor:"
 
-#: admin/class-mcp-admin-connections.php:714
+#: admin/class-mcp-admin-connections.php:715
 msgid ""
 "Add this to <code>.vscode/mcp.json</code> in your project (or your user "
 "<code>mcp.json</code>), then restart VS Code:"
-msgstr "Tambahkan ini ke <code>.vscode/mcp.json</code> di proyek Anda (atau <code>mcp.json</code> pengguna Anda), lalu mulai ulang VS Code:"
+msgstr ""
+"Tambahkan ini ke <code>.vscode/mcp.json</code> di proyek Anda (atau "
+"<code>mcp.json</code> pengguna Anda), lalu mulai ulang VS Code:"
 
-#: admin/class-mcp-admin-connections.php:718
+#: admin/class-mcp-admin-connections.php:719
 msgid "Add the server to your tool"
 msgstr "Tambahkan server ke alat Anda"
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:786
+#: admin/class-mcp-admin-connections.php:787
 #, php-format
 msgid ""
 "Open a new Claude Code session and run <code>/mcp</code> — <code>%s</code> "
@@ -969,7 +1000,7 @@ msgstr ""
 "akan tercantum sebagai terhubung."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:788
+#: admin/class-mcp-admin-connections.php:789
 #, php-format
 msgid ""
 "Start Codex and run <code>/mcp</code> — <code>%s</code> should be listed "
@@ -979,7 +1010,7 @@ msgstr ""
 "beserta alat-alatnya."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:790
+#: admin/class-mcp-admin-connections.php:791
 #, php-format
 msgid ""
 "Run <code>opencode mcp list</code> — <code>%s</code> should be listed as "
@@ -989,7 +1020,7 @@ msgstr ""
 "sebagai terhubung."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:792
+#: admin/class-mcp-admin-connections.php:793
 #, php-format
 msgid ""
 "Open <code>Customize</code> in the Cursor sidebar — <code>%s</code> should "
@@ -999,7 +1030,7 @@ msgstr ""
 "tercantum dan aktif. Galat ditampilkan di <code>Output → MCP Logs</code>."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:794
+#: admin/class-mcp-admin-connections.php:795
 #, php-format
 msgid ""
 "Run <code>gemini mcp list</code> — <code>%s</code> should show as connected."
@@ -1008,40 +1039,44 @@ msgstr ""
 "terhubung."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:796
+#: admin/class-mcp-admin-connections.php:797
 #, php-format
 msgid ""
 "Open Copilot Chat in agent mode and click the tools icon — <code>%s</code> "
 "should be listed. Errors show under <code>Output → MCP</code>."
-msgstr "Buka Copilot Chat dalam mode agen dan klik ikon alat — <code>%s</code> seharusnya tercantum. Kesalahan ditampilkan di <code>Output → MCP</code>."
+msgstr ""
+"Buka Copilot Chat dalam mode agen dan klik ikon alat — <code>%s</code> "
+"seharusnya tercantum. Kesalahan ditampilkan di <code>Output → MCP</code>."
 
-#: admin/class-mcp-admin-connections.php:802
+#: admin/class-mcp-admin-connections.php:803
 msgid "Then try a read-only prompt:"
 msgstr "Lalu coba prompt hanya-baca:"
 
-#: admin/class-mcp-admin-connections.php:805
+#: admin/class-mcp-admin-connections.php:806
 msgid "Copy prompt"
 msgstr "Salin prompt"
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:805
+#: admin/class-mcp-admin-connections.php:806
 #, php-format
 msgid ""
 "Using %s, tell me this site's name and WordPress version. Don't change "
 "anything."
-msgstr "Dengan %s, sebutkan nama situs ini dan versi WordPress-nya. Jangan ubah apa pun."
+msgstr ""
+"Dengan %s, sebutkan nama situs ini dan versi WordPress-nya. Jangan ubah apa "
+"pun."
 
-#: admin/class-mcp-admin-connections.php:805
+#: admin/class-mcp-admin-connections.php:806
 msgid "prompt"
 msgstr "prompt"
 
 #. translators: %s: tool category name
-#: admin/class-mcp-admin-connections.php:831
+#: admin/class-mcp-admin-connections.php:832
 #, php-format
 msgid "Select all %s tools"
 msgstr "Pilih semua alat %s"
 
-#: admin/class-mcp-admin-connections.php:845
+#: admin/class-mcp-admin-connections.php:846
 msgid ""
 "Note: read-only MCP resources (site info, user list, recent posts, etc.) are "
 "always available to every credential regardless of tool scope."
@@ -1050,55 +1085,55 @@ msgstr ""
 "dll.) selalu tersedia untuk setiap kunci dan koneksi, terlepas dari cakupan "
 "alat."
 
-#: admin/class-mcp-admin-connections.php:856
+#: admin/class-mcp-admin-connections.php:857
 msgid "Custom…"
 msgstr "Kustom…"
 
-#: admin/class-mcp-admin-connections.php:856
-#: admin/class-mcp-admin-connections.php:872
-#: admin/class-mcp-admin-connections.php:883
+#: admin/class-mcp-admin-connections.php:857
+#: admin/class-mcp-admin-connections.php:873
+#: admin/class-mcp-admin-connections.php:884
 msgid "Full access"
 msgstr "Akses penuh"
 
-#: admin/class-mcp-admin-connections.php:856
-#: admin/class-mcp-admin-connections.php:876
+#: admin/class-mcp-admin-connections.php:857
+#: admin/class-mcp-admin-connections.php:877
 msgid "Read-only"
 msgstr "Hanya baca"
 
-#: admin/class-mcp-admin-connections.php:859 includes/class-mcp-oauth.php:1476
+#: admin/class-mcp-admin-connections.php:860 includes/class-mcp-oauth.php:1479
 msgid "Access level"
 msgstr "Tingkat Akses"
 
 #. translators: %d: number of tools this credential may call
-#: admin/class-mcp-admin-connections.php:880
+#: admin/class-mcp-admin-connections.php:881
 #, php-format
 msgid "Custom (%d tools)"
 msgstr "Kustom (%d alat)"
 
-#: admin/class-mcp-admin-connections.php:887
+#: admin/class-mcp-admin-connections.php:888
 msgid "Unknown (blocked)"
 msgstr "Tidak dikenal (diblokir)"
 
-#: admin/class-mcp-admin-connections.php:903
+#: admin/class-mcp-admin-connections.php:904
 msgid "Dismiss"
 msgstr "Tutup"
 
 #. translators: 1: app name such as ChatGPT, 2: relative time such as "4 minutes"
-#: admin/class-mcp-admin-connections.php:907
+#: admin/class-mcp-admin-connections.php:908
 #, php-format
 msgid "%1$s tried to connect %2$s ago, but new connections were off."
 msgstr ""
 "%1$s mencoba terhubung %2$s yang lalu, tetapi koneksi baru sedang nonaktif."
 
 #. translators: %d: number of attempts
-#: admin/class-mcp-admin-connections.php:910
+#: admin/class-mcp-admin-connections.php:911
 #, php-format
 msgid "(%d attempt)"
 msgid_plural "(%d attempts)"
 msgstr[0] "(%d percobaan)"
 
 #. translators: %s: host name
-#: admin/class-mcp-admin-connections.php:915
+#: admin/class-mcp-admin-connections.php:916
 #, php-format
 msgid ""
 "Its sign-in address (%s) is not on the allowed list either — add it to the "
@@ -1108,18 +1143,18 @@ msgstr ""
 "ke host masuk tambahan di tab Pengaturan."
 
 #. translators: %s: app name such as ChatGPT
-#: admin/class-mcp-admin-connections.php:922
+#: admin/class-mcp-admin-connections.php:923
 #, php-format
 msgid "New connections are on — try again in %s now."
 msgstr "Koneksi baru aktif — coba lagi sekarang di %s."
 
 #. translators: %s: app name such as ChatGPT
-#: admin/class-mcp-admin-connections.php:936
+#: admin/class-mcp-admin-connections.php:937
 #, php-format
 msgid "Then add the app again in %s."
 msgstr "Lalu tambahkan aplikasi itu lagi di %s."
 
-#: admin/class-mcp-admin-connections.php:961
+#: admin/class-mcp-admin-connections.php:962
 msgid ""
 "Connect AI agents like <strong>Claude</strong>, <strong>ChatGPT</strong>, or "
 "<strong>Codex</strong> to this WordPress site over the Model Context "
@@ -1129,29 +1164,29 @@ msgstr ""
 "atau <strong>Codex</strong> ke situs WordPress ini melalui Model Context "
 "Protocol."
 
-#: admin/class-mcp-admin-connections.php:988
-#: admin/class-mcp-admin-connections.php:1123
+#: admin/class-mcp-admin-connections.php:989
+#: admin/class-mcp-admin-connections.php:1124
 msgid "Connect another app"
 msgstr "Hubungkan aplikasi lain"
 
-#: admin/class-mcp-admin-connections.php:988
+#: admin/class-mcp-admin-connections.php:989
 msgid "Connect your first app"
 msgstr "Hubungkan aplikasi pertama Anda"
 
-#: admin/class-mcp-admin-connections.php:989
+#: admin/class-mcp-admin-connections.php:990
 msgid "Pick your AI app or coding tool — setup takes about a minute."
 msgstr ""
 "Pilih aplikasi AI atau alat pemrograman Anda — penyiapan sekitar satu menit."
 
-#: admin/class-mcp-admin-connections.php:991
+#: admin/class-mcp-admin-connections.php:992
 msgid "Close"
 msgstr "Tutup"
 
-#: admin/class-mcp-admin-connections.php:999
+#: admin/class-mcp-admin-connections.php:1000
 msgid "Which app do you want to connect?"
 msgstr "Aplikasi mana yang ingin Anda hubungkan?"
 
-#: admin/class-mcp-admin-connections.php:1000
+#: admin/class-mcp-admin-connections.php:1001
 msgid ""
 "Pick your AI app or coding tool from the list to see step-by-step setup "
 "instructions."
@@ -1160,136 +1195,136 @@ msgstr ""
 "petunjuk penyiapan langkah demi langkah."
 
 #. translators: %s: AI client name, e.g. "Claude Code"
-#: admin/class-mcp-admin-connections.php:1011
+#: admin/class-mcp-admin-connections.php:1012
 #, php-format
 msgid "Connect %s"
 msgstr "Hubungkan %s"
 
-#: admin/class-mcp-admin-connections.php:1032
+#: admin/class-mcp-admin-connections.php:1033
 msgid "No terminal needed"
 msgstr "Tidak perlu terminal"
 
-#: admin/class-mcp-admin-connections.php:1033
+#: admin/class-mcp-admin-connections.php:1034
 msgid "Terminal & IDE tools"
 msgstr "Alat Terminal & IDE"
 
-#: admin/class-mcp-admin-connections.php:1038
+#: admin/class-mcp-admin-connections.php:1039
 msgid "AI clients"
 msgstr "Klien AI"
 
-#: admin/class-mcp-admin-connections.php:1058
+#: admin/class-mcp-admin-connections.php:1059
 msgid "Needs public URL"
 msgstr "Perlu URL publik"
 
-#: admin/class-mcp-admin-connections.php:1060
+#: admin/class-mcp-admin-connections.php:1061
 msgid "Works locally"
 msgstr "Berfungsi secara lokal"
 
-#: admin/class-mcp-admin-connections.php:1068
+#: admin/class-mcp-admin-connections.php:1069
 msgid "Another MCP client? Use this endpoint:"
 msgstr "Klien MCP lain? Gunakan endpoint ini:"
 
-#: admin/class-mcp-admin-connections.php:1071
+#: admin/class-mcp-admin-connections.php:1072
 msgid "Copy endpoint URL"
 msgstr "Salin URL endpoint"
 
-#: admin/class-mcp-admin-connections.php:1105
+#: admin/class-mcp-admin-connections.php:1106
 msgid "Copy"
 msgstr "Salin"
 
-#: admin/class-mcp-admin-connections.php:1118
+#: admin/class-mcp-admin-connections.php:1119
 msgid "Connected apps"
 msgstr "Aplikasi terhubung"
 
-#: admin/class-mcp-admin-connections.php:1131
+#: admin/class-mcp-admin-connections.php:1132
 msgid "Name"
 msgstr "Nama"
 
-#: admin/class-mcp-admin-connections.php:1132
+#: admin/class-mcp-admin-connections.php:1133
 msgid "Type"
 msgstr "Jenis"
 
-#: admin/class-mcp-admin-connections.php:1133
+#: admin/class-mcp-admin-connections.php:1134
 msgid "Access"
 msgstr "Akses"
 
-#: admin/class-mcp-admin-connections.php:1135
+#: admin/class-mcp-admin-connections.php:1136
 msgid "Last used"
 msgstr "Terakhir digunakan"
 
-#: admin/class-mcp-admin-connections.php:1155
+#: admin/class-mcp-admin-connections.php:1156
 msgid "Revoke this key? Any client using it will lose access."
 msgstr ""
 "Cabut kunci ini? Klien mana pun yang menggunakannya akan kehilangan akses."
 
 #. translators: 1: app name detected from its first request, 2: WordPress username of the approving admin
-#: admin/class-mcp-admin-connections.php:1162
+#: admin/class-mcp-admin-connections.php:1163
 #, php-format
 msgid "%1$s · approved by %2$s"
 msgstr "%1$s · disetujui oleh %2$s"
 
 #. translators: %s: WordPress username of the admin who approved the connection
-#: admin/class-mcp-admin-connections.php:1165
+#: admin/class-mcp-admin-connections.php:1166
 #, php-format
 msgid "approved by %s"
 msgstr "disetujui oleh %s"
 
-#: admin/class-mcp-admin-connections.php:1171
+#: admin/class-mcp-admin-connections.php:1172
 msgid "OAuth"
 msgstr "OAuth"
 
-#: admin/class-mcp-admin-connections.php:1179
+#: admin/class-mcp-admin-connections.php:1180
 msgid "Revoke this connection? The app will lose access immediately."
 msgstr "Cabut koneksi ini? Aplikasi akan segera kehilangan akses."
 
 #. translators: %s: human-readable time difference, e.g. "2 hours"
-#: admin/class-mcp-admin-connections.php:1205
+#: admin/class-mcp-admin-connections.php:1206
 #, php-format
 msgid "%s ago"
 msgstr "%s lalu"
 
-#: admin/class-mcp-admin-connections.php:1207
+#: admin/class-mcp-admin-connections.php:1208
 msgid "Never"
 msgstr "Tidak pernah"
 
 #. translators: %s: credential name
-#: admin/class-mcp-admin-connections.php:1214
+#: admin/class-mcp-admin-connections.php:1215
 #, php-format
 msgid "Actions for %s"
 msgstr "Tindakan untuk %s"
 
-#: admin/class-mcp-admin-connections.php:1217
+#: admin/class-mcp-admin-connections.php:1218
 msgid "Edit access…"
 msgstr "Ubah akses…"
 
-#: admin/class-mcp-admin-connections.php:1218
+#: admin/class-mcp-admin-connections.php:1219
 msgid "Revoke"
 msgstr "Cabut"
 
-#: admin/class-mcp-admin-connections.php:1221
+#: admin/class-mcp-admin-connections.php:1222
 msgid "Revoke…"
 msgstr "Cabut…"
 
 #. translators: %s: credential name
-#: admin/class-mcp-admin-connections.php:1234
+#: admin/class-mcp-admin-connections.php:1235
 #, php-format
 msgid "Access for <strong>%s</strong>"
 msgstr "Akses untuk <strong>%s</strong>"
 
-#: admin/class-mcp-admin-connections.php:1238
+#: admin/class-mcp-admin-connections.php:1239
 #: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:219
 msgid "Cancel"
 msgstr "Batal"
 
-#: admin/class-mcp-admin-connections.php:1239
+#: admin/class-mcp-admin-connections.php:1240
 msgid "Save access"
 msgstr "Simpan akses"
 
-#: admin/class-mcp-admin-connections.php:1252
+#: admin/class-mcp-admin-connections.php:1253
 msgid "Connection Doctor"
 msgstr "Diagnostik Koneksi"
 
-#: admin/class-mcp-admin-connections.php:1254
+#: admin/class-mcp-admin-connections.php:1255
 msgid ""
 "Test whether AI clients can reach this site and get a copy-pasteable "
 "diagnosis for anything broken."
@@ -1297,15 +1332,15 @@ msgstr ""
 "Uji apakah klien AI dapat menjangkau situs ini dan dapatkan diagnosis yang "
 "bisa disalin-tempel untuk semua masalah yang ada."
 
-#: admin/class-mcp-admin-connections.php:1256
+#: admin/class-mcp-admin-connections.php:1257
 msgid "Run checks"
 msgstr "Jalankan pemeriksaan"
 
-#: admin/class-mcp-admin-connections.php:1257
+#: admin/class-mcp-admin-connections.php:1258
 msgid "Copy report"
 msgstr "Salin laporan"
 
-#: admin/class-mcp-admin-connections.php:1258
+#: admin/class-mcp-admin-connections.php:1259
 msgid "Get help on WordPress.org"
 msgstr "Dapatkan bantuan di WordPress.org"
 
@@ -2132,15 +2167,15 @@ msgstr "Jalankan Diagnostik Koneksi"
 msgid "Thanks!"
 msgstr "Terima kasih!"
 
-#: includes/class-mcp-oauth.php:826
+#: includes/class-mcp-oauth.php:827
 msgid "Unknown client"
 msgstr "Klien tidak dikenal"
 
-#: includes/class-mcp-oauth.php:1226
+#: includes/class-mcp-oauth.php:1229
 msgid "The OAuth connector is not enabled on this site."
 msgstr "Konektor OAuth tidak diaktifkan di situs ini."
 
-#: includes/class-mcp-oauth.php:1262
+#: includes/class-mcp-oauth.php:1265
 msgid ""
 "This site has no record of this app. That usually means the site's database "
 "was restored or copied from another site. To let the app connect again: "
@@ -2155,15 +2190,15 @@ msgstr ""
 "\"Aktifkan selama 30 menit\", lalu gunakan \"Sambungkan ulang\" di aplikasi "
 "dan setujui di sini."
 
-#: includes/class-mcp-oauth.php:1276
+#: includes/class-mcp-oauth.php:1279
 msgid "Invalid redirect_uri for this client."
 msgstr "redirect_uri tidak valid untuk klien ini."
 
-#: includes/class-mcp-oauth.php:1285
+#: includes/class-mcp-oauth.php:1288
 msgid "You must be an administrator to authorize this connection."
 msgstr "Anda harus menjadi administrator untuk mengotorisasi koneksi ini."
 
-#: includes/class-mcp-oauth.php:1293
+#: includes/class-mcp-oauth.php:1296
 msgid ""
 "This connection request is missing a required security parameter (PKCE "
 "S256). Start the connection again from your AI app."
@@ -2171,7 +2206,7 @@ msgstr ""
 "Permintaan koneksi ini tidak memiliki parameter keamanan wajib (PKCE S256). "
 "Mulai lagi koneksi dari aplikasi AI Anda."
 
-#: includes/class-mcp-oauth.php:1297
+#: includes/class-mcp-oauth.php:1300
 msgid ""
 "This connection request is for a different address than this site's MCP "
 "endpoint. Check the server URL in your AI app."
@@ -2180,7 +2215,7 @@ msgstr ""
 "situs ini. Periksa URL server di aplikasi AI Anda."
 
 #. translators: %s: host name the app asked to be sent back to
-#: includes/class-mcp-oauth.php:1306
+#: includes/class-mcp-oauth.php:1309
 #, php-format
 msgid ""
 "This connection would send you to %s, which is not an allowed destination on "
@@ -2191,30 +2226,30 @@ msgstr ""
 "situs ini. Jika Anda memercayai aplikasi tersebut, administrator dapat "
 "menambahkan host-nya di Pengaturan > Cowboy MCP > Desktop Connector."
 
-#: includes/class-mcp-oauth.php:1319
+#: includes/class-mcp-oauth.php:1322
 msgid "Security check failed. Please try again."
 msgstr "Pemeriksaan keamanan gagal. Silakan coba lagi."
 
-#: includes/class-mcp-oauth.php:1394
+#: includes/class-mcp-oauth.php:1397
 msgid "Connection error"
 msgstr "Kesalahan koneksi"
 
-#: includes/class-mcp-oauth.php:1401
+#: includes/class-mcp-oauth.php:1404
 msgid "An application"
 msgstr "Sebuah aplikasi"
 
-#: includes/class-mcp-oauth.php:1433
+#: includes/class-mcp-oauth.php:1436
 msgid "Authorize connection"
 msgstr "Otorisasi koneksi"
 
 #. translators: %s: application/client name
-#: includes/class-mcp-oauth.php:1444
+#: includes/class-mcp-oauth.php:1447
 #, php-format
 msgid "%s wants to connect"
 msgstr "%s ingin terhubung"
 
 #. translators: %s: site name
-#: includes/class-mcp-oauth.php:1448
+#: includes/class-mcp-oauth.php:1451
 #, php-format
 msgid ""
 "It will be able to read and manage %s through the MCP server, acting with "
@@ -2224,18 +2259,18 @@ msgstr ""
 "bertindak dengan izin administrator Anda."
 
 #. translators: %s: WordPress username
-#: includes/class-mcp-oauth.php:1453
+#: includes/class-mcp-oauth.php:1456
 #, php-format
 msgid "Authorizing as %s"
 msgstr "Mengotorisasi sebagai %s"
 
 #. translators: %s: host name of the address the browser is sent to after approval, e.g. chatgpt.com
-#: includes/class-mcp-oauth.php:1458
+#: includes/class-mcp-oauth.php:1461
 #, php-format
 msgid "After you approve, you will be sent to %s"
 msgstr "Setelah Anda menyetujui, Anda akan diarahkan ke %s"
 
-#: includes/class-mcp-oauth.php:1460
+#: includes/class-mcp-oauth.php:1463
 msgid ""
 "The app name above is supplied by the app and is not verified. Approve only "
 "if you just started this connection yourself."
@@ -2243,7 +2278,7 @@ msgstr ""
 "Nama aplikasi di atas diberikan oleh aplikasi itu sendiri dan tidak "
 "diverifikasi. Setujui hanya jika Anda baru saja memulai koneksi ini sendiri."
 
-#: includes/class-mcp-oauth.php:1462
+#: includes/class-mcp-oauth.php:1465
 msgid ""
 "This site has no stored record of this connection. That is normal after a "
 "database restore or a staging sync. If you did not just start this from your "
@@ -2253,7 +2288,7 @@ msgstr ""
 "wajar setelah pemulihan database atau sinkronisasi staging. Jika Anda tidak "
 "baru saja memulainya dari aplikasi AI Anda, pilih Tolak."
 
-#: includes/class-mcp-oauth.php:1464
+#: includes/class-mcp-oauth.php:1467
 msgid ""
 "This site has no record of this app. Approving registers it here and sends "
 "you to the address above. That is expected after a database restore or a "
@@ -2267,32 +2302,41 @@ msgstr ""
 "aplikasi AI Anda, pilih Tolak."
 
 #. translators: %d: number of tools allowed in the connection's current custom scope
-#: includes/class-mcp-oauth.php:1482
+#: includes/class-mcp-oauth.php:1485
 #, php-format
 msgid "Keep current custom scope (%d tools)"
 msgstr "Pertahankan cakupan kustom saat ini (%d alat)"
 
-#: includes/class-mcp-oauth.php:1488
+#: includes/class-mcp-oauth.php:1491
 msgid "Full access — read and manage the site"
 msgstr "Akses penuh — baca dan kelola situs"
 
-#: includes/class-mcp-oauth.php:1492
+#: includes/class-mcp-oauth.php:1495
 msgid "Read-only — inspect the site, make no changes"
 msgstr "Hanya baca — periksa situs, tanpa membuat perubahan"
 
-#: includes/class-mcp-oauth.php:1496
+#: includes/class-mcp-oauth.php:1499
 msgid "Deny"
 msgstr "Tolak"
 
-#: includes/class-mcp-oauth.php:1497
+#: includes/class-mcp-oauth.php:1500
 msgid "Approve"
 msgstr "Setujui"
 
 #. translators: %s: redirect URI
-#: includes/class-mcp-oauth.php:1502
+#: includes/class-mcp-oauth.php:1505
 #, php-format
 msgid "Redirects to: %s"
 msgstr "Mengalihkan ke: %s"
+
+#~ msgid ""
+#~ "Copy above turns this on for you. Adding it by hand? Enable it first. It "
+#~ "switches itself off after 30 minutes, and connections that already exist "
+#~ "keep working either way."
+#~ msgstr ""
+#~ "Tombol “Salin” di atas mengaktifkan ini untuk Anda. Menambahkan secara "
+#~ "manual? Aktifkan ini terlebih dahulu. Akan mati sendiri setelah 30 menit, "
+#~ "dan koneksi yang sudah ada tetap berfungsi apa pun keadaannya."
 
 #~ msgid "ChatGPT found your site — approve access on the sign-in page."
 #~ msgstr "ChatGPT menemukan situs Anda — setujui akses di halaman masuk."
