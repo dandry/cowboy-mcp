@@ -240,7 +240,7 @@ class Cowboy_MCP_OAuth {
             return null;
         }
         $name = strtolower( trim( (string) ( $row['client_name'] ?? '' ) ) );
-        foreach ( [ 'claude code' => 'claude-code', 'codex' => 'codex', 'gemini cli' => 'gemini-cli', 'visual studio code' => 'vscode', 'cursor' => 'cursor', 'opencode' => 'opencode', 'mcp cli client' => 'mcp-remote', 'zed' => 'zed', 'cline' => 'cline', 'goose' => 'goose', 'amp' => 'amp', 'kiro' => 'kiro', 'qwen code' => 'qwen-code', 'kilo' => 'kilo', 'raycast' => 'raycast', 'windsurf' => 'windsurf', 'devin' => 'windsurf' ] as $prefix => $slug ) {
+        foreach ( [ 'claude code' => 'claude-code', 'codex' => 'codex', 'gemini cli' => 'gemini-cli', 'visual studio code' => 'vscode', 'cursor' => 'cursor', 'opencode' => 'opencode', 'mcp cli' => 'mcp-remote', 'zed' => 'zed', 'cline' => 'cline', 'goose' => 'goose', 'amp' => 'amp', 'kiro' => 'kiro', 'qwen code' => 'qwen-code', 'kilo' => 'kilo', 'raycast' => 'raycast', 'windsurf' => 'windsurf', 'devin' => 'windsurf' ] as $prefix => $slug ) {
             if ( str_starts_with( $name, $prefix ) ) {
                 return $slug;
             }
@@ -283,6 +283,9 @@ class Cowboy_MCP_OAuth {
         $map  = [ 'claude-code' => 'claude-code', 'codex-mcp-client' => 'codex', 'gemini-cli-mcp-client' => 'gemini-cli', 'cursor-vscode' => 'cursor', 'opencode' => 'opencode' ];
         if ( isset( $map[ $name ] ) ) {
             return $map[ $name ];
+        }
+        if ( str_contains( $name, '(via mcp-remote' ) || str_starts_with( $name, 'mcp-remote' ) ) {
+            return 'mcp-remote'; // the bridge rewrites the client's name to "<client> (via mcp-remote <v>)" and probes with "mcp-remote-fallback-test" (src/lib/utils.ts)
         }
         return str_starts_with( $name, 'Visual Studio Code' ) ? 'vscode' : null;
     }
