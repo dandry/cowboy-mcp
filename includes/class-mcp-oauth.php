@@ -43,7 +43,7 @@ class Cowboy_MCP_OAuth {
      * via the cowboy_mcp_oauth_redirect_hosts filter; oauth_redirect_allowlist=false
      * restores the old any-host behaviour.
      */
-    const DEFAULT_REDIRECT_HOSTS = [ 'chatgpt.com', 'openai.com', 'claude.ai', 'claude.com', 'anthropic.com', 'vscode.dev', 'cursor.com', 'perplexity.ai', 'n8n.cloud', 'grok.com', 'mistral.ai', 'antigravity.google', 'oauth-redirect.googleusercontent.com' ];
+    const DEFAULT_REDIRECT_HOSTS = [ 'chatgpt.com', 'openai.com', 'claude.ai', 'claude.com', 'anthropic.com', 'vscode.dev', 'cursor.com', 'perplexity.ai', 'n8n.cloud', 'grok.com', 'mistral.ai', 'antigravity.google', 'oauth-redirect.googleusercontent.com' ]; // phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- OAuth redirect-host allowlist entry (Gemini app callback), not an asset URL.
     const LOOPBACK_HOSTS         = [ 'localhost', '127.0.0.1', '::1' ];
     /**
      * Private-use redirect URIs accepted verbatim (RFC 8252 §7.1), mapped to the client slug.
@@ -183,7 +183,7 @@ class Cowboy_MCP_OAuth {
             'chatgpt.com' => 'ChatGPT', 'openai.com' => 'ChatGPT',
             'claude.ai' => 'Claude', 'claude.com' => 'Claude', 'anthropic.com' => 'Claude',
             'vscode.dev' => 'VS Code', 'cursor.com' => 'Cursor', 'perplexity.ai' => 'Perplexity', 'n8n.cloud' => 'n8n',
-            'grok.com' => 'Grok', 'mistral.ai' => 'Le Chat', 'oauth-redirect.googleusercontent.com' => 'Gemini', 'antigravity.google' => 'Antigravity',
+            'grok.com' => 'Grok', 'mistral.ai' => 'Le Chat', 'oauth-redirect.googleusercontent.com' => 'Gemini', 'antigravity.google' => 'Antigravity', // phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- OAuth redirect-host allowlist entry (Gemini app callback), not an asset URL.
         ];
         foreach ( $map as $base => $label ) {
             if ( $host === $base || str_ends_with( $host, '.' . $base ) ) {
@@ -218,7 +218,7 @@ class Cowboy_MCP_OAuth {
             'chatgpt.com' => 'chatgpt', 'openai.com' => 'chatgpt',
             'claude.ai' => 'claude', 'claude.com' => 'claude', 'anthropic.com' => 'claude',
             'vscode.dev' => 'vscode', 'cursor.com' => 'cursor', 'perplexity.ai' => 'perplexity', 'n8n.cloud' => 'n8n',
-            'grok.com' => 'grok', 'mistral.ai' => 'lechat', 'oauth-redirect.googleusercontent.com' => 'gemini-app', 'antigravity.google' => 'antigravity',
+            'grok.com' => 'grok', 'mistral.ai' => 'lechat', 'oauth-redirect.googleusercontent.com' => 'gemini-app', 'antigravity.google' => 'antigravity', // phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- OAuth redirect-host allowlist entry (Gemini app callback), not an asset URL.
         ];
         $all_loopback = ! empty( $uris );
         foreach ( $uris as $u ) {
