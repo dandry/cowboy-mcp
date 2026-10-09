@@ -105,14 +105,15 @@ class Cowboy_MCP_Admin_Connections {
         // ('bridge'), or is cloud-initiated and needs a public URL ('tunnel').
         // Display metadata only — never used for gating.
         return [
-            'claude-ai'      => [ 'label' => 'claude.ai',      'group' => 'no-terminal', 'type' => 'oauth',  'local' => 'tunnel' ],
-            'claude-desktop' => [ 'label' => 'Claude Desktop', 'group' => 'no-terminal', 'type' => 'oauth',  'local' => 'bridge' ],
-            'chatgpt'        => [ 'label' => 'ChatGPT',        'group' => 'no-terminal', 'type' => 'oauth',  'local' => 'tunnel' ],
-            'claude-code'    => [ 'label' => 'Claude Code',    'group' => 'terminal',    'type' => 'apikey', 'local' => 'works' ],
-            'codex'          => [ 'label' => 'Codex',          'group' => 'terminal',    'type' => 'apikey', 'local' => 'works' ],
-            'opencode'       => [ 'label' => 'Opencode',       'group' => 'terminal',    'type' => 'apikey', 'local' => 'works' ],
-            'cursor'         => [ 'label' => 'Cursor',         'group' => 'terminal',    'type' => 'apikey', 'local' => 'works' ],
-            'gemini-cli'     => [ 'label' => 'Gemini CLI',     'group' => 'terminal',    'type' => 'apikey', 'local' => 'works' ],
+            'claude-ai'      => [ 'label' => 'claude.ai',      'group' => 'no-terminal', 'type' => 'oauth',      'watch' => 'claude',      'local' => 'tunnel' ],
+            'claude-desktop' => [ 'label' => 'Claude Desktop', 'group' => 'no-terminal', 'type' => 'oauth',      'watch' => 'claude',      'local' => 'bridge' ],
+            'chatgpt'        => [ 'label' => 'ChatGPT',        'group' => 'no-terminal', 'type' => 'oauth',      'watch' => 'chatgpt',     'local' => 'tunnel' ],
+            'claude-code'    => [ 'label' => 'Claude Code',    'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'claude-code', 'local' => 'works' ],
+            'codex'          => [ 'label' => 'Codex',          'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'codex',       'local' => 'works' ],
+            'cursor'         => [ 'label' => 'Cursor',         'group' => 'terminal',    'type' => 'oauth-link', 'watch' => 'cursor',      'local' => 'works' ],
+            'vscode'         => [ 'label' => 'VS Code',        'group' => 'terminal',    'type' => 'oauth-link', 'watch' => 'vscode',      'local' => 'works' ],
+            'gemini-cli'     => [ 'label' => 'Gemini CLI',     'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'gemini-cli',  'local' => 'works' ],
+            'opencode'       => [ 'label' => 'Opencode',       'group' => 'terminal',    'type' => 'oauth-cli',  'watch' => 'opencode',    'local' => 'works' ],
         ];
     }
 
@@ -125,7 +126,7 @@ class Cowboy_MCP_Admin_Connections {
      * Echo the inline SVG logo for a client (monochrome, fill = currentColor).
      * Marks: Claude, Cursor, Google Gemini and OpenCode from Simple Icons 16.34.0 (CC0 vectors of the
      * brands' own marks); OpenAI's blossom from OpenAI's official logo pack (cdn.openai.com/brand),
-     * which also stands for Codex. Used only to identify the app being connected; no endorsement.
+     * which also stands for Codex. VS Code: a neutral code-brackets glyph (no brand mark). Used only to identify the app being connected; no endorsement.
      */
     private static function render_client_icon( string $slug ): void {
         $claude = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"></path></svg>';
@@ -138,6 +139,7 @@ class Cowboy_MCP_Admin_Connections {
             'codex'          => $openai,
             'opencode'       => '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M22 24H2V0h20zM17 4.8H7v14.4h10z"></path></svg>',
             'cursor'         => '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"></path></svg>',
+            'vscode'         => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 2 12l6 6M16 6l6 6-6 6M14 4l-4 16"/></svg>',
             'gemini-cli'     => '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"></path></svg>',
         ];
         echo $icons[ $slug ] ?? ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG literals defined directly above; no user input.
@@ -149,8 +151,8 @@ class Cowboy_MCP_Admin_Connections {
      * panel (claude.ai, Claude app, ChatGPT) once the connector is on - API-key
      * tools never see it because they never register.
      */
-    /** $quick: the panel offers "Add to Claude", which opens the window itself. */
-    private static function render_connections_gate( bool $quick = false ): void {
+    /** $quick: the panel offers "Add to Claude", which opens the window itself. $cli: a terminal/IDE panel whose Copy (Task 4) opens it. */
+    private static function render_connections_gate( bool $quick = false, bool $cli = false ): void {
         $settings = get_option( 'cowboy_mcp_settings', [] );
         if ( ! class_exists( 'Cowboy_MCP_OAuth' ) || empty( $settings['enabled'] ) || empty( $settings['oauth_enabled'] ) ) {
             return;
@@ -175,9 +177,11 @@ class Cowboy_MCP_Admin_Connections {
                     ?></button>
                 </form>
                 <p class="description"><?php
-                    echo $quick
+                    echo $cli
+                        ? esc_html__( 'Copy above turns this on for you. Adding it by hand? Enable it first. It switches itself off after 30 minutes, and connections that already exist keep working either way.', 'cowboy-mcp' )
+                        : ( $quick
                         ? esc_html__( 'Add to Claude below turns this on for you. Adding it by hand? Enable it first. It switches itself off after 30 minutes, and connections that already exist keep working either way.', 'cowboy-mcp' )
-                        : esc_html__( 'Step one when adding ChatGPT or a Claude app: enable this, then add the app. It switches itself off after 30 minutes. API keys do not use it, and connections that already exist keep working either way.', 'cowboy-mcp' );
+                        : esc_html__( 'Step one when adding ChatGPT or a Claude app: enable this, then add the app. It switches itself off after 30 minutes. API keys do not use it, and connections that already exist keep working either way.', 'cowboy-mcp' ) );
                 ?></p>
         </div>
         <?php
@@ -431,7 +435,7 @@ class Cowboy_MCP_Admin_Connections {
         <div class="mcp-local-guidance">
             <p><strong><?php esc_html_e( 'What works on a local site:', 'cowboy-mcp' ); ?></strong></p>
             <ul>
-                <li><?php echo wp_kses( __( '<strong>Terminal tools</strong> (Claude Code, Codex, Cursor, Gemini CLI) — connect right now, no public URL needed. Pick one in the sidebar.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
+                <li><?php echo wp_kses( __( '<strong>Terminal and IDE tools</strong> (Claude Code, Codex, Cursor, VS Code, Gemini CLI) — connect right now; the sign-in opens in your browser on this computer. Pick one in the sidebar.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
                 <li><?php echo wp_kses( __( '<strong>Claude Desktop</strong> — connects through a local bridge that runs on this computer. Pick it in the sidebar for instructions.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
                 <li><?php echo wp_kses( __( '<strong>claude.ai and ChatGPT</strong> — cloud-only: they need a public HTTPS address. A tunnel (e.g. ngrok or Cloudflare Tunnel) works temporarily, but it exposes your entire dev site to the internet while it runs, and the WordPress Site Address must be set to the tunnel URL for the sign-in to work.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></li>
             </ul>
@@ -515,9 +519,126 @@ class Cowboy_MCP_Admin_Connections {
         self::render_verify_step( $slug, $domain );
     }
 
-    private static function render_key_step( string $slug, string $label, $new_key, bool $has_keys ): void {
+    /** Terminal clients that sign in with OAuth: command first, API key as a fallback. */
+    private static function render_oauth_cli_panel( string $slug, string $label, array $keys, string $endpoint, $new_key, bool $is_local ): void {
+        $host     = (string) wp_parse_url( home_url(), PHP_URL_HOST );
+        $domain   = str_replace( '.', '-', $host );
+        $settings = get_option( 'cowboy_mcp_settings', [] );
+        $oauth_on = class_exists( 'Cowboy_MCP_OAuth' ) && ! empty( $settings['enabled'] ) && ! empty( $settings['oauth_enabled'] );
+        $intro    = match ( $slug ) {
+            'claude-code' => esc_html__( 'Run these in your terminal. The second line opens your browser to sign in.', 'cowboy-mcp' ),
+            'codex'       => esc_html__( 'Run this in your terminal. Codex opens your browser to sign in.', 'cowboy-mcp' ),
+            /* translators: %s: the MCP server name used in the command */
+            'gemini-cli'  => wp_kses( sprintf( __( 'Run this in your terminal, then start <code>gemini</code> and run <code>/mcp auth %s</code> to sign in.', 'cowboy-mcp' ), esc_html( $domain ) ), [ 'code' => [] ] ),
+            'opencode'    => wp_kses( __( 'Add this to <code>~/.config/opencode/opencode.json</code> (or a project <code>opencode.json</code>). Opencode opens your browser to sign in the first time it connects.', 'cowboy-mcp' ), [ 'code' => [] ] ),
+            default       => '',
+        };
+        $title    = 'opencode' === $slug ? '~/.config/opencode/opencode.json' : __( 'terminal', 'cowboy-mcp' );
         ?>
-        <?php self::step_open( $new_key ? '✓' : '1', __( 'Create an API key', 'cowboy-mcp' ), $new_key ? 'done' : '' ); ?>
+        <?php self::step_open( '1', __( 'Add the server', 'cowboy-mcp' ), '' ); ?>
+                <p><?php echo $intro; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped per-branch above. ?></p>
+                <?php self::render_code( 'mcp-oauth-cmd-' . $slug, self::oauth_snippet( $slug, $domain, $endpoint ), $title, __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'oauth' ] ); ?>
+                <?php if ( 'claude-code' === $slug ) : ?>
+                    <p class="description"><?php echo wp_kses( __( 'Working over SSH? Add <code>--no-browser</code> to the second line and open the printed URL in a local browser.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                <?php endif; ?>
+                <?php if ( $is_local && 'https' === wp_parse_url( $endpoint, PHP_URL_SCHEME ) ) : ?>
+                    <p class="description"><?php echo wp_kses( __( 'Local https sites usually use a self-signed certificate that these tools reject. Either trust the certificate in your tool, or set the WordPress Site Address to the <code>http://</code> URL — the sign-in discovery addresses are built from it.', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                <?php endif; ?>
+                <?php self::render_key_fallback( $slug, $label, $keys, $endpoint, $new_key, $is_local ); ?>
+        <?php self::step_close(); ?>
+        <?php self::render_approve_step( $oauth_on ); ?>
+        <?php self::render_verify_step_with_prompt( $slug, $domain ); ?>
+        <?php
+    }
+
+    /** IDEs with an install link: Cursor, VS Code. */
+    private static function render_oauth_link_panel( string $slug, string $label, array $keys, string $endpoint, $new_key, bool $is_local ): void {
+        $host     = (string) wp_parse_url( home_url(), PHP_URL_HOST );
+        $domain   = str_replace( '.', '-', $host );
+        $settings = get_option( 'cowboy_mcp_settings', [] );
+        $oauth_on = class_exists( 'Cowboy_MCP_OAuth' ) && ! empty( $settings['enabled'] ) && ! empty( $settings['oauth_enabled'] );
+        $cursor   = ( 'cursor' === $slug );
+        $btn      = $cursor ? __( 'Add to Cursor', 'cowboy-mcp' ) : __( 'Install in VS Code', 'cowboy-mcp' );
+        $after    = $cursor
+            ? __( 'Opens Cursor and asks you to add this site. Accept, then Cursor opens your browser to sign in.', 'cowboy-mcp' )
+            : __( 'Opens VS Code and asks you to add this site. Confirm, trust the server when asked, then VS Code opens your browser to sign in.', 'cowboy-mcp' );
+        $file     = $cursor ? '~/.cursor/mcp.json' : '.vscode/mcp.json';
+        ?>
+        <?php self::step_open( '1', $btn, '' ); ?>
+                <p><a class="cmcp-btn cmcp-btn--primary cmcp-install" href="<?php echo esc_url( self::install_link( $slug, $domain, $endpoint ), [ 'https', 'cursor' ] ); ?>"<?php echo $cursor ? '' : ' target="_blank" rel="noopener"'; ?> data-cmcp-start="<?php echo esc_attr( $slug ); ?>" data-cmcp-mode="oauth"><?php
+                    echo esc_html( $btn );
+                    echo Cowboy_MCP_Admin::icon( 'external' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+                ?></a></p>
+                <p><?php echo esc_html( $after ); ?></p>
+                <details class="mcp-local-details">
+                    <summary><?php esc_html_e( 'Add it by hand instead', 'cowboy-mcp' ); ?></summary>
+                    <div class="mcp-local-details-body">
+                        <p><?php
+                            /* translators: %s: config file path */
+                            echo wp_kses( sprintf( __( 'Add this to <code>%s</code> (create the file if it does not exist), then restart the editor. It signs in on first use.', 'cowboy-mcp' ), esc_html( $file ) ), [ 'code' => [] ] );
+                        ?></p>
+                        <?php self::render_code( 'mcp-oauth-cfg-' . $slug, self::oauth_snippet( $slug, $domain, $endpoint ), $file, __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'oauth' ] ); ?>
+                    </div>
+                </details>
+                <?php self::render_key_fallback( $slug, $label, $keys, $endpoint, $new_key, $is_local ); ?>
+        <?php self::step_close(); ?>
+        <?php self::render_approve_step( $oauth_on ); ?>
+        <?php self::render_verify_step_with_prompt( $slug, $domain ); ?>
+        <?php
+    }
+
+    /** Step 2 for every OAuth terminal/IDE client (+ the New-connections gate while the connector is on). */
+    private static function render_approve_step( bool $oauth_on ): void {
+        ?>
+        <?php self::step_open( '2', __( 'Approve access', 'cowboy-mcp' ), '' ); ?>
+                <p><?php echo wp_kses( __( 'A sign-in page opens on <strong>your site</strong>. Review what it is asking for, pick the access level and click <strong>Approve</strong>. You are back in your tool a moment later.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
+                <?php
+                if ( $oauth_on ) {
+                    self::render_connections_gate( true, true );
+                }
+                ?>
+        <?php self::step_close(); ?>
+        <?php
+    }
+
+    /** Step 3: the client's own check plus one read-only prompt to try. */
+    private static function render_verify_step_with_prompt( string $slug, string $domain ): void {
+        ?>
+        <div data-cmcp-verify-step>
+        <?php self::render_verify_step( $slug, $domain ); ?>
+        </div>
+        <?php
+    }
+
+    /** API-key fallback for OAuth-first clients: the old key step + header snippet, collapsed. */
+    private static function render_key_fallback( string $slug, string $label, array $keys, string $endpoint, $new_key, bool $is_local ): void {
+        $host        = (string) wp_parse_url( home_url(), PHP_URL_HOST );
+        $domain      = str_replace( '.', '-', $host );
+        $key_display = $new_key ?: 'YOUR_API_KEY';
+        $offer_http  = $is_local && 'https' === wp_parse_url( $endpoint, PHP_URL_SCHEME ) && Cowboy_MCP_Security::host_is_loopback_shaped( $host );
+        ?>
+        <details class="mcp-local-details cmcp-key-fallback" <?php echo $new_key ? 'open' : ''; ?>>
+            <summary><?php esc_html_e( "Headless, CI, or a tool that can't open a browser? Use an API key instead", 'cowboy-mcp' ); ?></summary>
+            <div class="mcp-local-details-body cmcp-key-fallback-body">
+                <?php self::render_key_step( $slug, $label, $new_key, ! empty( $keys ), 'a' ); ?>
+                <p><?php esc_html_e( 'Then add the server with the key in a header:', 'cowboy-mcp' ); ?></p>
+                <?php self::render_code( 'mcp-cmd-' . $slug, self::install_snippet( $slug, $domain, $endpoint, $key_display ), self::snippet_title( $slug ), __( 'Copy setup command', 'cowboy-mcp' ), [ 'start' => $slug, 'mode' => 'key' ] ); ?>
+                <?php if ( 'codex' === $slug ) : ?>
+                    <p class="description"><?php echo wp_kses( __( 'Codex reads the key each time it starts, so also add the <code>export</code> line to your shell profile (e.g. <code>~/.zshrc</code>).', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></p>
+                <?php endif; ?>
+                <?php
+                if ( $offer_http ) {
+                    self::render_cert_error_details( $slug, self::install_snippet( $slug, $domain, set_url_scheme( $endpoint, 'http' ), $key_display ), self::snippet_title( $slug ) );
+                }
+                ?>
+            </div>
+        </details>
+        <?php
+    }
+
+    private static function render_key_step( string $slug, string $label, $new_key, bool $has_keys, string $num = '1' ): void {
+        ?>
+        <?php self::step_open( $new_key ? '✓' : $num, __( 'Create an API key', 'cowboy-mcp' ), $new_key ? 'done' : '' ); ?>
                 <?php if ( $new_key ) : ?>
                     <div class="cmcp-keybox">
                         <p class="cmcp-keybox-note"><?php echo wp_kses( __( '<strong>Copy your key now</strong> — for security it will not be shown again.', 'cowboy-mcp' ), [ 'strong' => [] ] ); ?></p>
@@ -548,6 +669,7 @@ class Cowboy_MCP_Admin_Connections {
             'codex'      => wp_kses( __( 'Run these in your terminal. Codex reads the key each time it starts, so also add the <code>export</code> line to your shell profile (e.g. <code>~/.zshrc</code>):', 'cowboy-mcp' ), [ 'code' => [] ] ),
             'opencode'   => wp_kses( __( 'Add this to <code>~/.config/opencode/opencode.json</code> (or a project <code>opencode.json</code>), then restart Opencode:', 'cowboy-mcp' ), [ 'code' => [] ] ),
             'cursor'     => wp_kses( __( 'Add this to <code>~/.cursor/mcp.json</code> (create the file if it does not exist), then restart Cursor:', 'cowboy-mcp' ), [ 'code' => [] ] ),
+            'vscode'     => wp_kses( __( 'Add this to <code>.vscode/mcp.json</code> in your project (or your user <code>mcp.json</code>), then restart VS Code:', 'cowboy-mcp' ), [ 'code' => [] ] ),
             default      => '',
         };
         ?>
@@ -568,6 +690,7 @@ class Cowboy_MCP_Admin_Connections {
         return match ( $slug ) {
             'opencode' => '~/.config/opencode/opencode.json',
             'cursor'   => '~/.cursor/mcp.json',
+            'vscode'   => '.vscode/mcp.json',
             default    => __( 'terminal', 'cowboy-mcp' ),
         };
     }
@@ -580,8 +703,39 @@ class Cowboy_MCP_Admin_Connections {
             'opencode'    => "{\n  \"mcp\": {\n    \"{$domain}\": {\n      \"type\": \"remote\",\n      \"url\": \"{$endpoint}\",\n      \"oauth\": false,\n      \"headers\": {\n        \"Authorization\": \"Bearer {$key_display}\"\n      }\n    }\n  }\n}",
             'cursor'      => "{\n  \"mcpServers\": {\n    \"{$domain}\": {\n      \"url\": \"{$endpoint}\",\n      \"headers\": {\n        \"Authorization\": \"Bearer {$key_display}\"\n      }\n    }\n  }\n}",
             'gemini-cli'  => 'gemini mcp add --scope user --transport http ' . $domain . ' ' . $endpoint . ' --header "Authorization: Bearer ' . $key_display . '"',
+            'vscode'      => "{\n  \"servers\": {\n    \"{$domain}\": {\n      \"type\": \"http\",\n      \"url\": \"{$endpoint}\",\n      \"headers\": {\n        \"Authorization\": \"Bearer {$key_display}\"\n      }\n    }\n  }\n}",
             default       => '',
         };
+    }
+
+    /** OAuth (no-key) setup snippet per client. Commands verified against the installed binaries / sources on 2026-10-07. */
+    private static function oauth_snippet( string $slug, string $domain, string $endpoint ): string {
+        return match ( $slug ) {
+            'claude-code' => 'claude mcp add --transport http ' . $domain . ' ' . $endpoint . "\n" . 'claude mcp login ' . $domain,
+            'codex'       => 'codex mcp add ' . $domain . ' --url ' . $endpoint,
+            'gemini-cli'  => 'gemini mcp add -s user -t http ' . $domain . ' ' . $endpoint,
+            'opencode'    => "{\n  \"mcp\": {\n    \"{$domain}\": {\n      \"type\": \"remote\",\n      \"url\": \"{$endpoint}\"\n    }\n  }\n}",
+            'cursor'      => "{\n  \"mcpServers\": {\n    \"{$domain}\": {\n      \"url\": \"{$endpoint}\"\n    }\n  }\n}",
+            'vscode'      => "{\n  \"servers\": {\n    \"{$domain}\": {\n      \"type\": \"http\",\n      \"url\": \"{$endpoint}\"\n    }\n  }\n}",
+            default       => '',
+        };
+    }
+
+    /**
+     * One-click install links. Cursor: cursor.com/docs/mcp/install-links (config = base64 of the inner
+     * server object). VS Code: the redirect form used by github/github-mcp-server's README (config = the
+     * inner object, name separate). Both verified 2026-10-07.
+     */
+    public static function install_link( string $slug, string $domain, string $endpoint ): string {
+        if ( 'cursor' === $slug ) {
+            $config = base64_encode( (string) wp_json_encode( [ 'url' => $endpoint ], JSON_UNESCAPED_SLASHES ) );
+            return 'cursor://anysphere.cursor-deeplink/mcp/install?name=' . rawurlencode( $domain ) . '&config=' . rawurlencode( $config );
+        }
+        if ( 'vscode' === $slug ) {
+            $config = (string) wp_json_encode( [ 'type' => 'http', 'url' => $endpoint ], JSON_UNESCAPED_SLASHES );
+            return 'https://insiders.vscode.dev/redirect/mcp/install?name=' . rawurlencode( $domain ) . '&config=' . rawurlencode( $config );
+        }
+        return '';
     }
 
     private static function render_verify_step( string $slug, string $domain ): void {
@@ -596,11 +750,18 @@ class Cowboy_MCP_Admin_Connections {
             'cursor'      => sprintf( __( 'Open <code>Customize</code> in the Cursor sidebar — <code>%s</code> should be listed and enabled. Errors show under <code>Output → MCP Logs</code>.', 'cowboy-mcp' ), esc_html( $domain ) ),
             /* translators: %s: the MCP server name shown in the client. */
             'gemini-cli'  => sprintf( __( 'Run <code>gemini mcp list</code> — <code>%s</code> should show as connected.', 'cowboy-mcp' ), esc_html( $domain ) ),
+            /* translators: %s: the MCP server name shown in the client. */
+            'vscode'      => sprintf( __( 'Open Copilot Chat in agent mode and click the tools icon — <code>%s</code> should be listed. Errors show under <code>Output → MCP</code>.', 'cowboy-mcp' ), esc_html( $domain ) ),
             default       => '',
         };
         ?>
         <?php self::step_open( '3', __( 'Check it worked', 'cowboy-mcp' ), '' ); ?>
                 <p><?php echo wp_kses( $text, [ 'code' => [] ] ); ?></p>
+                <p class="description"><?php esc_html_e( 'Then try a read-only prompt:', 'cowboy-mcp' ); ?></p>
+                <?php
+                /* translators: %s: the MCP server name shown in the client. */
+                self::render_code( 'mcp-prompt-' . $slug, sprintf( __( "Using %s, tell me this site's name and WordPress version. Don't change anything.", 'cowboy-mcp' ), $domain ), __( 'prompt', 'cowboy-mcp' ), __( 'Copy prompt', 'cowboy-mcp' ) );
+                ?>
         <?php self::step_close(); ?>
         <?php
     }
@@ -809,11 +970,12 @@ class Cowboy_MCP_Admin_Connections {
                                 ?></h3>
                             </div>
                             <?php
-                            if ( 'oauth' === $client['type'] ) {
-                                self::render_oauth_client_panel( $slug, $endpoint, $is_local, $keys, $new_key );
-                            } else {
-                                self::render_api_client_panel( $slug, $client['label'], $keys, $endpoint, $new_key, $is_local );
-                            }
+                            match ( $client['type'] ) {
+                                'oauth'      => self::render_oauth_client_panel( $slug, $endpoint, $is_local, $keys, $new_key ),
+                                'oauth-cli'  => self::render_oauth_cli_panel( $slug, $client['label'], $keys, $endpoint, $new_key, $is_local ),
+                                'oauth-link' => self::render_oauth_link_panel( $slug, $client['label'], $keys, $endpoint, $new_key, $is_local ),
+                                default      => self::render_api_client_panel( $slug, $client['label'], $keys, $endpoint, $new_key, $is_local ),
+                            };
                             ?>
                         </div>
                     <?php endforeach; ?>
@@ -888,13 +1050,17 @@ class Cowboy_MCP_Admin_Connections {
         echo '</div></div>';
     }
 
-    private static function render_code( string $id, string $text, string $title, string $copy_label ): void {
+    private static function render_code( string $id, string $text, string $title, string $copy_label, array $attrs = [] ): void {
+        $data = '';
+        foreach ( $attrs as $k => $v ) {
+            $data .= ' data-cmcp-' . esc_attr( $k ) . '="' . esc_attr( (string) $v ) . '"';
+        }
         ?>
         <div class="cmcp-term-wrap">
             <div class="cmcp-term-bar">
                 <span class="cmcp-lamp" aria-hidden="true"></span>
                 <span><?php echo esc_html( $title ); ?></span>
-                <button type="button" class="cmcp-term-copy mcp-copy-btn" data-copy-target="<?php echo esc_attr( $id ); ?>" aria-label="<?php echo esc_attr( $copy_label ); ?>"><?php esc_html_e( 'Copy', 'cowboy-mcp' ); ?></button>
+                <button type="button" class="cmcp-term-copy mcp-copy-btn" data-copy-target="<?php echo esc_attr( $id ); ?>"<?php echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- each key/value escaped above. ?> aria-label="<?php echo esc_attr( $copy_label ); ?>"><?php esc_html_e( 'Copy', 'cowboy-mcp' ); ?></button>
             </div>
             <pre class="cmcp-term" id="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $text ); ?></pre>
         </div>
