@@ -12,6 +12,16 @@ class Cowboy_MCP_Auth {
     /** Option key where API keys are stored. */
     const OPTION_KEY = 'cowboy_mcp_api_keys';
 
+    /**
+     * Side store for the MCP clientInfo each credential last presented (autoload no):
+     * `key:<key id>` / `oauth:<client_id>` => {name, title?, version?, at}. Kept apart from the
+     * credential records so the endpoint never rewrites `cowboy_mcp_api_keys` / `cowboy_mcp_oauth_clients`.
+     */
+    const CLIENT_INFO_OPTION = 'cowboy_mcp_client_info';
+
+    /** Most entries kept in CLIENT_INFO_OPTION; the oldest `at` is dropped first. */
+    private const CLIENT_INFO_MAX = 200;
+
     /** Rate limit window duration in seconds. */
     private const RATE_LIMIT_WINDOW = 60;
 
@@ -92,6 +102,7 @@ class Cowboy_MCP_Auth {
         }
         unset( $keys[ $id ] );
         update_option( self::OPTION_KEY, $keys );
+        self::forget_client_info( 'key', $id );
         return true;
     }
 
@@ -154,7 +165,7 @@ class Cowboy_MCP_Auth {
                 'created'   => $k['created'],
                 'last_used' => $k['last_used'] ?? null,
                 'scope'     => ( isset( $k['scope'] ) && is_array( $k['scope'] ) ) ? $k['scope'] : null,
-                'client_info' => $k['client_info'] ?? null,
+                'client_info' => self::client_info_for( 'key', (string) $k['id'] ),
             ];
         }, array_values( $keys ) );
     }
@@ -308,9 +319,9 @@ class Cowboy_MCP_Auth {
     public static array $last_client_info = [];
 
     /**
-     * Stamp the authenticated credential with the client that is using it: the OAuth client row
-     * for cmcp_at_ tokens, the key record otherwise. Throttled like last_used (one write per minute
-     * unless name/version changed). Never fails the request.
+     * Remember which client is using the authenticated credential (OAuth client for cmcp_at_
+     * tokens, the API key otherwise). Writes ONLY CLIENT_INFO_OPTION — never a credential
+     * record — and at most once a minute per credential. Never fails the request.
      */
     public static function record_client_info( array $info ): void {
         self::$last_client_info = $info;
@@ -328,17 +339,45 @@ class Cowboy_MCP_Auth {
         if ( ! isset( $keys[ $ctx['key_id'] ] ) ) {
             return;
         }
-        if ( ! self::client_info_changed( (array) ( $keys[ $ctx['key_id'] ]['client_info'] ?? [] ), $info ) ) {
-            return;
-        }
-        $keys[ $ctx['key_id'] ]['client_info'] = $info + [ 'at' => time() ];
-        update_option( self::OPTION_KEY, $keys );
+        self::store_client_info( 'key', (string) $ctx['key_id'], $info );
     }
 
-    public static function client_info_changed( array $prev, array $info ): bool {
-        return ( $prev['name'] ?? null ) !== ( $info['name'] ?? null )
-            || ( $prev['version'] ?? null ) !== ( $info['version'] ?? null )
-            || ( time() - (int) ( $prev['at'] ?? 0 ) ) >= 60;
+    /** The clientInfo last seen for a credential (`key` + key id, or `oauth` + client_id), or null. */
+    public static function client_info_for( string $kind, string $id ): ?array {
+        $all   = get_option( self::CLIENT_INFO_OPTION, [] );
+        $entry = is_array( $all ) ? ( $all[ $kind . ':' . $id ] ?? null ) : null;
+        return is_array( $entry ) ? $entry : null;
+    }
+
+    /**
+     * Save a credential's clientInfo to the side option. Throttled unconditionally: an entry
+     * stamped less than 60 s ago is left alone whatever the new name/version. Capped at
+     * CLIENT_INFO_MAX entries (oldest `at` dropped first).
+     */
+    public static function store_client_info( string $kind, string $id, array $info ): void {
+        $all = get_option( self::CLIENT_INFO_OPTION, [] );
+        $all = is_array( $all ) ? $all : [];
+        $k   = $kind . ':' . $id;
+        if ( isset( $all[ $k ] ) && ( time() - (int) ( $all[ $k ]['at'] ?? 0 ) ) < 60 ) {
+            return;
+        }
+        unset( $all[ $k ] );
+        $all[ $k ] = $info + [ 'at' => time() ];
+        if ( count( $all ) > self::CLIENT_INFO_MAX ) {
+            uasort( $all, static fn( $a, $b ) => ( (int) ( $a['at'] ?? 0 ) ) <=> ( (int) ( $b['at'] ?? 0 ) ) );
+            $all = array_slice( $all, count( $all ) - self::CLIENT_INFO_MAX, null, true );
+        }
+        update_option( self::CLIENT_INFO_OPTION, $all, false );
+    }
+
+    /** Drop a credential's clientInfo entry (on revoke / client removal). */
+    public static function forget_client_info( string $kind, string $id ): void {
+        $all = get_option( self::CLIENT_INFO_OPTION, [] );
+        if ( ! is_array( $all ) || ! isset( $all[ $kind . ':' . $id ] ) ) {
+            return;
+        }
+        unset( $all[ $kind . ':' . $id ] );
+        update_option( self::CLIENT_INFO_OPTION, $all, false );
     }
 
     /**

@@ -333,6 +333,7 @@ class Cowboy_MCP_Checkpoint {
 		'cowboy_mcp_oauth_tokens',
 		'cowboy_mcp_oauth_refresh',
 		'cowboy_mcp_oauth_clients',
+		'cowboy_mcp_client_info',
 	];
 
 	public static function restore( int $id, string $actor = 'mcp' ): array|WP_Error {

@@ -82,7 +82,8 @@ class Cowboy_MCP_Admin_Connections {
             if ( $order[ $s ] > $order[ $stage ] || ( 'connected' === $s && 'connected' === $stage && $fresh ) ) {
                 $stage  = $s;
                 $reused = 'connected' === $s && ! $fresh;
-                $named  = (int) ( $c['client_info']['at'] ?? 0 ) >= $since ? Cowboy_MCP_OAuth::client_display_name( $c['client_info'] ?? null ) : null;
+                $ci     = Cowboy_MCP_Auth::client_info_for( 'oauth', (string) $cid );
+                $named  = (int) ( $ci['at'] ?? 0 ) >= $since ? Cowboy_MCP_OAuth::client_display_name( $ci ) : null;
             }
         }
         if ( 'waiting' === $stage ) {

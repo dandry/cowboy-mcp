@@ -258,6 +258,7 @@ class Cowboy_MCP_OAuth {
         return '' !== $host ? self::app_label_for_host( $host ) : 'An unknown app';
     }
 
+    /** Record the clientInfo an OAuth connection presented (client_id resolved read-only from the token). */
     public static function stamp_client_info( string $access_id, array $info ): void {
         $tokens = get_option( self::TOKENS_OPTION, [] );
         $cid    = (string) ( $tokens[ $access_id ]['client_id'] ?? '' );
@@ -265,11 +266,11 @@ class Cowboy_MCP_OAuth {
             return;
         }
         $clients = get_option( self::CLIENTS_OPTION, [] );
-        if ( ! isset( $clients[ $cid ] ) || ! Cowboy_MCP_Auth::client_info_changed( (array) ( $clients[ $cid ]['client_info'] ?? [] ), $info ) ) {
+        if ( ! isset( $clients[ $cid ] ) ) {
             return;
         }
-        $clients[ $cid ]['client_info'] = $info + [ 'at' => time() ];
-        update_option( self::CLIENTS_OPTION, $clients, false );
+        // Side option only: the clients option is never rewritten from the endpoint.
+        Cowboy_MCP_Auth::store_client_info( 'oauth', $cid, $info );
     }
 
     /** Slug from an MCP initialize clientInfo (names verified from each client's source, 2026-10-07). */
@@ -828,7 +829,7 @@ class Cowboy_MCP_OAuth {
                 'created'     => (int) ( $clients[ $cid ]['created'] ?? $info['created'] ),
                 'last_used'   => $info['last_used'],
                 'tool_scope'  => ( isset( $clients[ $cid ]['tool_scope'] ) && is_array( $clients[ $cid ]['tool_scope'] ) ) ? $clients[ $cid ]['tool_scope'] : null,
-                'client_info' => $clients[ $cid ]['client_info'] ?? null,
+                'client_info' => Cowboy_MCP_Auth::client_info_for( 'oauth', (string) $cid ),
             ];
         }
         return $out;
@@ -878,6 +879,7 @@ class Cowboy_MCP_OAuth {
             update_option( self::CLIENTS_OPTION, $clients, false );
             $found = true;
         }
+        Cowboy_MCP_Auth::forget_client_info( 'oauth', $client_id );
 
         $tokens = get_option( self::TOKENS_OPTION, [] );
         foreach ( $tokens as $tid => $t ) {
@@ -1136,6 +1138,7 @@ class Cowboy_MCP_OAuth {
         $remove = array_slice( array_keys( $unused ), 0, (int) ceil( self::MAX_CLIENTS / 2 ) );
         foreach ( $remove as $cid ) {
             unset( $clients[ $cid ] );
+            Cowboy_MCP_Auth::forget_client_info( 'oauth', (string) $cid );
         }
         return $clients;
     }
