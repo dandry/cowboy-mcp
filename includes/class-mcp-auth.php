@@ -355,6 +355,8 @@ class Cowboy_MCP_Auth {
      * CLIENT_INFO_MAX entries (oldest `at` dropped first).
      */
     public static function store_client_info( string $kind, string $id, array $info ): void {
+        // Read fresh: another request (e.g. the Doctor's loopback) may have written since this request first read it.
+        wp_cache_delete( self::CLIENT_INFO_OPTION, 'options' );
         $all = get_option( self::CLIENT_INFO_OPTION, [] );
         $all = is_array( $all ) ? $all : [];
         $k   = $kind . ':' . $id;
@@ -372,6 +374,8 @@ class Cowboy_MCP_Auth {
 
     /** Drop a credential's clientInfo entry (on revoke / client removal). */
     public static function forget_client_info( string $kind, string $id ): void {
+        // Read fresh: another request (e.g. the Doctor's loopback) may have written since this request first read it.
+        wp_cache_delete( self::CLIENT_INFO_OPTION, 'options' );
         $all = get_option( self::CLIENT_INFO_OPTION, [] );
         if ( ! is_array( $all ) || ! isset( $all[ $kind . ':' . $id ] ) ) {
             return;
