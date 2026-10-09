@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-09 13:39-0700\n"
+"POT-Creation-Date: 2026-10-09 13:51-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Russian\n"
@@ -194,7 +194,7 @@ msgid "Create checkpoint now"
 msgstr "Создать контрольную точку сейчас"
 
 #: admin/class-mcp-admin-activity.php:335
-#: admin/class-mcp-admin-connections.php:1207
+#: admin/class-mcp-admin-connections.php:1283
 msgid "Created"
 msgstr "Создан"
 
@@ -211,7 +211,7 @@ msgid "Size"
 msgstr "Размер"
 
 #: admin/class-mcp-admin-activity.php:339
-#: admin/class-mcp-admin-connections.php:1209
+#: admin/class-mcp-admin-connections.php:1285
 msgid "Actions"
 msgstr "Действия"
 
@@ -300,7 +300,7 @@ msgstr "Новые подключения: включены"
 
 #. translators: %s: countdown such as 29:59
 #: admin/class-mcp-admin-connections.php:216
-#: admin/class-mcp-admin-connections.php:992
+#: admin/class-mcp-admin-connections.php:1068
 #, php-format
 msgid "%s left"
 msgstr "осталось %s"
@@ -310,7 +310,7 @@ msgid "Disable now"
 msgstr "Выключить сейчас"
 
 #: admin/class-mcp-admin-connections.php:221
-#: admin/class-mcp-admin-connections.php:999 admin/class-mcp-admin.php:221
+#: admin/class-mcp-admin-connections.php:1075 admin/class-mcp-admin.php:221
 msgid "Enable for 30 minutes"
 msgstr "Включить на 30 минут"
 
@@ -512,7 +512,7 @@ msgstr ""
 "<strong>Connect</strong>."
 
 #: admin/class-mcp-admin-connections.php:341
-#: admin/class-mcp-admin-connections.php:670
+#: admin/class-mcp-admin-connections.php:662
 msgid "Add it by hand instead"
 msgstr "Добавить вручную"
 
@@ -530,7 +530,7 @@ msgstr "Скопировать URL коннектора"
 
 #: admin/class-mcp-admin-connections.php:350
 #: admin/class-mcp-admin-connections.php:396
-#: admin/class-mcp-admin-connections.php:693
+#: admin/class-mcp-admin-connections.php:715
 msgid "Approve access"
 msgstr "Подтвердите доступ"
 
@@ -705,38 +705,35 @@ msgstr "Добавьте мост в Claude Desktop"
 
 #: admin/class-mcp-admin-connections.php:507
 msgid ""
-"Add this to <code>claude_desktop_config.json</code> (create the file if it "
-"does not exist), then fully quit and restart the Claude app. It opens your "
-"browser to sign in the first time it connects."
-msgstr ""
-"Добавьте это в <code>claude_desktop_config.json</code> (создайте файл, если "
-"его нет), затем полностью закройте и снова запустите приложение Claude. При "
-"первом подключении оно откроет браузер для входа."
+"Run this in Terminal (macOS) or PowerShell (Windows), then fully quit and "
+"reopen the Claude app. It opens your browser to sign in the first time it "
+"connects."
+msgstr "Выполните это в Терминале (macOS) или PowerShell (Windows), затем полностью закройте и снова откройте приложение Claude. При первом подключении оно откроет браузер для входа."
 
 #: admin/class-mcp-admin-connections.php:508
-#: admin/class-mcp-admin-connections.php:524
-#: admin/class-mcp-admin-connections.php:581
-#: admin/class-mcp-admin-connections.php:624
-#: admin/class-mcp-admin-connections.php:636
+#: admin/class-mcp-admin-connections.php:519
+#: admin/class-mcp-admin-connections.php:531
+#: admin/class-mcp-admin-connections.php:588
+#: admin/class-mcp-admin-connections.php:627
+#: admin/class-mcp-admin-connections.php:668
 #: admin/class-mcp-admin-connections.php:676
-#: admin/class-mcp-admin-connections.php:732
-#: admin/class-mcp-admin-connections.php:785
+#: admin/class-mcp-admin-connections.php:702
+#: admin/class-mcp-admin-connections.php:754
+#: admin/class-mcp-admin-connections.php:807
 msgid "Copy setup command"
 msgstr "Скопировать команду настройки"
 
-#: admin/class-mcp-admin-connections.php:510
-msgid ""
-"macOS: <code>~/Library/Application Support/Claude/"
-"claude_desktop_config.json</code>"
-msgstr ""
-"macOS: <code>~/Library/Application Support/Claude/"
-"claude_desktop_config.json</code>"
+#: admin/class-mcp-admin-connections.php:508
+#: admin/class-mcp-admin-connections.php:512
+#: admin/class-mcp-admin-connections.php:531
+#: admin/class-mcp-admin-connections.php:535
+#: admin/class-mcp-admin-connections.php:627
+#: admin/class-mcp-admin-connections.php:676
+#: admin/class-mcp-admin-connections.php:821
+msgid "terminal"
+msgstr "терминал"
 
-#: admin/class-mcp-admin-connections.php:511
-msgid "Windows: <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>"
-msgstr "Windows: <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>"
-
-#: admin/class-mcp-admin-connections.php:513
+#: admin/class-mcp-admin-connections.php:509
 msgid ""
 "Requires Node.js on this computer — the bridge is the standard open-source "
 "<code>mcp-remote</code> package, started on demand via <code>npx</code>. It "
@@ -746,20 +743,42 @@ msgstr ""
 "открытый пакет <code>mcp-remote</code>, запускаемый по требованию через "
 "<code>npx</code>. Он соединяет только ваш компьютер с этим сайтом."
 
-#: admin/class-mcp-admin-connections.php:520
-#: admin/class-mcp-admin-connections.php:728
+#: admin/class-mcp-admin-connections.php:516
+#: admin/class-mcp-admin-connections.php:696
+msgid "Prefer to edit the config file?"
+msgstr "Предпочитаете отредактировать файл конфигурации?"
+
+#: admin/class-mcp-admin-connections.php:518
+msgid ""
+"Add this to <code>claude_desktop_config.json</code> (create the file if it "
+"does not exist), then fully quit and restart the Claude app:"
+msgstr "Добавьте это в <code>claude_desktop_config.json</code> (создайте файл, если его нет), затем полностью закройте и снова запустите приложение Claude:"
+
+#: admin/class-mcp-admin-connections.php:521
+msgid ""
+"macOS: <code>~/Library/Application Support/Claude/"
+"claude_desktop_config.json</code>"
+msgstr ""
+"macOS: <code>~/Library/Application Support/Claude/"
+"claude_desktop_config.json</code>"
+
+#: admin/class-mcp-admin-connections.php:522
+msgid "Windows: <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>"
+msgstr "Windows: <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>"
+
+#: admin/class-mcp-admin-connections.php:527
+#: admin/class-mcp-admin-connections.php:750
 msgid ""
 "Headless, CI, or a tool that can't open a browser? Use an API key instead"
 msgstr ""
 "Без графического интерфейса, CI или инструмент не может открыть браузер? "
 "Используйте API-ключ"
 
-#: admin/class-mcp-admin-connections.php:523
-msgid "Then use this config instead, with the key in a header:"
-msgstr ""
-"Затем используйте вместо этого такую конфигурацию с ключом в заголовке:"
+#: admin/class-mcp-admin-connections.php:530
+msgid "Then run this instead, with the key in a header:"
+msgstr "Затем вместо этого выполните эту команду с ключом в заголовке:"
 
-#: admin/class-mcp-admin-connections.php:525
+#: admin/class-mcp-admin-connections.php:532
 msgid ""
 "Your API key is stored in plain text in that file, so prefer a <strong>read-"
 "only</strong> key unless this connection needs to make changes — and revoke "
@@ -769,13 +788,13 @@ msgstr ""
 "<strong>только для чтения</strong>, если этому подключению не нужно вносить "
 "изменения, — и отзовите его здесь, когда перестанете им пользоваться."
 
-#: admin/class-mcp-admin-connections.php:535
-#: admin/class-mcp-admin-connections.php:866
+#: admin/class-mcp-admin-connections.php:542
+#: admin/class-mcp-admin-connections.php:942
 msgid "Check it worked"
 msgstr "Проверьте, что всё работает"
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:538
+#: admin/class-mcp-admin-connections.php:545
 #, php-format
 msgid ""
 "Open a new chat in Claude Desktop and click the tools icon — <code>%s</code> "
@@ -786,11 +805,11 @@ msgstr ""
 "должен появиться <code>%s</code>. Первый запуск может занять немного "
 "времени, пока скачивается мост."
 
-#: admin/class-mcp-admin-connections.php:578
+#: admin/class-mcp-admin-connections.php:585
 msgid "Getting a certificate error?"
 msgstr "Ошибка сертификата?"
 
-#: admin/class-mcp-admin-connections.php:580
+#: admin/class-mcp-admin-connections.php:587
 msgid ""
 "Local sites usually use a self-signed certificate that AI tools reject. "
 "Since this site runs on this same computer, you can use the plain "
@@ -807,46 +826,35 @@ msgstr ""
 "интернете: он отключает проверку сертификатов для всех соединений этого "
 "инструмента."
 
-#: admin/class-mcp-admin-connections.php:610
+#: admin/class-mcp-admin-connections.php:617
 msgid ""
 "Run these in your terminal. The second line opens your browser to sign in."
 msgstr ""
 "Выполните эти команды в терминале. Вторая строка откроет браузер для входа."
 
-#: admin/class-mcp-admin-connections.php:611
+#: admin/class-mcp-admin-connections.php:618
 msgid "Run this in your terminal. Codex opens your browser to sign in."
 msgstr "Выполните это в терминале. Codex откроет браузер для входа."
 
-#: admin/class-mcp-admin-connections.php:612
+#. translators: %s: the MCP server name used in the command
+#: admin/class-mcp-admin-connections.php:620
+#, php-format
 msgid ""
-"Add this to <code>~/.gemini/settings.json</code> (create the file if it does "
-"not exist), then start <code>gemini</code> — it opens your browser to sign "
-"in."
-msgstr ""
-"Добавьте это в <code>~/.gemini/settings.json</code> (создайте файл, если его "
-"нет), затем запустите <code>gemini</code> — он откроет браузер для входа."
+"Run this in your terminal, then start <code>gemini</code>: it opens your "
+"browser to sign in (if it does not, run <code>/mcp auth %s</code>)."
+msgstr "Выполните это в терминале, затем запустите <code>gemini</code>: он откроет браузер для входа (если нет, выполните <code>/mcp auth %s</code>)."
 
-#: admin/class-mcp-admin-connections.php:613
+#: admin/class-mcp-admin-connections.php:621
 msgid ""
-"Add this to <code>~/.config/opencode/opencode.json</code> (or a project "
-"<code>opencode.json</code>). Opencode opens your browser to sign in the "
-"first time it connects."
-msgstr ""
-"Добавьте это в <code>~/.config/opencode/opencode.json</code> (или в "
-"<code>opencode.json</code> проекта). При первом подключении Opencode откроет "
-"браузер для входа."
+"Run this in your terminal. Opencode opens your browser to sign in the first "
+"time it connects."
+msgstr "Выполните это в терминале. Opencode откроет браузер для входа при первом подключении."
 
-#: admin/class-mcp-admin-connections.php:619
-#: admin/class-mcp-admin-connections.php:636
-#: admin/class-mcp-admin-connections.php:801
-msgid "terminal"
-msgstr "терминал"
-
-#: admin/class-mcp-admin-connections.php:622
+#: admin/class-mcp-admin-connections.php:625
 msgid "Add the server"
 msgstr "Добавьте сервер"
 
-#: admin/class-mcp-admin-connections.php:626
+#: admin/class-mcp-admin-connections.php:629
 msgid ""
 "Working over SSH? Add <code>--no-browser</code> to the second line and open "
 "the printed URL in a local browser."
@@ -854,21 +862,7 @@ msgstr ""
 "Работаете по SSH? Добавьте <code>--no-browser</code> ко второй строке и "
 "откройте выведенный URL в локальном браузере."
 
-#: admin/class-mcp-admin-connections.php:630
-msgid "Prefer a command?"
-msgstr "Предпочитаете команду?"
-
-#. translators: %s: the MCP server name used in the command
-#: admin/class-mcp-admin-connections.php:634
-#, php-format
-msgid ""
-"Run this in your terminal, then start <code>gemini</code> and run <code>/mcp "
-"auth %s</code> to sign in."
-msgstr ""
-"Выполните это в терминале, затем запустите <code>gemini</code> и выполните "
-"<code>/mcp auth %s</code>, чтобы войти."
-
-#: admin/class-mcp-admin-connections.php:641
+#: admin/class-mcp-admin-connections.php:633
 msgid ""
 "Local https sites usually use a self-signed certificate that these tools "
 "reject. Either trust the certificate in your tool, or set the WordPress Site "
@@ -880,15 +874,15 @@ msgstr ""
 "инструменте, либо укажите в поле «Адрес сайта» WordPress URL с <code>http://"
 "</code> — из него строятся адреса обнаружения для входа."
 
-#: admin/class-mcp-admin-connections.php:657
+#: admin/class-mcp-admin-connections.php:649
 msgid "Add to Cursor"
 msgstr "Добавить в Cursor"
 
-#: admin/class-mcp-admin-connections.php:657
+#: admin/class-mcp-admin-connections.php:649
 msgid "Install in VS Code"
 msgstr "Установить в VS Code"
 
-#: admin/class-mcp-admin-connections.php:659
+#: admin/class-mcp-admin-connections.php:651
 msgid ""
 "Opens Cursor and asks you to add this site. Accept, then Cursor opens your "
 "browser to sign in."
@@ -896,7 +890,7 @@ msgstr ""
 "Открывает Cursor и предлагает добавить этот сайт. Согласитесь — и Cursor "
 "откроет браузер для входа."
 
-#: admin/class-mcp-admin-connections.php:660
+#: admin/class-mcp-admin-connections.php:652
 msgid ""
 "Opens VS Code and asks you to add this site. Confirm, trust the server when "
 "asked, then VS Code opens your browser to sign in."
@@ -905,7 +899,7 @@ msgstr ""
 "отметьте сервер как доверенный — и VS Code откроет браузер для входа."
 
 #. translators: %s: config file path
-#: admin/class-mcp-admin-connections.php:674
+#: admin/class-mcp-admin-connections.php:666
 #, php-format
 msgid ""
 "Add this to <code>%s</code> (create the file if it does not exist), then "
@@ -914,7 +908,25 @@ msgstr ""
 "Добавьте это в <code>%s</code> (создайте файл, если его нет) и перезапустите "
 "редактор. Вход выполняется при первом использовании."
 
-#: admin/class-mcp-admin-connections.php:694
+#: admin/class-mcp-admin-connections.php:673
+msgid "Prefer a command?"
+msgstr "Предпочитаете команду?"
+
+#: admin/class-mcp-admin-connections.php:675
+msgid ""
+"Run this in your terminal (the <code>code</code> command ships with VS "
+"Code), then open Copilot Chat. It signs in on first use."
+msgstr "Выполните это в терминале (команда <code>code</code> поставляется с VS Code), затем откройте Copilot Chat. Вход выполняется при первом использовании."
+
+#. translators: %s: config file path
+#: admin/class-mcp-admin-connections.php:700
+#, php-format
+msgid ""
+"Add this to <code>%s</code> (create the file if it does not exist), then "
+"restart the app. It signs in on first use."
+msgstr "Добавьте это в <code>%s</code> (создайте файл, если его нет), затем перезапустите приложение. Вход выполняется при первом использовании."
+
+#: admin/class-mcp-admin-connections.php:716
 msgid ""
 "A sign-in page opens on <strong>your site</strong>. Review what it is asking "
 "for, pick the access level and click <strong>Approve</strong>. You are back "
@@ -925,18 +937,21 @@ msgstr ""
 "<strong>Подтвердить</strong>. Через мгновение вы вернётесь в свой инструмент."
 
 #. translators: 1: AI app name, 2: host that publishes its identity document, e.g. claude.ai
-#: admin/class-mcp-admin-connections.php:700
+#: admin/class-mcp-admin-connections.php:722
 #, php-format
 msgid ""
 "%1$s identifies itself with a document published by %2$s, so it needs no "
 "\"New connections\" switch — the sign-in page shows that identity."
-msgstr "%1$s идентифицирует себя документом, опубликованным на %2$s, поэтому переключатель «Новые подключения» ему не нужен — страница входа показывает эту идентичность."
+msgstr ""
+"%1$s идентифицирует себя документом, опубликованным на %2$s, поэтому "
+"переключатель «Новые подключения» ему не нужен — страница входа показывает "
+"эту идентичность."
 
-#: admin/class-mcp-admin-connections.php:731
+#: admin/class-mcp-admin-connections.php:753
 msgid "Then add the server with the key in a header:"
 msgstr "Затем добавьте сервер с ключом в заголовке:"
 
-#: admin/class-mcp-admin-connections.php:734
+#: admin/class-mcp-admin-connections.php:756
 msgid ""
 "Codex reads the key each time it starts, so also add the <code>export</code> "
 "line to your shell profile (e.g. <code>~/.zshrc</code>)."
@@ -944,54 +959,54 @@ msgstr ""
 "Codex считывает ключ при каждом запуске, поэтому добавьте строку "
 "<code>export</code> и в профиль оболочки (например, <code>~/.zshrc</code>)."
 
-#: admin/class-mcp-admin-connections.php:748
+#: admin/class-mcp-admin-connections.php:770
 msgid "Create an API key"
 msgstr "Создайте API-ключ"
 
-#: admin/class-mcp-admin-connections.php:751
+#: admin/class-mcp-admin-connections.php:773
 msgid ""
 "<strong>Copy your key now</strong> — for security it will not be shown again."
 msgstr ""
 "<strong>Скопируйте ключ сейчас</strong> — из соображений безопасности он "
 "больше не будет показан."
 
-#: admin/class-mcp-admin-connections.php:752
-#: admin/class-mcp-admin-connections.php:1220
+#: admin/class-mcp-admin-connections.php:774
+#: admin/class-mcp-admin-connections.php:1296
 msgid "API key"
 msgstr "API-ключ"
 
-#: admin/class-mcp-admin-connections.php:752
+#: admin/class-mcp-admin-connections.php:774
 msgid "Copy API key"
 msgstr "Скопировать API-ключ"
 
-#: admin/class-mcp-admin-connections.php:753
+#: admin/class-mcp-admin-connections.php:775
 msgid "I've saved my key"
 msgstr "Я сохранил ключ"
 
-#: admin/class-mcp-admin-connections.php:756
+#: admin/class-mcp-admin-connections.php:778
 msgid "Give it a name so you can recognize it later, then generate."
 msgstr ""
 "Дайте ему название, чтобы позже вы могли его узнать, затем сгенерируйте."
 
 #. translators: %s: client name, e.g. "Claude Code"
-#: admin/class-mcp-admin-connections.php:761
+#: admin/class-mcp-admin-connections.php:783
 #, php-format
 msgid "e.g. %s on my laptop"
 msgstr "напр., %s на моём ноутбуке"
 
-#: admin/class-mcp-admin-connections.php:764
+#: admin/class-mcp-admin-connections.php:786
 msgid "Generate API key"
 msgstr "Сгенерировать API-ключ"
 
-#: admin/class-mcp-admin-connections.php:764
+#: admin/class-mcp-admin-connections.php:786
 msgid "Generate another key"
 msgstr "Сгенерировать ещё один ключ"
 
-#: admin/class-mcp-admin-connections.php:775
+#: admin/class-mcp-admin-connections.php:799
 msgid "Run this in your terminal:"
 msgstr "Выполните это в терминале:"
 
-#: admin/class-mcp-admin-connections.php:776
+#: admin/class-mcp-admin-connections.php:800
 msgid ""
 "Run these in your terminal. Codex reads the key each time it starts, so also "
 "add the <code>export</code> line to your shell profile (e.g. <code>~/.zshrc</"
@@ -1001,15 +1016,7 @@ msgstr ""
 "поэтому добавьте строку <code>export</code> и в профиль оболочки (например, "
 "<code>~/.zshrc</code>):"
 
-#: admin/class-mcp-admin-connections.php:777
-msgid ""
-"Add this to <code>~/.config/opencode/opencode.json</code> (or a project "
-"<code>opencode.json</code>), then restart Opencode:"
-msgstr ""
-"Добавьте это в <code>~/.config/opencode/opencode.json</code> (или в "
-"<code>opencode.json</code> проекта), затем перезапустите Opencode:"
-
-#: admin/class-mcp-admin-connections.php:778
+#: admin/class-mcp-admin-connections.php:801
 msgid ""
 "Add this to <code>~/.cursor/mcp.json</code> (create the file if it does not "
 "exist), then restart Cursor:"
@@ -1017,20 +1024,12 @@ msgstr ""
 "Добавьте это в <code>~/.cursor/mcp.json</code> (создайте файл, если его "
 "нет), затем перезапустите Cursor:"
 
-#: admin/class-mcp-admin-connections.php:779
-msgid ""
-"Add this to <code>.vscode/mcp.json</code> in your project (or your user "
-"<code>mcp.json</code>), then restart VS Code:"
-msgstr ""
-"Добавьте это в <code>.vscode/mcp.json</code> в своём проекте (или в "
-"пользовательский <code>mcp.json</code>) и перезапустите VS Code:"
-
-#: admin/class-mcp-admin-connections.php:783
+#: admin/class-mcp-admin-connections.php:805
 msgid "Add the server to your tool"
 msgstr "Добавьте сервер в свой инструмент"
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:852
+#: admin/class-mcp-admin-connections.php:928
 #, php-format
 msgid ""
 "Open a new Claude Code session and run <code>/mcp</code> — <code>%s</code> "
@@ -1040,7 +1039,7 @@ msgstr ""
 "code> должен отображаться как подключённый."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:854
+#: admin/class-mcp-admin-connections.php:930
 #, php-format
 msgid ""
 "Start Codex and run <code>/mcp</code> — <code>%s</code> should be listed "
@@ -1050,7 +1049,7 @@ msgstr ""
 "в списке вместе со своими инструментами."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:856
+#: admin/class-mcp-admin-connections.php:932
 #, php-format
 msgid ""
 "Run <code>opencode mcp list</code> — <code>%s</code> should be listed as "
@@ -1060,7 +1059,7 @@ msgstr ""
 "указан как подключённый."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:858
+#: admin/class-mcp-admin-connections.php:934
 #, php-format
 msgid ""
 "Open <code>Customize</code> in the Cursor sidebar — <code>%s</code> should "
@@ -1071,7 +1070,7 @@ msgstr ""
 "Logs</code>."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:860
+#: admin/class-mcp-admin-connections.php:936
 #, php-format
 msgid ""
 "Run <code>gemini mcp list</code> — <code>%s</code> should show as connected."
@@ -1080,7 +1079,7 @@ msgstr ""
 "как подключённый."
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:862
+#: admin/class-mcp-admin-connections.php:938
 #, php-format
 msgid ""
 "Open Copilot Chat in agent mode and click the tools icon — <code>%s</code> "
@@ -1090,16 +1089,16 @@ msgstr ""
 "списке должен быть <code>%s</code>. Ошибки отображаются в <code>Output → "
 "MCP</code>."
 
-#: admin/class-mcp-admin-connections.php:868
+#: admin/class-mcp-admin-connections.php:944
 msgid "Then try a read-only prompt:"
 msgstr "Затем попробуйте запрос только на чтение:"
 
-#: admin/class-mcp-admin-connections.php:871
+#: admin/class-mcp-admin-connections.php:947
 msgid "Copy prompt"
 msgstr "Копировать запрос"
 
 #. translators: %s: the MCP server name shown in the client.
-#: admin/class-mcp-admin-connections.php:871
+#: admin/class-mcp-admin-connections.php:947
 #, php-format
 msgid ""
 "Using %s, tell me this site's name and WordPress version. Don't change "
@@ -1107,17 +1106,17 @@ msgid ""
 msgstr ""
 "С помощью %s назови название этого сайта и версию WordPress. Ничего не меняй."
 
-#: admin/class-mcp-admin-connections.php:871
+#: admin/class-mcp-admin-connections.php:947
 msgid "prompt"
 msgstr "запрос"
 
 #. translators: %s: tool category name
-#: admin/class-mcp-admin-connections.php:897
+#: admin/class-mcp-admin-connections.php:973
 #, php-format
 msgid "Select all %s tools"
 msgstr "Выбрать все инструменты категории «%s»"
 
-#: admin/class-mcp-admin-connections.php:911
+#: admin/class-mcp-admin-connections.php:987
 msgid ""
 "Note: read-only MCP resources (site info, user list, recent posts, etc.) are "
 "always available to every credential regardless of tool scope."
@@ -1126,48 +1125,48 @@ msgstr ""
 "список пользователей, последние записи и т. д.) всегда доступны для любого "
 "ключа или подключения независимо от области инструментов."
 
-#: admin/class-mcp-admin-connections.php:922
+#: admin/class-mcp-admin-connections.php:998
 msgid "Custom…"
 msgstr "Настраиваемый…"
 
-#: admin/class-mcp-admin-connections.php:922
-#: admin/class-mcp-admin-connections.php:938
-#: admin/class-mcp-admin-connections.php:949
+#: admin/class-mcp-admin-connections.php:998
+#: admin/class-mcp-admin-connections.php:1014
+#: admin/class-mcp-admin-connections.php:1025
 msgid "Full access"
 msgstr "Полный доступ"
 
-#: admin/class-mcp-admin-connections.php:922
-#: admin/class-mcp-admin-connections.php:942
+#: admin/class-mcp-admin-connections.php:998
+#: admin/class-mcp-admin-connections.php:1018
 msgid "Read-only"
 msgstr "Только чтение"
 
-#: admin/class-mcp-admin-connections.php:925 includes/class-mcp-oauth.php:1801
+#: admin/class-mcp-admin-connections.php:1001 includes/class-mcp-oauth.php:1801
 msgid "Access level"
 msgstr "Уровень доступа"
 
 #. translators: %d: number of tools this credential may call
-#: admin/class-mcp-admin-connections.php:946
+#: admin/class-mcp-admin-connections.php:1022
 #, php-format
 msgid "Custom (%d tools)"
 msgstr "Настраиваемый (%d инструментов)"
 
-#: admin/class-mcp-admin-connections.php:953
+#: admin/class-mcp-admin-connections.php:1029
 msgid "Unknown (blocked)"
 msgstr "Неизвестно (заблокировано)"
 
-#: admin/class-mcp-admin-connections.php:969
+#: admin/class-mcp-admin-connections.php:1045
 msgid "Dismiss"
 msgstr "Закрыть"
 
 #. translators: 1: app name such as ChatGPT, 2: relative time such as "4 minutes"
-#: admin/class-mcp-admin-connections.php:973
+#: admin/class-mcp-admin-connections.php:1049
 #, php-format
 msgid "%1$s tried to connect %2$s ago, but new connections were off."
 msgstr ""
 "%1$s пытался подключиться %2$s назад, но новые подключения были отключены."
 
 #. translators: %d: number of attempts
-#: admin/class-mcp-admin-connections.php:976
+#: admin/class-mcp-admin-connections.php:1052
 #, php-format
 msgid "(%d attempt)"
 msgid_plural "(%d attempts)"
@@ -1176,7 +1175,7 @@ msgstr[1] "(%d попытки)"
 msgstr[2] "(%d попыток)"
 
 #. translators: %s: host name
-#: admin/class-mcp-admin-connections.php:981
+#: admin/class-mcp-admin-connections.php:1057
 #, php-format
 msgid ""
 "Its sign-in address (%s) is not on the allowed list either — add it to the "
@@ -1186,18 +1185,18 @@ msgstr ""
 "дополнительные хосты входа на вкладке «Настройки»."
 
 #. translators: %s: app name such as ChatGPT
-#: admin/class-mcp-admin-connections.php:988
+#: admin/class-mcp-admin-connections.php:1064
 #, php-format
 msgid "New connections are on — try again in %s now."
 msgstr "Новые подключения включены — повторите попытку в %s прямо сейчас."
 
 #. translators: %s: app name such as ChatGPT
-#: admin/class-mcp-admin-connections.php:1002
+#: admin/class-mcp-admin-connections.php:1078
 #, php-format
 msgid "Then add the app again in %s."
 msgstr "Затем добавьте приложение заново в %s."
 
-#: admin/class-mcp-admin-connections.php:1027
+#: admin/class-mcp-admin-connections.php:1103
 msgid ""
 "Connect AI agents like <strong>Claude</strong>, <strong>ChatGPT</strong>, or "
 "<strong>Codex</strong> to this WordPress site over the Model Context "
@@ -1207,30 +1206,30 @@ msgstr ""
 "strong> или <strong>Codex</strong>, к этому сайту WordPress по протоколу "
 "Model Context Protocol."
 
-#: admin/class-mcp-admin-connections.php:1054
-#: admin/class-mcp-admin-connections.php:1196
+#: admin/class-mcp-admin-connections.php:1130
+#: admin/class-mcp-admin-connections.php:1272
 msgid "Connect another app"
 msgstr "Подключить ещё приложение"
 
-#: admin/class-mcp-admin-connections.php:1054
+#: admin/class-mcp-admin-connections.php:1130
 msgid "Connect your first app"
 msgstr "Подключите первое приложение"
 
-#: admin/class-mcp-admin-connections.php:1055
+#: admin/class-mcp-admin-connections.php:1131
 msgid "Pick your AI app or coding tool — setup takes about a minute."
 msgstr ""
 "Выберите ИИ-приложение или инструмент для разработки — настройка займёт "
 "около минуты."
 
-#: admin/class-mcp-admin-connections.php:1057
+#: admin/class-mcp-admin-connections.php:1133
 msgid "Close"
 msgstr "Закрыть"
 
-#: admin/class-mcp-admin-connections.php:1065
+#: admin/class-mcp-admin-connections.php:1141
 msgid "Which app do you want to connect?"
 msgstr "Какое приложение вы хотите подключить?"
 
-#: admin/class-mcp-admin-connections.php:1066
+#: admin/class-mcp-admin-connections.php:1142
 msgid ""
 "Pick your AI app or coding tool from the list to see step-by-step setup "
 "instructions."
@@ -1239,135 +1238,135 @@ msgstr ""
 "увидеть пошаговые инструкции по настройке."
 
 #. translators: %s: AI client name, e.g. "Claude Code"
-#: admin/class-mcp-admin-connections.php:1077
+#: admin/class-mcp-admin-connections.php:1153
 #, php-format
 msgid "Connect %s"
 msgstr "Подключить %s"
 
-#: admin/class-mcp-admin-connections.php:1098
+#: admin/class-mcp-admin-connections.php:1174
 msgid "No terminal needed"
 msgstr "Терминал не нужен"
 
-#: admin/class-mcp-admin-connections.php:1099
+#: admin/class-mcp-admin-connections.php:1175
 msgid "Terminal & IDE tools"
 msgstr "Инструменты терминала и IDE"
 
-#: admin/class-mcp-admin-connections.php:1104
+#: admin/class-mcp-admin-connections.php:1180
 msgid "AI clients"
 msgstr "ИИ-клиенты"
 
-#: admin/class-mcp-admin-connections.php:1124
+#: admin/class-mcp-admin-connections.php:1200
 msgid "Needs public URL"
 msgstr "Нужен публичный URL"
 
-#: admin/class-mcp-admin-connections.php:1126
+#: admin/class-mcp-admin-connections.php:1202
 msgid "Works locally"
 msgstr "Работает локально"
 
-#: admin/class-mcp-admin-connections.php:1134
+#: admin/class-mcp-admin-connections.php:1210
 msgid "Another MCP client? Use this endpoint:"
 msgstr "Другой MCP-клиент? Используйте этот адрес:"
 
-#: admin/class-mcp-admin-connections.php:1137
+#: admin/class-mcp-admin-connections.php:1213
 msgid "Copy endpoint URL"
 msgstr "Копировать URL конечной точки"
 
-#: admin/class-mcp-admin-connections.php:1178
+#: admin/class-mcp-admin-connections.php:1254
 msgid "Copy"
 msgstr "Копировать"
 
-#: admin/class-mcp-admin-connections.php:1191
+#: admin/class-mcp-admin-connections.php:1267
 msgid "Connected apps"
 msgstr "Подключённые приложения"
 
-#: admin/class-mcp-admin-connections.php:1204
+#: admin/class-mcp-admin-connections.php:1280
 msgid "Name"
 msgstr "Название"
 
-#: admin/class-mcp-admin-connections.php:1205
+#: admin/class-mcp-admin-connections.php:1281
 msgid "Type"
 msgstr "Тип"
 
-#: admin/class-mcp-admin-connections.php:1206
+#: admin/class-mcp-admin-connections.php:1282
 msgid "Access"
 msgstr "Доступ"
 
-#: admin/class-mcp-admin-connections.php:1208
+#: admin/class-mcp-admin-connections.php:1284
 msgid "Last used"
 msgstr "Последнее использование"
 
-#: admin/class-mcp-admin-connections.php:1228
+#: admin/class-mcp-admin-connections.php:1304
 msgid "Revoke this key? Any client using it will lose access."
 msgstr "Отозвать этот ключ? Все клиенты, использующие его, потеряют доступ."
 
 #. translators: 1: app name detected from its first request, 2: WordPress username of the approving admin
-#: admin/class-mcp-admin-connections.php:1235
+#: admin/class-mcp-admin-connections.php:1311
 #, php-format
 msgid "%1$s · approved by %2$s"
 msgstr "%1$s · одобрил %2$s"
 
 #. translators: %s: WordPress username of the admin who approved the connection
-#: admin/class-mcp-admin-connections.php:1238
+#: admin/class-mcp-admin-connections.php:1314
 #, php-format
 msgid "approved by %s"
 msgstr "одобрено пользователем %s"
 
-#: admin/class-mcp-admin-connections.php:1244
+#: admin/class-mcp-admin-connections.php:1320
 msgid "OAuth"
 msgstr "OAuth"
 
-#: admin/class-mcp-admin-connections.php:1252
+#: admin/class-mcp-admin-connections.php:1328
 msgid "Revoke this connection? The app will lose access immediately."
 msgstr "Отозвать это подключение? Приложение немедленно потеряет доступ."
 
 #. translators: %s: human-readable time difference, e.g. "2 hours"
-#: admin/class-mcp-admin-connections.php:1278
+#: admin/class-mcp-admin-connections.php:1354
 #, php-format
 msgid "%s ago"
 msgstr "%s назад"
 
-#: admin/class-mcp-admin-connections.php:1280
+#: admin/class-mcp-admin-connections.php:1356
 msgid "Never"
 msgstr "Никогда"
 
 #. translators: %s: credential name
-#: admin/class-mcp-admin-connections.php:1287
+#: admin/class-mcp-admin-connections.php:1363
 #, php-format
 msgid "Actions for %s"
 msgstr "Действия для %s"
 
-#: admin/class-mcp-admin-connections.php:1290
+#: admin/class-mcp-admin-connections.php:1366
 msgid "Edit access…"
 msgstr "Изменить доступ…"
 
-#: admin/class-mcp-admin-connections.php:1291
+#: admin/class-mcp-admin-connections.php:1367
 msgid "Revoke"
 msgstr "Отозвать"
 
-#: admin/class-mcp-admin-connections.php:1294
+#: admin/class-mcp-admin-connections.php:1370
 msgid "Revoke…"
 msgstr "Отозвать…"
 
 #. translators: %s: credential name
-#: admin/class-mcp-admin-connections.php:1307
+#: admin/class-mcp-admin-connections.php:1383
 #, php-format
 msgid "Access for <strong>%s</strong>"
 msgstr "Доступ для <strong>%s</strong>"
 
-#: admin/class-mcp-admin-connections.php:1311
+#: admin/class-mcp-admin-connections.php:1387
 #: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:222
 msgid "Cancel"
 msgstr "Отмена"
 
-#: admin/class-mcp-admin-connections.php:1312
+#: admin/class-mcp-admin-connections.php:1388
 msgid "Save access"
 msgstr "Сохранить доступ"
 
-#: admin/class-mcp-admin-connections.php:1325
+#: admin/class-mcp-admin-connections.php:1401
 msgid "Connection Doctor"
 msgstr "Диагностика подключения"
 
-#: admin/class-mcp-admin-connections.php:1327
+#: admin/class-mcp-admin-connections.php:1403
 msgid ""
 "Test whether AI clients can reach this site and get a copy-pasteable "
 "diagnosis for anything broken."
@@ -1375,15 +1374,15 @@ msgstr ""
 "Проверьте, могут ли ИИ-клиенты обращаться к этому сайту, и получите готовую "
 "для копирования диагностику любых неполадок."
 
-#: admin/class-mcp-admin-connections.php:1329
+#: admin/class-mcp-admin-connections.php:1405
 msgid "Run checks"
 msgstr "Запустить проверку"
 
-#: admin/class-mcp-admin-connections.php:1330
+#: admin/class-mcp-admin-connections.php:1406
 msgid "Copy report"
 msgstr "Скопировать отчёт"
 
-#: admin/class-mcp-admin-connections.php:1331
+#: admin/class-mcp-admin-connections.php:1407
 msgid "Get help on WordPress.org"
 msgstr "Получить помощь на WordPress.org"
 
