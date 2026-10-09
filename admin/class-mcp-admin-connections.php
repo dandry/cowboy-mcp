@@ -32,7 +32,8 @@ class Cowboy_MCP_Admin_Connections {
     /**
      * Read-only: how far the watched app has got since the click. Never writes clients or tokens.
      * OAuth mode: only client rows whose derived slug matches the watch count, so unrelated
-     * connections can never report "connected". Key mode: only keys created after the click count.
+     * connections can never report "connected". Key mode: only keys created at most 30 min before the click
+     * (and used after it) count.
      *
      * @param array{app:string,since:int,mode?:string} $watch
      * @return array{stage:string,reused:bool,app:string,label:string,mode:string}
@@ -45,7 +46,8 @@ class Cowboy_MCP_Admin_Connections {
         $oauth = class_exists( 'Cowboy_MCP_OAuth' );
         if ( 'key' === $mode ) {
             foreach ( Cowboy_MCP_Auth::list_keys() as $k ) {
-                if ( (int) ( $k['created'] ?? 0 ) >= $since && ( (int) ( $k['last_used'] ?? 0 ) >= $since || (int) ( $k['client_info']['at'] ?? 0 ) >= $since ) ) {
+                // Keys are minted before Copy (the snippet embeds them), so a key created up to 30 min before the click counts; older keys never do.
+                if ( (int) ( $k['created'] ?? 0 ) >= $since - 30 * MINUTE_IN_SECONDS && ( (int) ( $k['last_used'] ?? 0 ) >= $since || (int) ( $k['client_info']['at'] ?? 0 ) >= $since ) ) {
                     $out['stage'] = 'connected';
                     $who          = $oauth ? Cowboy_MCP_OAuth::client_display_name( $k['client_info'] ?? null ) : null;
                     $out['label'] = $who ?? $out['label'];
