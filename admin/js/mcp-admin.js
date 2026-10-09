@@ -843,29 +843,64 @@ document.addEventListener( 'click', function( e ) {
 	} );
 } )();
 
-// Live "Connected": poll while the strip is on screen and the tab is visible.
+// Live "Connected": poll while a strip is on screen and the tab is visible. Also started by [data-cmcp-start].
 ( function() {
-	var strip = document.querySelector( '[data-cmcp-connect-watch]' );
-	if ( ! strip || strip.getAttribute( 'data-stage' ) === 'connected' ) { return; }
 	var timer = null;
-	function tick() {
-		if ( document.visibilityState !== 'visible' ) { return; }
-		var body = new URLSearchParams( { action: 'cowboy_mcp_connect_status', _ajax_nonce: cowboyMcpAdmin.statusNonce } );
-		fetch( cowboyMcpAdmin.ajaxUrl, { method: 'POST', credentials: 'same-origin', body: body } )
+	function markDone() {
+		var step = document.querySelector( '.mcp-client-panel--active [data-cmcp-verify-step] .cmcp-step' );
+		if ( step ) { step.classList.add( 'cmcp-step--done' ); }
+	}
+	function startWatch( strip ) {
+		if ( timer ) { window.clearInterval( timer ); timer = null; }
+		if ( ! strip || strip.getAttribute( 'data-stage' ) === 'connected' ) { if ( strip ) { markDone(); } return; }
+		function tick() {
+			if ( document.visibilityState !== 'visible' ) { return; }
+			var body = new URLSearchParams( { action: 'cowboy_mcp_connect_status', _ajax_nonce: cowboyMcpAdmin.statusNonce } );
+			fetch( cowboyMcpAdmin.ajaxUrl, { method: 'POST', credentials: 'same-origin', body: body } )
+				.then( function( r ) { return r.json(); } )
+				.then( function( r ) {
+					if ( ! r || r.success !== true ) { window.clearInterval( timer ); return; } // expired nonce / 403: stop polling
+					var d = r.data;
+					if ( d.stage === 'expired' ) { strip.remove(); window.clearInterval( timer ); return; }
+					strip.setAttribute( 'data-stage', d.stage );
+					strip.className = 'cmcp-connect-status cmcp-connect-status--' + d.stage;
+					strip.querySelector( '.cmcp-connect-status-text' ).textContent = d.text;
+					if ( d.done ) {
+						strip.querySelector( '.cmcp-connect-status-refresh' ).hidden = false;
+						markDone();
+						window.clearInterval( timer );
+					}
+				} )
+				.catch( function() {} );
+		}
+		timer = window.setInterval( tick, 3000 );
+	}
+	startWatch( document.querySelector( '[data-cmcp-connect-watch]' ) );
+
+	// Copy / Add to Cursor / Install in VS Code: start a watched connection in the same gesture.
+	// Does not check defaultPrevented: the click may legitimately navigate (anchor) or copy (button).
+	document.addEventListener( 'click', function( e ) {
+		var el = e.target.closest ? e.target.closest( '[data-cmcp-start]' ) : null;
+		if ( ! el || typeof cowboyMcpAdmin === 'undefined' || ! cowboyMcpAdmin.startNonce ) { return; }
+		var body = new URLSearchParams( { action: 'cowboy_mcp_start_connect', _ajax_nonce: cowboyMcpAdmin.startNonce, client: el.getAttribute( 'data-cmcp-start' ), mode: el.getAttribute( 'data-cmcp-mode' ) || 'oauth' } );
+		fetch( cowboyMcpAdmin.ajaxUrl, { method: 'POST', credentials: 'same-origin', keepalive: true, body: body } )
 			.then( function( r ) { return r.json(); } )
 			.then( function( r ) {
-				if ( ! r || r.success !== true ) { window.clearInterval( timer ); return; } // expired nonce / 403: stop polling
-				var d = r.data;
-				if ( d.stage === 'expired' ) { strip.remove(); window.clearInterval( timer ); return; }
-				strip.setAttribute( 'data-stage', d.stage );
-				strip.className = 'cmcp-connect-status cmcp-connect-status--' + d.stage;
-				strip.querySelector( '.cmcp-connect-status-text' ).textContent = d.text;
-				if ( d.done ) {
-					strip.querySelector( '.cmcp-connect-status-refresh' ).hidden = false;
-					window.clearInterval( timer );
+				if ( ! r || r.success !== true || ! r.data || ! r.data.html ) { return; }
+				var tpl = document.createElement( 'div' );
+				tpl.innerHTML = r.data.html; // server-rendered, escaped markup (esc_html/esc_attr)
+				var strip = tpl.querySelector( '[data-cmcp-connect-watch]' );
+				if ( ! strip ) { return; }
+				var old = document.querySelector( '[data-cmcp-connect-watch]' );
+				if ( old ) {
+					old.replaceWith( strip );
+				} else {
+					var lede = document.querySelector( '.cmcp-lede' );
+					if ( ! lede ) { return; }
+					lede.parentNode.insertBefore( strip, lede );
 				}
+				startWatch( strip );
 			} )
 			.catch( function() {} );
-	}
-	timer = window.setInterval( tick, 3000 );
+	} );
 } )();

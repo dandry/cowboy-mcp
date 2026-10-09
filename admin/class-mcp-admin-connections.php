@@ -10,39 +10,61 @@ class Cowboy_MCP_Admin_Connections {
     // Verified 2026-10-06 against live ChatGPT: the Plugins page; its + menu offers 'Add custom MCP server'.
     const CHATGPT_URL = 'https://chatgpt.com/plugins';
 
-    /** Remember (30 min, per admin) which app the admin just started connecting. */
-    public static function set_connect_watch( string $app ): void {
-        set_transient( 'cowboy_mcp_connect_watch_' . get_current_user_id(), [ 'app' => $app, 'since' => time() ], 30 * MINUTE_IN_SECONDS );
+    /** Remember (30 min, per admin) which app the admin just started connecting, and how. */
+    public static function set_connect_watch( string $app, string $mode = 'oauth' ): void {
+        set_transient( 'cowboy_mcp_connect_watch_' . get_current_user_id(), [ 'app' => $app, 'mode' => $mode, 'since' => time() ], 30 * MINUTE_IN_SECONDS );
     }
 
-    /** @return array{app:string,since:int}|null */
+    /** @return array{app:string,since:int,mode?:string}|null  (1.7.1 transients carry no mode = oauth) */
     public static function connect_watch(): ?array {
         $w = get_transient( 'cowboy_mcp_connect_watch_' . get_current_user_id() );
         return ( is_array( $w ) && isset( $w['app'], $w['since'] ) ) ? $w : null;
     }
 
+    /** Display label for a watch slug ('claude' = the hosted Claude apps). */
+    public static function watch_label( string $app ): string {
+        if ( class_exists( 'Cowboy_MCP_OAuth' ) && isset( Cowboy_MCP_OAuth::CLIENT_LABELS[ $app ] ) ) {
+            return Cowboy_MCP_OAuth::CLIENT_LABELS[ $app ];
+        }
+        return self::client_registry()[ $app ]['label'] ?? __( 'the app', 'cowboy-mcp' );
+    }
+
     /**
-     * Read-only: how far the watched app has got since the click. Never writes
-     * clients or tokens. Only clients whose redirect host maps to the watched
-     * app's label count, so unrelated connections can never report "connected".
+     * Read-only: how far the watched app has got since the click. Never writes clients or tokens.
+     * OAuth mode: only client rows whose derived slug matches the watch count, so unrelated
+     * connections can never report "connected". Key mode: only keys created after the click count.
      *
-     * @param array{app:string,since:int} $watch
-     * @return array{stage:string,reused:bool,app:string}
+     * @param array{app:string,since:int,mode?:string} $watch
+     * @return array{stage:string,reused:bool,app:string,label:string,mode:string}
      */
     public static function connect_status( array $watch ): array {
-        $label   = 'chatgpt' === $watch['app'] ? 'ChatGPT' : 'Claude';
-        $since   = (int) $watch['since'];
+        $app   = (string) $watch['app'];
+        $mode  = 'key' === ( $watch['mode'] ?? 'oauth' ) ? 'key' : 'oauth';
+        $since = (int) $watch['since'];
+        $out   = [ 'stage' => 'waiting', 'reused' => false, 'app' => $app, 'label' => self::watch_label( $app ), 'mode' => $mode ];
+        $oauth = class_exists( 'Cowboy_MCP_OAuth' );
+        if ( 'key' === $mode ) {
+            foreach ( Cowboy_MCP_Auth::list_keys() as $k ) {
+                if ( (int) ( $k['created'] ?? 0 ) >= $since && ( (int) ( $k['last_used'] ?? 0 ) >= $since || (int) ( $k['client_info']['at'] ?? 0 ) >= $since ) ) {
+                    $out['stage'] = 'connected';
+                    $who          = $oauth ? Cowboy_MCP_OAuth::client_display_name( $k['client_info'] ?? null ) : null;
+                    $out['label'] = $who ?? $out['label'];
+                    break;
+                }
+            }
+            return $out;
+        }
+        if ( ! $oauth ) {
+            return $out;
+        }
         $clients = (array) get_option( 'cowboy_mcp_oauth_clients', [] );
         $tokens  = array_merge( array_values( (array) get_option( 'cowboy_mcp_oauth_tokens', [] ) ), array_values( (array) get_option( 'cowboy_mcp_oauth_refresh', [] ) ) );
         $order   = [ 'waiting' => 0, 'registered' => 1, 'approved' => 2, 'connected' => 3 ];
         $stage   = 'waiting';
         $reused  = false;
+        $named   = null;
         foreach ( $clients as $cid => $c ) {
-            if ( ! is_array( $c ) ) {
-                continue;
-            }
-            $host = (string) wp_parse_url( (string) ( $c['redirect_uris'][0] ?? '' ), PHP_URL_HOST );
-            if ( '' === $host || Cowboy_MCP_OAuth::app_label_for_host( $host ) !== $label ) {
+            if ( ! is_array( $c ) || Cowboy_MCP_OAuth::client_slug_for_row( $c ) !== $app ) {
                 continue;
             }
             $mine  = array_filter( $tokens, static fn( $t ) => is_array( $t ) && ( $t['client_id'] ?? '' ) === $cid );
@@ -58,36 +80,54 @@ class Cowboy_MCP_Admin_Connections {
             if ( $order[ $s ] > $order[ $stage ] || ( 'connected' === $s && 'connected' === $stage && $fresh ) ) {
                 $stage  = $s;
                 $reused = 'connected' === $s && ! $fresh;
+                $named  = (int) ( $c['client_info']['at'] ?? 0 ) >= $since ? Cowboy_MCP_OAuth::client_display_name( $c['client_info'] ?? null ) : null;
             }
         }
         if ( 'waiting' === $stage ) {
             foreach ( Cowboy_MCP_OAuth::blocked_attempts() as $a ) {
-                if ( $a['app'] === $label && (int) $a['at'] >= $since ) {
+                if ( ( ( $a['slug'] ?? null ) === $app || ( $a['app'] ?? '' ) === $out['label'] ) && (int) ( $a['at'] ?? 0 ) >= $since ) {
                     $stage = 'blocked';
                     break;
                 }
             }
         }
-        return [ 'stage' => $stage, 'reused' => $reused, 'app' => $watch['app'] ];
+        $out['stage']  = $stage;
+        $out['reused'] = $reused;
+        if ( $named ) {
+            $out['label'] = $named;
+        }
+        return $out;
     }
 
-    /** Whole translated sentences per app and stage. */
+    /** One sentence per stage; the app name is a proper noun injected as %s. */
     public static function connect_status_text( array $st ): string {
-        $gpt = 'chatgpt' === $st['app'];
-        return match ( $st['stage'] ) {
-            'registered' => $gpt ? __( 'ChatGPT found your site — approve access on the sign-in page.', 'cowboy-mcp' ) : __( 'Claude found your site — approve access on the sign-in page.', 'cowboy-mcp' ),
-            'approved'   => $gpt ? __( 'Approved — waiting for ChatGPT\'s first request.', 'cowboy-mcp' ) : __( 'Approved — waiting for Claude\'s first request.', 'cowboy-mcp' ),
-            'connected'  => ! empty( $st['reused'] )
-                ? ( $gpt ? __( '✓ Connected — ChatGPT reused your earlier connection.', 'cowboy-mcp' ) : __( '✓ Connected — Claude reused your earlier connection.', 'cowboy-mcp' ) )
-                : ( $gpt ? __( '✓ Connected — ChatGPT can now use this site.', 'cowboy-mcp' ) : __( '✓ Connected — Claude can now use this site.', 'cowboy-mcp' ) ),
-            'blocked'    => $gpt ? __( 'ChatGPT tried to connect, but new connections were off.', 'cowboy-mcp' ) : __( 'Claude tried to connect, but new connections were off.', 'cowboy-mcp' ),
-            default      => $gpt ? __( 'Waiting for ChatGPT…', 'cowboy-mcp' ) : __( 'Waiting for Claude…', 'cowboy-mcp' ),
-        };
+        $n = (string) ( $st['label'] ?? self::watch_label( (string) ( $st['app'] ?? '' ) ) );
+        switch ( $st['stage'] ) {
+            case 'registered':
+                /* translators: %s: AI app name, e.g. Claude Code */
+                return sprintf( __( '%s found your site — approve access on the sign-in page.', 'cowboy-mcp' ), $n );
+            case 'approved':
+                /* translators: %s: AI app name, e.g. Claude Code */
+                return sprintf( __( 'Approved — waiting for the first request from %s.', 'cowboy-mcp' ), $n );
+            case 'connected':
+                if ( ! empty( $st['reused'] ) ) {
+                    /* translators: %s: AI app name, e.g. Claude Code */
+                    return sprintf( __( '✓ Connected — %s reused your earlier connection.', 'cowboy-mcp' ), $n );
+                }
+                /* translators: %s: AI app name, e.g. Claude Code */
+                return sprintf( __( '✓ Connected — %s can now use this site.', 'cowboy-mcp' ), $n );
+            case 'blocked':
+                /* translators: %s: AI app name, e.g. Claude Code */
+                return sprintf( __( '%s tried to connect, but new connections were off.', 'cowboy-mcp' ), $n );
+            default:
+                /* translators: %s: AI app name, e.g. Claude Code */
+                return sprintf( __( 'Waiting for %s…', 'cowboy-mcp' ), $n );
+        }
     }
 
     public static function render_connect_status(): void {
         $w = self::connect_watch();
-        if ( ! $w || ! class_exists( 'Cowboy_MCP_OAuth' ) ) {
+        if ( ! $w ) {
             return;
         }
         $st = self::connect_status( $w );
@@ -1096,9 +1136,11 @@ class Cowboy_MCP_Admin_Connections {
                     <tbody>
                     <?php
                     foreach ( $keys as $k ) {
+                        // Display name may be client-supplied (clientInfo title/name): render_credential_row() escapes 'sub'.
+                        $who = class_exists( 'Cowboy_MCP_OAuth' ) ? Cowboy_MCP_OAuth::client_display_name( $k['client_info'] ?? null ) : null;
                         self::render_credential_row( [
                             'name'      => (string) $k['label'],
-                            'sub'       => $k['prefix'] . '…',
+                            'sub'       => ( $who ? $who . ' · ' : '' ) . $k['prefix'] . '…',
                             'mono'      => true,
                             'type'      => __( 'API key', 'cowboy-mcp' ),
                             'scope'     => $k['scope'] ?? null,
@@ -1112,10 +1154,17 @@ class Cowboy_MCP_Admin_Connections {
                         ] );
                     }
                     foreach ( $connections as $c ) {
+                        $who = class_exists( 'Cowboy_MCP_OAuth' ) ? Cowboy_MCP_OAuth::client_display_name( $c['client_info'] ?? null ) : null;
+                        if ( $who ) {
+                            /* translators: 1: app name detected from its first request, 2: WordPress username of the approving admin */
+                            $sub = sprintf( __( '%1$s · approved by %2$s', 'cowboy-mcp' ), $who, $c['user'] );
+                        } else {
+                            /* translators: %s: WordPress username of the admin who approved the connection */
+                            $sub = sprintf( __( 'approved by %s', 'cowboy-mcp' ), $c['user'] );
+                        }
                         self::render_credential_row( [
                             'name'      => (string) $c['client_name'],
-                            /* translators: %s: WordPress username of the admin who approved the connection */
-                            'sub'       => sprintf( __( 'approved by %s', 'cowboy-mcp' ), $c['user'] ),
+                            'sub'       => $sub,
                             'mono'      => false,
                             'type'      => __( 'OAuth', 'cowboy-mcp' ),
                             'scope'     => $c['tool_scope'] ?? null,

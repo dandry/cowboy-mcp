@@ -24,6 +24,7 @@ class Cowboy_MCP_Admin {
         add_action( 'wp_ajax_cowboy_mcp_dismiss_setup_notice', [ __CLASS__, 'ajax_dismiss_setup_notice' ] );
         add_action( 'wp_ajax_cowboy_mcp_dismiss_blocked', [ __CLASS__, 'ajax_dismiss_blocked' ] );
         add_action( 'wp_ajax_cowboy_mcp_connect_status', [ __CLASS__, 'ajax_connect_status' ] );
+        add_action( 'wp_ajax_cowboy_mcp_start_connect', [ __CLASS__, 'ajax_start_connect' ] );
         add_action( 'wp_ajax_cowboy_mcp_set_conn_client', [ __CLASS__, 'ajax_set_conn_client' ] );
     }
 
@@ -118,7 +119,7 @@ class Cowboy_MCP_Admin {
             wp_send_json_error( null, 403 );
         }
         $w = Cowboy_MCP_Admin_Connections::connect_watch();
-        if ( ! $w || ! class_exists( 'Cowboy_MCP_OAuth' ) ) {
+        if ( ! $w ) {
             wp_send_json_success( [ 'stage' => 'expired', 'reused' => false, 'text' => '', 'done' => true ] );
         }
         $st = Cowboy_MCP_Admin_Connections::connect_status( $w );
@@ -126,6 +127,34 @@ class Cowboy_MCP_Admin {
             delete_transient( 'cowboy_mcp_connect_watch_' . get_current_user_id() );
         }
         wp_send_json_success( [ 'stage' => $st['stage'], 'reused' => $st['reused'], 'text' => Cowboy_MCP_Admin_Connections::connect_status_text( $st ), 'done' => 'connected' === $st['stage'] ] );
+    }
+
+    /**
+     * Start a watched connection for a terminal/IDE client: connector on, window open, watch set.
+     * The ONLY settings write is oauth_enabled = true via enable_oauth_connector() (same as Add to
+     * Claude), and only in OAuth mode — API keys and existing OAuth clients are untouched.
+     */
+    public static function ajax_start_connect(): void {
+        check_ajax_referer( 'cowboy_mcp_start_connect' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( null, 403 );
+        }
+        $client = sanitize_key( wp_unslash( $_POST['client'] ?? '' ) );
+        $mode   = 'key' === sanitize_key( wp_unslash( $_POST['mode'] ?? 'oauth' ) ) ? 'key' : 'oauth';
+        $reg    = Cowboy_MCP_Admin_Connections::client_registry();
+        if ( ! isset( $reg[ $client ] ) ) {
+            wp_send_json_error( [ 'message' => 'unknown client' ], 400 );
+        }
+        if ( 'oauth' === $mode && class_exists( 'Cowboy_MCP_OAuth' ) ) {
+            self::enable_oauth_connector();
+            Cowboy_MCP_OAuth::open_registration_window();
+        }
+        Cowboy_MCP_Admin_Connections::set_connect_watch( $reg[ $client ]['watch'] ?? $client, $mode );
+        $w  = Cowboy_MCP_Admin_Connections::connect_watch();
+        $st = Cowboy_MCP_Admin_Connections::connect_status( (array) $w );
+        ob_start();
+        Cowboy_MCP_Admin_Connections::render_connect_status();
+        wp_send_json_success( [ 'stage' => $st['stage'], 'text' => Cowboy_MCP_Admin_Connections::connect_status_text( $st ), 'html' => (string) ob_get_clean() ] );
     }
 
     public static function enqueue_assets( string $hook ): void {
@@ -182,6 +211,7 @@ class Cowboy_MCP_Admin {
             'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
             'dismissNonce' => wp_create_nonce( 'cowboy_mcp_dismiss_new_key' ),
             'statusNonce'  => wp_create_nonce( 'cowboy_mcp_connect_status' ),
+            'startNonce'   => wp_create_nonce( 'cowboy_mcp_start_connect' ),
             'connNonce'    => wp_create_nonce( 'cowboy_mcp_set_conn_client' ),
             'blockedNonce' => wp_create_nonce( 'cowboy_mcp_dismiss_blocked' ),
             'gateOff'      => __( 'New connections: disabled', 'cowboy-mcp' ),
