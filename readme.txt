@@ -29,7 +29,7 @@ Cowboy MCP connects your WordPress site to Claude, ChatGPT, Cursor, Gemini or an
 
 Ask in plain language - "publish these three drafts," "why is the checkout page 500-ing," "bump every Summer Sale price 20%," "clear the cache and re-check site health" - and your agent gets it done. Most WordPress AI plugins let an assistant write blog posts; Cowboy MCP lets your agent actually *run the site*, including WP-CLI, files, the database, error logs and diagnostics.
 
-Try it without installing anything: click **Live Preview** above to open a throwaway WordPress Playground site with Cowboy MCP already active.
+Try it without installing: click **Live Preview** above for a throwaway WordPress Playground site with Cowboy MCP active.
 
 = What is a WordPress MCP server? =
 
@@ -48,7 +48,7 @@ MCP (Model Context Protocol) is the open standard AI assistants use to work with
 * **Roll back a post** - list a post's revisions, see a git-style diff of what changed, and restore any revision (the restore itself is undoable).
 * **Run your events** - create and edit The Events Calendar events, venues and organizers; with Events Calendar Pro, manage recurring series and cancel single dates.
 * **Plug into the WordPress Abilities API** - every tool is also a `cowboy-mcp/*` ability (with safe mode, the audit log and undo still in front), and abilities other plugins register become tools for your agent.
-* **Works on any host** - shared hosting, managed WordPress, a VPS or a local dev site. Nothing to install beyond the plugin, and no WordPress.com account or Jetpack plan needed.
+* **Works on any host** - shared hosting, managed WordPress, a VPS or a local dev site. Nothing to install beyond the plugin; no WordPress.com account or Jetpack plan.
 
 = Tool coverage =
 
@@ -74,7 +74,7 @@ Plus 17 read-only MCP resources, 4 resource templates and 8 guided workflow prom
 
 = Connect Claude Code to WordPress =
 
-Open the Connections tab (it switches on sign-in), then run two lines in your terminal - no key to copy:
+Pick the app on the Connections tab and click **Copy** (this switches sign-in on for 30 minutes), then run two lines in your terminal - no key to copy:
 
     claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
     claude mcp login your-site
@@ -118,7 +118,7 @@ Windsurf (now Devin Desktop) uses this block in `~/.config/devin/mcp_config.json
 
     codex mcp add your-site --url https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
 
-Codex opens your browser to sign in.
+Click **Copy** on the Connections tab (it switches sign-in on for 30 minutes); Codex then opens your browser to sign in.
 
 Headless or CI? Add `--bearer-token-env-var COWBOY_MCP_API_KEY` and export your key in your shell profile.
 
@@ -126,7 +126,7 @@ Headless or CI? Add `--bearer-token-env-var COWBOY_MCP_API_KEY` and export your 
 
     gemini mcp add -s user -t http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
 
-Then start `gemini` and run `/mcp auth your-site` to sign in.
+Click **Copy** on the Connections tab (it switches sign-in on for 30 minutes), then start `gemini` and run `/mcp auth your-site` to sign in.
 
 Headless or CI? Use an API key: `gemini mcp add --scope user --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"`.
 
@@ -140,7 +140,7 @@ Local, Studio, MAMP, DevKinsta, wp-env, Docker - it works the same. Terminal and
 
 = Secure by design: built for live sites =
 
-Built to keep you in charge when an AI has real control:
+Built to keep you in charge:
 
 * **Safe mode** (on by default) - destructive tools refuse to run until the agent confirms, with a preview of what would happen.
 * **Dry run** - every non-read-only tool accepts a dry-run flag that reports exactly what would change without touching anything.
@@ -149,17 +149,17 @@ Built to keep you in charge when an AI has real control:
 * **Safe plugin and theme updates** - file backup first, database checkpoint, then a health check that automatically restores the previous version if the site breaks.
 * **Audit log** - every tool call, error and authentication event on the Logs tab; pruned after 30 days.
 * **AI agent permissions** - each API key and each OAuth connection can be full access, read-only, or a custom list of tools; a read-only key cannot write even if the agent tries.
-* **Hashed keys, rate limits, origin checks** - keys are shown once and stored as one-way hashes, requests are rate-limited per key (120/minute by default), and requests from unknown browser origins are rejected.
+* **Hashed keys, rate limits, origin checks** - keys are shown once and stored as one-way hashes, requests are rate-limited per key (120/minute by default), and unknown browser origins are rejected.
 * **Guardrails you cannot talk your way past** - a denylist of sensitive options, dangerous SQL and WP-CLI commands, SSRF protection, file writes confined to `wp-content` with a PHP syntax check, and last-administrator protection. Power mode lifts some of these for rare jobs; only a human can switch it on in wp-admin, so the agent can never grant itself more power.
 * **Connection Doctor** - a one-click self-test that names the exact thing blocking a connection (HTTPS, REST, OAuth discovery, Cloudflare, firewalls, caching) and gives you a report to paste into a support topic.
 
 = How Cowboy MCP is different =
 
-* **Nothing in the middle.** Some WordPress MCP products route requests through their own cloud relay, meter actions in credits, or need a hosted account or paid plan. Cowboy MCP runs on your server, on any host: no account, no relay, no quota.
+* **Nothing in the middle.** Some WordPress MCP products route requests through a cloud relay, meter actions in credits, or need a hosted account. Cowboy MCP runs on your server, on any host: no account, no relay, no quota.
 * **Every tool is free.** Some plugins gate the useful tools - plugins, themes, the database, WooCommerce - behind a Pro licence. Cowboy MCP ships all of them, GPL-licensed, with no paid tier.
 * **Typed tools with undo, not a PHP shell.** Tools that let an agent execute arbitrary PHP are built for development copies. Cowboy MCP gives the agent typed tools wrapped in safe mode, dry run, undo and checkpoints, so it can be trusted on the site that pays the bills. (Want the comparison? See [Cowboy MCP vs Novamira](https://cowboymcp.com/compare/cowboy-mcp-vs-novamira).)
-* **A full safety net, not just an undo button.** Many MCP plugins now promise undo - often a time-limited token, or edits made on a duplicate first. Cowboy MCP adds a per-change journal with conflict detection, whole-database checkpoints, automatic restore of broken updates, dry run, safe mode and an always-on audit log.
-* **A complete server today, wired into the official pieces.** The Abilities API and the official MCP adapter are a framework; Cowboy MCP is the turnkey server - install and connect - and on WordPress 6.9+ it bridges both ways. Needs WordPress 6.2+, no Composer, Node.js or build step.
+* **A full safety net, not just an undo button.** Many MCP plugins now promise undo - often a time-limited token or duplicate-first editing. Cowboy MCP adds a per-change journal with conflict detection, whole-database checkpoints, automatic restore of broken updates, dry run, safe mode and an always-on audit log.
+* **A complete server today, wired into the official pieces.** The Abilities API and the official MCP adapter are a framework; Cowboy MCP is the turnkey server, and on WordPress 6.9+ it bridges both ways. Needs WordPress 6.2+, no Composer, Node.js or build step.
 
 Setup guides for every client, the security model and head-to-head comparisons live at [cowboymcp.com](https://cowboymcp.com).
 
@@ -178,7 +178,7 @@ Questions and connection problems: post in the [support forum](https://wordpress
 == Installation ==
 
 1. Install and activate Cowboy MCP from the Plugins screen.
-2. Go to **Settings > Cowboy MCP**, open the **Connections** tab and pick your app.
+2. Go to **Settings > Cowboy MCP**, open the **Connections** tab, pick your app and click **Copy**; it switches sign-in on for 30 minutes.
 3. Connect your agent and start giving it instructions.
 
 **Claude Code:**
