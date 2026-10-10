@@ -963,6 +963,11 @@ class Cowboy_MCP_Admin_Connections {
         $catalog  = Cowboy_MCP_Tools::get_tool_catalog();
         ?>
         <template id="mcp-scope-checklist-template">
+            <div class="cmcp-scope-bulk">
+                <button type="button" class="cmcp-linkbtn" data-cmcp-scope-all="1"><?php esc_html_e( 'Select all', 'cowboy-mcp' ); ?></button>
+                <span aria-hidden="true">&middot;</span>
+                <button type="button" class="cmcp-linkbtn" data-cmcp-scope-all="0"><?php esc_html_e( 'Deselect all', 'cowboy-mcp' ); ?></button>
+            </div>
             <div class="mcp-scope-checklist cmcp-scope-checklist">
                 <?php foreach ( $catalog['categories'] as $cat => $info ) : ?>
                     <details class="mcp-scope-cat cmcp-scope-cat">

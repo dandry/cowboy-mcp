@@ -420,6 +420,16 @@
 	});
 
 	document.addEventListener('click', function (e) {
+		// Select all / Deselect all above the checklist: every tool checkbox in this form's
+		// checklist (including the "not currently available" ones) plus the category toggles.
+		var bulk = e.target.closest('[data-cmcp-scope-all]');
+		if (bulk) {
+			var on = bulk.getAttribute('data-cmcp-scope-all') === '1';
+			bulk.closest('.mcp-scope-custom-slot').querySelectorAll('input[name="allowed_tools[]"], .mcp-scope-cat-all').forEach(function (c) {
+				c.checked = on;
+			});
+			return;
+		}
 		// Category select-all checkbox lives inside <summary>, so a native click
 		// also toggles the parent <details> — that's <summary>'s default action,
 		// not propagation, so stopPropagation() alone can't stop it. preventDefault()

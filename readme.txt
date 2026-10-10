@@ -301,6 +301,7 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 * Connection Doctor no longer warns about the New-connections switch being off unless an app was actually refused.
 * Security: the plugin's own transients (the New-connections window, sign-in codes, the identity-document cache) can no longer be written through the option tools or WP-CLI, Power mode included.
 * The Connections tab is shorter and easier to read: each step says only what to do, the "New connections" switch appears only where you have to flip it yourself (by-hand setup, or after a refused attempt) and on the live status strip while it is open, the test prompt is a one-line copy, and the config-file and API-key options sit on one row under the main step.
+* Custom access: Select all and Deselect all buttons above the tool list.
 
 = Earlier versions =
 

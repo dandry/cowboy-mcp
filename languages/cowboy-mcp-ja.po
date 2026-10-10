@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-09 14:45-0700\n"
+"POT-Creation-Date: 2026-10-09 23:02-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Japanese\n"
@@ -191,7 +191,7 @@ msgid "Create checkpoint now"
 msgstr "今すぐチェックポイントを作成"
 
 #: admin/class-mcp-admin-activity.php:335
-#: admin/class-mcp-admin-connections.php:1282
+#: admin/class-mcp-admin-connections.php:1287
 msgid "Created"
 msgstr "作成日"
 
@@ -208,7 +208,7 @@ msgid "Size"
 msgstr "サイズ"
 
 #: admin/class-mcp-admin-activity.php:339
-#: admin/class-mcp-admin-connections.php:1284
+#: admin/class-mcp-admin-connections.php:1289
 msgid "Actions"
 msgstr "操作"
 
@@ -309,7 +309,7 @@ msgid "Turn on new connections first:"
 msgstr "まず新しい接続をオンにしてください:"
 
 #: admin/class-mcp-admin-connections.php:231
-#: admin/class-mcp-admin-connections.php:1074
+#: admin/class-mcp-admin-connections.php:1079
 msgid "Enable for 30 minutes"
 msgstr "30 分間有効にする"
 
@@ -863,7 +863,7 @@ msgstr ""
 "表示されません。"
 
 #: admin/class-mcp-admin-connections.php:765
-#: admin/class-mcp-admin-connections.php:1295
+#: admin/class-mcp-admin-connections.php:1300
 msgid "API key"
 msgstr "APIキー"
 
@@ -998,13 +998,21 @@ msgstr ""
 "%s を使って、このサイトの名前と WordPress のバージョンを教えて。何も変更しな"
 "いで。"
 
+#: admin/class-mcp-admin-connections.php:967
+msgid "Select all"
+msgstr "すべて選択"
+
+#: admin/class-mcp-admin-connections.php:969
+msgid "Deselect all"
+msgstr "すべて選択解除"
+
 #. translators: %s: tool category name
-#: admin/class-mcp-admin-connections.php:972
+#: admin/class-mcp-admin-connections.php:977
 #, php-format
 msgid "Select all %s tools"
 msgstr "%s のすべてのツールを選択"
 
-#: admin/class-mcp-admin-connections.php:986
+#: admin/class-mcp-admin-connections.php:991
 msgid ""
 "Note: read-only MCP resources (site info, user list, recent posts, etc.) are "
 "always available to every credential regardless of tool scope."
@@ -1012,54 +1020,54 @@ msgstr ""
 "注: 読み取り専用のMCPリソース（サイト情報、ユーザー一覧、最近の投稿など）は、"
 "ツールのスコープに関係なく、すべてのキーおよび接続で常に利用できます。"
 
-#: admin/class-mcp-admin-connections.php:997
+#: admin/class-mcp-admin-connections.php:1002
 msgid "Custom…"
 msgstr "カスタム…"
 
-#: admin/class-mcp-admin-connections.php:997
-#: admin/class-mcp-admin-connections.php:1013
-#: admin/class-mcp-admin-connections.php:1024
+#: admin/class-mcp-admin-connections.php:1002
+#: admin/class-mcp-admin-connections.php:1018
+#: admin/class-mcp-admin-connections.php:1029
 msgid "Full access"
 msgstr "フルアクセス"
 
-#: admin/class-mcp-admin-connections.php:997
-#: admin/class-mcp-admin-connections.php:1017
+#: admin/class-mcp-admin-connections.php:1002
+#: admin/class-mcp-admin-connections.php:1022
 msgid "Read-only"
 msgstr "読み取り専用"
 
-#: admin/class-mcp-admin-connections.php:1000 includes/class-mcp-oauth.php:1801
+#: admin/class-mcp-admin-connections.php:1005 includes/class-mcp-oauth.php:1801
 msgid "Access level"
 msgstr "アクセスレベル"
 
 #. translators: %d: number of tools this credential may call
-#: admin/class-mcp-admin-connections.php:1021
+#: admin/class-mcp-admin-connections.php:1026
 #, php-format
 msgid "Custom (%d tools)"
 msgstr "カスタム（%d ツール）"
 
-#: admin/class-mcp-admin-connections.php:1028
+#: admin/class-mcp-admin-connections.php:1033
 msgid "Unknown (blocked)"
 msgstr "不明(ブロック済み)"
 
-#: admin/class-mcp-admin-connections.php:1044
+#: admin/class-mcp-admin-connections.php:1049
 msgid "Dismiss"
 msgstr "閉じる"
 
 #. translators: 1: app name such as ChatGPT, 2: relative time such as "4 minutes"
-#: admin/class-mcp-admin-connections.php:1048
+#: admin/class-mcp-admin-connections.php:1053
 #, php-format
 msgid "%1$s tried to connect %2$s ago, but new connections were off."
 msgstr "%1$s が %2$s前に接続を試みましたが、新規接続がオフになっていました。"
 
 #. translators: %d: number of attempts
-#: admin/class-mcp-admin-connections.php:1051
+#: admin/class-mcp-admin-connections.php:1056
 #, php-format
 msgid "(%d attempt)"
 msgid_plural "(%d attempts)"
 msgstr[0] "（%d 回の試行）"
 
 #. translators: %s: host name
-#: admin/class-mcp-admin-connections.php:1056
+#: admin/class-mcp-admin-connections.php:1061
 #, php-format
 msgid ""
 "Its sign-in address (%s) is not on the allowed list either — add it to the "
@@ -1069,24 +1077,24 @@ msgstr ""
 "ストに追加してください。"
 
 #. translators: %s: app name such as ChatGPT
-#: admin/class-mcp-admin-connections.php:1063
+#: admin/class-mcp-admin-connections.php:1068
 #, php-format
 msgid "New connections are on — try again in %s now."
 msgstr "新規接続がオンになりました — 今すぐ %s でもう一度お試しください。"
 
 #. translators: %s: countdown such as 29:59
-#: admin/class-mcp-admin-connections.php:1067
+#: admin/class-mcp-admin-connections.php:1072
 #, php-format
 msgid "%s left"
 msgstr "残り %s"
 
 #. translators: %s: app name such as ChatGPT
-#: admin/class-mcp-admin-connections.php:1077
+#: admin/class-mcp-admin-connections.php:1082
 #, php-format
 msgid "Then add the app again in %s."
 msgstr "その後、%s でアプリをもう一度追加してください。"
 
-#: admin/class-mcp-admin-connections.php:1102
+#: admin/class-mcp-admin-connections.php:1107
 msgid ""
 "Connect AI agents like <strong>Claude</strong>, <strong>ChatGPT</strong>, or "
 "<strong>Codex</strong> to this WordPress site over the Model Context "
@@ -1096,30 +1104,30 @@ msgstr ""
 "どの AI エージェントを、Model Context Protocol 経由でこの WordPress サイトに"
 "接続します。"
 
-#: admin/class-mcp-admin-connections.php:1129
-#: admin/class-mcp-admin-connections.php:1271
+#: admin/class-mcp-admin-connections.php:1134
+#: admin/class-mcp-admin-connections.php:1276
 msgid "Connect another app"
 msgstr "別のアプリを接続"
 
-#: admin/class-mcp-admin-connections.php:1129
+#: admin/class-mcp-admin-connections.php:1134
 msgid "Connect your first app"
 msgstr "最初のアプリを接続"
 
-#: admin/class-mcp-admin-connections.php:1130
+#: admin/class-mcp-admin-connections.php:1135
 msgid "Pick your AI app or coding tool — setup takes about a minute."
 msgstr ""
 "AIアプリまたはコーディングツールを選択してください。設定は1分ほどで完了しま"
 "す。"
 
-#: admin/class-mcp-admin-connections.php:1132
+#: admin/class-mcp-admin-connections.php:1137
 msgid "Close"
 msgstr "閉じる"
 
-#: admin/class-mcp-admin-connections.php:1140
+#: admin/class-mcp-admin-connections.php:1145
 msgid "Which app do you want to connect?"
 msgstr "どのアプリを接続しますか？"
 
-#: admin/class-mcp-admin-connections.php:1141
+#: admin/class-mcp-admin-connections.php:1146
 msgid ""
 "Pick your AI app or coding tool from the list to see step-by-step setup "
 "instructions."
@@ -1128,137 +1136,137 @@ msgstr ""
 "が表示されます。"
 
 #. translators: %s: AI client name, e.g. "Claude Code"
-#: admin/class-mcp-admin-connections.php:1152
+#: admin/class-mcp-admin-connections.php:1157
 #, php-format
 msgid "Connect %s"
 msgstr "%s を接続"
 
-#: admin/class-mcp-admin-connections.php:1173
+#: admin/class-mcp-admin-connections.php:1178
 msgid "No terminal needed"
 msgstr "ターミナル不要"
 
-#: admin/class-mcp-admin-connections.php:1174
+#: admin/class-mcp-admin-connections.php:1179
 msgid "Terminal & IDE tools"
 msgstr "ターミナル・IDE ツール"
 
-#: admin/class-mcp-admin-connections.php:1179
+#: admin/class-mcp-admin-connections.php:1184
 msgid "AI clients"
 msgstr "AI クライアント"
 
-#: admin/class-mcp-admin-connections.php:1199
+#: admin/class-mcp-admin-connections.php:1204
 msgid "Needs public URL"
 msgstr "公開URLが必要"
 
-#: admin/class-mcp-admin-connections.php:1201
+#: admin/class-mcp-admin-connections.php:1206
 msgid "Works locally"
 msgstr "ローカルで動作"
 
-#: admin/class-mcp-admin-connections.php:1209
+#: admin/class-mcp-admin-connections.php:1214
 msgid "Another MCP client? Use this endpoint:"
 msgstr "別の MCP クライアントですか？このエンドポイントを使用してください："
 
-#: admin/class-mcp-admin-connections.php:1212
+#: admin/class-mcp-admin-connections.php:1217
 msgid "Copy endpoint URL"
 msgstr "エンドポイント URL をコピー"
 
-#: admin/class-mcp-admin-connections.php:1253
+#: admin/class-mcp-admin-connections.php:1258
 msgid "Copy"
 msgstr "コピー"
 
-#: admin/class-mcp-admin-connections.php:1266
+#: admin/class-mcp-admin-connections.php:1271
 msgid "Connected apps"
 msgstr "接続済みアプリ"
 
-#: admin/class-mcp-admin-connections.php:1279
+#: admin/class-mcp-admin-connections.php:1284
 msgid "Name"
 msgstr "名前"
 
-#: admin/class-mcp-admin-connections.php:1280
+#: admin/class-mcp-admin-connections.php:1285
 msgid "Type"
 msgstr "種類"
 
-#: admin/class-mcp-admin-connections.php:1281
+#: admin/class-mcp-admin-connections.php:1286
 msgid "Access"
 msgstr "アクセス"
 
-#: admin/class-mcp-admin-connections.php:1283
+#: admin/class-mcp-admin-connections.php:1288
 msgid "Last used"
 msgstr "最終使用"
 
-#: admin/class-mcp-admin-connections.php:1303
+#: admin/class-mcp-admin-connections.php:1308
 msgid "Revoke this key? Any client using it will lose access."
 msgstr ""
 "このキーを無効化しますか？これを使用しているクライアントはアクセスできなくな"
 "ります。"
 
 #. translators: 1: app name detected from its first request, 2: WordPress username of the approving admin
-#: admin/class-mcp-admin-connections.php:1310
+#: admin/class-mcp-admin-connections.php:1315
 #, php-format
 msgid "%1$s · approved by %2$s"
 msgstr "%1$s · %2$s が承認"
 
 #. translators: %s: WordPress username of the admin who approved the connection
-#: admin/class-mcp-admin-connections.php:1313
+#: admin/class-mcp-admin-connections.php:1318
 #, php-format
 msgid "approved by %s"
 msgstr "%s が承認"
 
-#: admin/class-mcp-admin-connections.php:1319
+#: admin/class-mcp-admin-connections.php:1324
 msgid "OAuth"
 msgstr "OAuth"
 
-#: admin/class-mcp-admin-connections.php:1327
+#: admin/class-mcp-admin-connections.php:1332
 msgid "Revoke this connection? The app will lose access immediately."
 msgstr "この接続を無効化しますか？アプリは直ちにアクセスできなくなります。"
 
 #. translators: %s: human-readable time difference, e.g. "2 hours"
-#: admin/class-mcp-admin-connections.php:1353
+#: admin/class-mcp-admin-connections.php:1358
 #, php-format
 msgid "%s ago"
 msgstr "%s前"
 
-#: admin/class-mcp-admin-connections.php:1355
+#: admin/class-mcp-admin-connections.php:1360
 msgid "Never"
 msgstr "なし"
 
 #. translators: %s: credential name
-#: admin/class-mcp-admin-connections.php:1362
+#: admin/class-mcp-admin-connections.php:1367
 #, php-format
 msgid "Actions for %s"
 msgstr "%s の操作"
 
-#: admin/class-mcp-admin-connections.php:1365
+#: admin/class-mcp-admin-connections.php:1370
 msgid "Edit access…"
 msgstr "アクセスを編集…"
 
-#: admin/class-mcp-admin-connections.php:1366
+#: admin/class-mcp-admin-connections.php:1371
 msgid "Revoke"
 msgstr "無効化"
 
-#: admin/class-mcp-admin-connections.php:1369
+#: admin/class-mcp-admin-connections.php:1374
 msgid "Revoke…"
 msgstr "無効化…"
 
 #. translators: %s: credential name
-#: admin/class-mcp-admin-connections.php:1382
+#: admin/class-mcp-admin-connections.php:1387
 #, php-format
 msgid "Access for <strong>%s</strong>"
 msgstr "<strong>%s</strong> のアクセス"
 
-#: admin/class-mcp-admin-connections.php:1386
+#: admin/class-mcp-admin-connections.php:1391
 #: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:220
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: admin/class-mcp-admin-connections.php:1387
+#: admin/class-mcp-admin-connections.php:1392
 msgid "Save access"
 msgstr "アクセスを保存"
 
-#: admin/class-mcp-admin-connections.php:1400
+#: admin/class-mcp-admin-connections.php:1405
 msgid "Connection Doctor"
 msgstr "接続診断"
 
-#: admin/class-mcp-admin-connections.php:1402
+#: admin/class-mcp-admin-connections.php:1407
 msgid ""
 "Test whether AI clients can reach this site and get a copy-pasteable "
 "diagnosis for anything broken."
@@ -1266,15 +1274,15 @@ msgstr ""
 "AI クライアントがこのサイトに到達できるかをテストし、問題があればコピペ可能な"
 "診断結果を取得できます。"
 
-#: admin/class-mcp-admin-connections.php:1404
+#: admin/class-mcp-admin-connections.php:1409
 msgid "Run checks"
 msgstr "チェックを実行"
 
-#: admin/class-mcp-admin-connections.php:1405
+#: admin/class-mcp-admin-connections.php:1410
 msgid "Copy report"
 msgstr "レポートをコピー"
 
-#: admin/class-mcp-admin-connections.php:1406
+#: admin/class-mcp-admin-connections.php:1411
 msgid "Get help on WordPress.org"
 msgstr "WordPress.org でサポートを受ける"
 
