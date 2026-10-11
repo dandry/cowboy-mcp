@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-10 17:53-0700\n"
+"POT-Creation-Date: 2026-10-10 18:18-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Ukrainian\n"
@@ -1258,7 +1258,7 @@ msgid "Access for <strong>%s</strong>"
 msgstr "Доступ для <strong>%s</strong>"
 
 #: admin/class-mcp-admin-connections.php:1394
-#: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:220
+#: admin/class-mcp-admin-settings.php:152 admin/class-mcp-admin.php:220
 msgid "Cancel"
 msgstr "Назад"
 
@@ -1590,102 +1590,132 @@ msgid "advanced · off by default"
 msgstr "для досвідчених · вимкнено за замовчуванням"
 
 #: admin/class-mcp-admin-settings.php:95
-msgid "Lift safety restrictions for advanced operations"
-msgstr "Зняти обмеження безпеки для розширених операцій"
+msgid "Unlock advanced operations"
+msgstr "Відкрити розширені операції"
 
 #: admin/class-mcp-admin-settings.php:98
 msgid ""
-"<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
-"dangerous SQL, writing files anywhere, and requests to internal addresses. "
-"This grants effective <strong>remote code execution</strong> to anyone "
-"holding an API key. Only enable on a trusted, locked-down site you control. "
-"Your MCP API keys and the plugin&#8217;s own settings stay protected."
-msgstr ""
-"<strong>Небезпечно:</strong> дозволяє <code>eval</code>/<code>shell</code>, "
-"небезпечний SQL, запис файлів у будь-яке місце та запити до внутрішніх "
-"адрес. Це фактично надає <strong>віддалене виконання коду</strong> будь-"
-"кому, хто має API-ключ. Вмикайте лише на довіреному, надійно захищеному "
-"сайті, який ви контролюєте. Ваші API-ключі MCP та власні налаштування "
-"плагіна залишаються захищеними."
+"Power mode gives your AI agent the reach of a senior developer with server "
+"access: WP-CLI <code>eval</code> and <code>shell</code>, schema-changing "
+"SQL, writes anywhere in the install, requests to internal services, and "
+"admin-level user management. Many real jobs need exactly this. The audit "
+"log, the undo journal, and automatic checkpoints before WP-CLI writes all "
+"stay on."
+msgstr "Посилений режим дає ШІ-агенту можливості старшого розробника з доступом до сервера: WP-CLI <code>eval</code> і <code>shell</code>, SQL зі зміною схеми, запис у будь-яке місце інсталяції, запити до внутрішніх сервісів і керування користувачами на рівні адміністратора. Багатьом реальним завданням потрібно саме це. Журнал аудиту, журнал скасування та автоматичні контрольні точки перед записом через WP-CLI продовжують працювати."
 
 #: admin/class-mcp-admin-settings.php:104
-msgid "Turning it on allows"
-msgstr "Увімкнення дозволяє"
+msgid ""
+"<strong>Potential risk:</strong> with these limits lifted, anyone holding an "
+"API key can run code on this server. Turn it on for sites you control, with "
+"credentials you trust, and turn it off again when the job is done."
+msgstr "<strong>Потенційний ризик:</strong> коли ці обмеження зняті, будь-який власник API-ключа може виконувати код на цьому сервері. Вмикайте його на сайтах, які ви контролюєте, з обліковими даними, яким довіряєте, і вимикайте, коли завдання виконано."
 
-#: admin/class-mcp-admin-settings.php:106
+#: admin/class-mcp-admin-settings.php:110
+msgid "What you gain"
+msgstr "Що ви отримуєте"
+
+#: admin/class-mcp-admin-settings.php:112
+msgid "Fix a fatal or run a one-off migration from the agent"
+msgstr "Виправити фатальну помилку або виконати разову міграцію силами агента"
+
+#: admin/class-mcp-admin-settings.php:113
+msgid "Alter tables and clean up orphaned data"
+msgstr "Змінювати структуру таблиць і очищати осиротілі дані"
+
+#: admin/class-mcp-admin-settings.php:114
+msgid "Ship must-use plugins and edit any install file"
+msgstr "Встановлювати must-use плагіни та редагувати будь-який файл інсталяції"
+
+#: admin/class-mcp-admin-settings.php:115
+msgid "Reach local, staging, and Docker-sibling services"
+msgstr "Звертатися до локальних, staging- і сусідніх Docker-сервісів"
+
+#: admin/class-mcp-admin-settings.php:116
+msgid "Create administrators and reset passwords"
+msgstr "Створювати адміністраторів і скидати паролі"
+
+#: admin/class-mcp-admin-settings.php:120
+msgid "Potential risks"
+msgstr "Потенційні ризики"
+
+#: admin/class-mcp-admin-settings.php:122
 msgid "<code>eval</code> / <code>shell</code> via WP-CLI"
 msgstr "<code>eval</code> / <code>shell</code> через WP-CLI"
 
-#: admin/class-mcp-admin-settings.php:107
-msgid "Dangerous SQL"
-msgstr "Небезпечний SQL"
+#: admin/class-mcp-admin-settings.php:123
+msgid "Schema-changing and destructive SQL"
+msgstr "SQL, що змінює схему та видаляє дані"
 
-#: admin/class-mcp-admin-settings.php:108
+#: admin/class-mcp-admin-settings.php:124
 msgid "Writing files anywhere"
 msgstr "Запис файлів у будь-яке місце"
 
-#: admin/class-mcp-admin-settings.php:109
+#: admin/class-mcp-admin-settings.php:125
 msgid "Requests to internal addresses"
 msgstr "Запити до внутрішніх адрес"
 
-#: admin/class-mcp-admin-settings.php:113
+#: admin/class-mcp-admin-settings.php:126
+msgid "Granting admin roles and setting passwords"
+msgstr "Надання ролей адміністратора та встановлення паролів"
+
+#: admin/class-mcp-admin-settings.php:130
 msgid "Always stays protected"
 msgstr "Завжди залишається під захистом"
 
-#: admin/class-mcp-admin-settings.php:115
+#: admin/class-mcp-admin-settings.php:132
 msgid "Your MCP API keys"
 msgstr "Ваші API-ключі MCP"
 
-#: admin/class-mcp-admin-settings.php:116
+#: admin/class-mcp-admin-settings.php:133
 msgid "The plugin's own settings"
 msgstr "Власні налаштування плагіна"
 
-#: admin/class-mcp-admin-settings.php:117
+#: admin/class-mcp-admin-settings.php:134
 msgid "Self-delete and last-admin guards"
 msgstr "Захист від самовидалення та видалення останнього адміністратора"
 
-#: admin/class-mcp-admin-settings.php:118
+#: admin/class-mcp-admin-settings.php:135
 msgid "Secret redaction in results"
 msgstr "Приховування секретів у результатах"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "Off"
 msgstr "Вимк."
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "On"
 msgstr "Увімк."
 
 #. translators: %s: this site's host name, e.g. example.com
-#: admin/class-mcp-admin-settings.php:130
+#: admin/class-mcp-admin-settings.php:147
 #, php-format
 msgid "Type %s to turn on Power mode."
 msgstr "Введіть %s, щоб увімкнути посилений режим."
 
-#: admin/class-mcp-admin-settings.php:134
+#: admin/class-mcp-admin-settings.php:151
 msgid "Turn on"
 msgstr "Увімкнути"
 
-#: admin/class-mcp-admin-settings.php:137
+#: admin/class-mcp-admin-settings.php:154
 msgid "It takes effect when you save."
 msgstr "Набуде чинності після збереження."
 
-#: admin/class-mcp-admin-settings.php:142
-#: admin/class-mcp-admin-settings.php:143
+#: admin/class-mcp-admin-settings.php:159
+#: admin/class-mcp-admin-settings.php:160
 msgid "No unsaved changes"
 msgstr "Немає незбережених змін"
 
-#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:159
 msgid "You have unsaved changes"
 msgstr "Є незбережені зміни"
 
-#: admin/class-mcp-admin-settings.php:144
+#: admin/class-mcp-admin-settings.php:161
 msgid "Discard"
 msgstr "Відхилити"
 
-#: admin/class-mcp-admin-settings.php:145
+#: admin/class-mcp-admin-settings.php:162
 msgid "Save Settings"
 msgstr "Зберегти налаштування"
 
@@ -1968,61 +1998,73 @@ msgstr "Про плагін"
 msgid "Cowboy MCP sections"
 msgstr "Розділи Cowboy MCP"
 
-#: admin/class-mcp-admin.php:637
+#: admin/class-mcp-admin.php:641
+msgid "Power mode is on. Open Power mode settings."
+msgstr "Посилений режим увімкнено. Відкрити налаштування посиленого режиму."
+
+#: admin/class-mcp-admin.php:641
 msgid "Power mode on"
 msgstr "Посилений режим увімкнено"
 
-#: admin/class-mcp-admin.php:640
+#: admin/class-mcp-admin.php:643
+msgid "Power mode is off. Open Power mode settings."
+msgstr "Посилений режим вимкнено. Відкрити налаштування посиленого режиму."
+
+#: admin/class-mcp-admin.php:643
+msgid "Power mode off"
+msgstr "Посилений режим вимкнено"
+
+#: admin/class-mcp-admin.php:646
 msgid "Safe mode off"
 msgstr "Безпечний режим вимкнено"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "Every request from AI apps is rejected."
 msgstr "Усі запити від ШІ-застосунків відхиляються."
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "MCP server is off."
 msgstr "Сервер MCP вимкнено."
 
-#: admin/class-mcp-admin.php:666
+#: admin/class-mcp-admin.php:670
 msgid "Turn on in Settings"
 msgstr "Увімкнути в налаштуваннях"
 
-#: admin/class-mcp-admin.php:693
+#: admin/class-mcp-admin.php:698
 msgid "Pagination"
 msgstr "Посторінкова навігація"
 
-#: admin/class-mcp-admin.php:694
+#: admin/class-mcp-admin.php:699
 msgid "Previous"
 msgstr "Попередня"
 
 #. translators: 1: current page number, 2: total number of pages
-#: admin/class-mcp-admin.php:697
+#: admin/class-mcp-admin.php:702
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr "Сторінка %1$d з %2$d"
 
-#: admin/class-mcp-admin.php:699
+#: admin/class-mcp-admin.php:704
 msgid "Next"
 msgstr "Наступна"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Project home, guides, and news."
 msgstr "Домашня сторінка проєкту, посібники та новини."
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Website"
 msgstr "Сайт"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "GitHub"
 msgstr "GitHub"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "Source, issues & releases."
 msgstr "Вихідний код, задачі та релізи."
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid ""
 "Ask in the WordPress.org support forum. Paste your Connection Doctor report "
 "for a fast answer."
@@ -2030,11 +2072,11 @@ msgstr ""
 "Поставте запитання на форумі підтримки WordPress.org. Вставте звіт "
 "«Діагностика підключення», щоб швидше отримати відповідь."
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid "Get help"
 msgstr "Отримати допомогу"
 
-#: admin/class-mcp-admin.php:711
+#: admin/class-mcp-admin.php:716
 msgid ""
 "Enjoying Cowboy MCP? A review on WordPress.org helps other site owners find "
 "it."
@@ -2042,12 +2084,12 @@ msgstr ""
 "Подобається Cowboy MCP? Відгук на WordPress.org допоможе іншим власникам "
 "сайтів знайти плагін."
 
-#: admin/class-mcp-admin.php:711 admin/class-mcp-feedback.php:192
+#: admin/class-mcp-admin.php:716 admin/class-mcp-feedback.php:192
 msgid "Leave a review"
 msgstr "Залишити відгук"
 
 #. translators: %s: Model Context Protocol website URL.
-#: admin/class-mcp-admin.php:719
+#: admin/class-mcp-admin.php:724
 #, php-format
 msgid ""
 "<strong>Cowboy MCP</strong> turns this WordPress site into a <a href=\"%s\" "
@@ -2328,6 +2370,30 @@ msgstr "Підтвердити"
 #, php-format
 msgid "Redirects to: %s"
 msgstr "Перенаправлення на: %s"
+
+#~ msgid "Lift safety restrictions for advanced operations"
+#~ msgstr "Зняти обмеження безпеки для розширених операцій"
+
+#~ msgid ""
+#~ "<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
+#~ "dangerous SQL, writing files anywhere, and requests to internal "
+#~ "addresses. This grants effective <strong>remote code execution</strong> "
+#~ "to anyone holding an API key. Only enable on a trusted, locked-down site "
+#~ "you control. Your MCP API keys and the plugin&#8217;s own settings stay "
+#~ "protected."
+#~ msgstr ""
+#~ "<strong>Небезпечно:</strong> дозволяє <code>eval</code>/<code>shell</"
+#~ "code>, небезпечний SQL, запис файлів у будь-яке місце та запити до "
+#~ "внутрішніх адрес. Це фактично надає <strong>віддалене виконання коду</"
+#~ "strong> будь-кому, хто має API-ключ. Вмикайте лише на довіреному, надійно "
+#~ "захищеному сайті, який ви контролюєте. Ваші API-ключі MCP та власні "
+#~ "налаштування плагіна залишаються захищеними."
+
+#~ msgid "Turning it on allows"
+#~ msgstr "Увімкнення дозволяє"
+
+#~ msgid "Dangerous SQL"
+#~ msgstr "Небезпечний SQL"
 
 #~ msgid "New connections: disabled"
 #~ msgstr "Нові підключення: вимкнено"

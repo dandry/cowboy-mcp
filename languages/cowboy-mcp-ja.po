@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-10 17:53-0700\n"
+"POT-Creation-Date: 2026-10-10 18:18-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Japanese\n"
@@ -1255,7 +1255,7 @@ msgid "Access for <strong>%s</strong>"
 msgstr "<strong>%s</strong> のアクセス"
 
 #: admin/class-mcp-admin-connections.php:1394
-#: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:220
+#: admin/class-mcp-admin-settings.php:152 admin/class-mcp-admin.php:220
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -1583,101 +1583,132 @@ msgid "advanced · off by default"
 msgstr "上級者向け · デフォルトはオフ"
 
 #: admin/class-mcp-admin-settings.php:95
-msgid "Lift safety restrictions for advanced operations"
-msgstr "高度な操作のために安全制限を解除する"
+msgid "Unlock advanced operations"
+msgstr "高度な操作を解放する"
 
 #: admin/class-mcp-admin-settings.php:98
 msgid ""
-"<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
-"dangerous SQL, writing files anywhere, and requests to internal addresses. "
-"This grants effective <strong>remote code execution</strong> to anyone "
-"holding an API key. Only enable on a trusted, locked-down site you control. "
-"Your MCP API keys and the plugin&#8217;s own settings stay protected."
-msgstr ""
-"<strong>危険:</strong> <code>eval</code>/<code>shell</code>、危険な SQL、任意"
-"の場所へのファイル書き込み、内部アドレスへのリクエストを許可します。これは "
-"API キーを持つ誰にでも実質的な<strong>リモートコード実行</strong>を許可しま"
-"す。信頼できる、自分が管理する厳重に保護されたサイトでのみ有効にしてくださ"
-"い。MCP API キーとプラグイン自身の設定は保護されたままです。"
+"Power mode gives your AI agent the reach of a senior developer with server "
+"access: WP-CLI <code>eval</code> and <code>shell</code>, schema-changing "
+"SQL, writes anywhere in the install, requests to internal services, and "
+"admin-level user management. Many real jobs need exactly this. The audit "
+"log, the undo journal, and automatic checkpoints before WP-CLI writes all "
+"stay on."
+msgstr "パワーモードは、サーバーアクセスを持つシニア開発者と同じ範囲を AI エージェントに与えます。WP-CLI の <code>eval</code> と <code>shell</code>、スキーマを変更する SQL、インストール内の任意の場所への書き込み、内部サービスへのリクエスト、管理者レベルのユーザー管理です。実際の作業の多くはまさにこれを必要とします。監査ログ、取り消しジャーナル、WP-CLI 書き込み前の自動チェックポイントはすべて有効のままです。"
 
 #: admin/class-mcp-admin-settings.php:104
-msgid "Turning it on allows"
-msgstr "オンにすると許可されること"
+msgid ""
+"<strong>Potential risk:</strong> with these limits lifted, anyone holding an "
+"API key can run code on this server. Turn it on for sites you control, with "
+"credentials you trust, and turn it off again when the job is done."
+msgstr "<strong>潜在的なリスク:</strong> これらの制限が解除されると、API キーを持つ誰もがこのサーバーでコードを実行できます。自分が管理するサイトで、信頼できる認証情報とともにオンにし、作業が終わったら再びオフにしてください。"
 
-#: admin/class-mcp-admin-settings.php:106
+#: admin/class-mcp-admin-settings.php:110
+msgid "What you gain"
+msgstr "できるようになること"
+
+#: admin/class-mcp-admin-settings.php:112
+msgid "Fix a fatal or run a one-off migration from the agent"
+msgstr "エージェントから致命的エラーを修正したり、単発のマイグレーションを実行する"
+
+#: admin/class-mcp-admin-settings.php:113
+msgid "Alter tables and clean up orphaned data"
+msgstr "テーブルを変更し、孤立したデータを整理する"
+
+#: admin/class-mcp-admin-settings.php:114
+msgid "Ship must-use plugins and edit any install file"
+msgstr "must-use プラグインを配置し、インストール内の任意のファイルを編集する"
+
+#: admin/class-mcp-admin-settings.php:115
+msgid "Reach local, staging, and Docker-sibling services"
+msgstr "ローカル、ステージング、Docker の隣接サービスにアクセスする"
+
+#: admin/class-mcp-admin-settings.php:116
+msgid "Create administrators and reset passwords"
+msgstr "管理者を作成し、パスワードをリセットする"
+
+#: admin/class-mcp-admin-settings.php:120
+msgid "Potential risks"
+msgstr "潜在的なリスク"
+
+#: admin/class-mcp-admin-settings.php:122
 msgid "<code>eval</code> / <code>shell</code> via WP-CLI"
 msgstr "WP-CLI 経由の <code>eval</code> / <code>shell</code>"
 
-#: admin/class-mcp-admin-settings.php:107
-msgid "Dangerous SQL"
-msgstr "危険な SQL"
+#: admin/class-mcp-admin-settings.php:123
+msgid "Schema-changing and destructive SQL"
+msgstr "スキーマを変更する SQL や破壊的な SQL"
 
-#: admin/class-mcp-admin-settings.php:108
+#: admin/class-mcp-admin-settings.php:124
 msgid "Writing files anywhere"
 msgstr "任意の場所へのファイル書き込み"
 
-#: admin/class-mcp-admin-settings.php:109
+#: admin/class-mcp-admin-settings.php:125
 msgid "Requests to internal addresses"
 msgstr "内部アドレスへのリクエスト"
 
-#: admin/class-mcp-admin-settings.php:113
+#: admin/class-mcp-admin-settings.php:126
+msgid "Granting admin roles and setting passwords"
+msgstr "管理者権限の付与とパスワードの設定"
+
+#: admin/class-mcp-admin-settings.php:130
 msgid "Always stays protected"
 msgstr "常に保護されるもの"
 
-#: admin/class-mcp-admin-settings.php:115
+#: admin/class-mcp-admin-settings.php:132
 msgid "Your MCP API keys"
 msgstr "MCP の API キー"
 
-#: admin/class-mcp-admin-settings.php:116
+#: admin/class-mcp-admin-settings.php:133
 msgid "The plugin's own settings"
 msgstr "プラグイン自体の設定"
 
-#: admin/class-mcp-admin-settings.php:117
+#: admin/class-mcp-admin-settings.php:134
 msgid "Self-delete and last-admin guards"
 msgstr "自己削除と最後の管理者に対する保護"
 
-#: admin/class-mcp-admin-settings.php:118
+#: admin/class-mcp-admin-settings.php:135
 msgid "Secret redaction in results"
 msgstr "結果内の機密情報のマスク"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "Off"
 msgstr "オフ"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "On"
 msgstr "オン"
 
 #. translators: %s: this site's host name, e.g. example.com
-#: admin/class-mcp-admin-settings.php:130
+#: admin/class-mcp-admin-settings.php:147
 #, php-format
 msgid "Type %s to turn on Power mode."
 msgstr "パワーモードを有効にするには %s と入力してください。"
 
-#: admin/class-mcp-admin-settings.php:134
+#: admin/class-mcp-admin-settings.php:151
 msgid "Turn on"
 msgstr "オンにする"
 
-#: admin/class-mcp-admin-settings.php:137
+#: admin/class-mcp-admin-settings.php:154
 msgid "It takes effect when you save."
 msgstr "保存すると反映されます。"
 
-#: admin/class-mcp-admin-settings.php:142
-#: admin/class-mcp-admin-settings.php:143
+#: admin/class-mcp-admin-settings.php:159
+#: admin/class-mcp-admin-settings.php:160
 msgid "No unsaved changes"
 msgstr "未保存の変更はありません"
 
-#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:159
 msgid "You have unsaved changes"
 msgstr "未保存の変更があります"
 
-#: admin/class-mcp-admin-settings.php:144
+#: admin/class-mcp-admin-settings.php:161
 msgid "Discard"
 msgstr "破棄"
 
-#: admin/class-mcp-admin-settings.php:145
+#: admin/class-mcp-admin-settings.php:162
 msgid "Save Settings"
 msgstr "設定を保存"
 
@@ -1960,61 +1991,73 @@ msgstr "概要"
 msgid "Cowboy MCP sections"
 msgstr "Cowboy MCP のセクション"
 
-#: admin/class-mcp-admin.php:637
+#: admin/class-mcp-admin.php:641
+msgid "Power mode is on. Open Power mode settings."
+msgstr "パワーモードはオンです。パワーモードの設定を開きます。"
+
+#: admin/class-mcp-admin.php:641
 msgid "Power mode on"
 msgstr "パワーモード オン"
 
-#: admin/class-mcp-admin.php:640
+#: admin/class-mcp-admin.php:643
+msgid "Power mode is off. Open Power mode settings."
+msgstr "パワーモードはオフです。パワーモードの設定を開きます。"
+
+#: admin/class-mcp-admin.php:643
+msgid "Power mode off"
+msgstr "パワーモード オフ"
+
+#: admin/class-mcp-admin.php:646
 msgid "Safe mode off"
 msgstr "セーフモード オフ"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "Every request from AI apps is rejected."
 msgstr "AIアプリからのリクエストはすべて拒否されます。"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "MCP server is off."
 msgstr "MCP サーバーはオフです。"
 
-#: admin/class-mcp-admin.php:666
+#: admin/class-mcp-admin.php:670
 msgid "Turn on in Settings"
 msgstr "設定でオンにする"
 
-#: admin/class-mcp-admin.php:693
+#: admin/class-mcp-admin.php:698
 msgid "Pagination"
 msgstr "ページ送り"
 
-#: admin/class-mcp-admin.php:694
+#: admin/class-mcp-admin.php:699
 msgid "Previous"
 msgstr "前へ"
 
 #. translators: 1: current page number, 2: total number of pages
-#: admin/class-mcp-admin.php:697
+#: admin/class-mcp-admin.php:702
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr "%2$d ページ中 %1$d ページ目"
 
-#: admin/class-mcp-admin.php:699
+#: admin/class-mcp-admin.php:704
 msgid "Next"
 msgstr "次へ"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Project home, guides, and news."
 msgstr "プロジェクトのホーム、ガイド、ニュース。"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Website"
 msgstr "ウェブサイト"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "GitHub"
 msgstr "GitHub"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "Source, issues & releases."
 msgstr "ソースコード、課題、リリース。"
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid ""
 "Ask in the WordPress.org support forum. Paste your Connection Doctor report "
 "for a fast answer."
@@ -2022,11 +2065,11 @@ msgstr ""
 "WordPress.org のサポートフォーラムで質問してください。接続診断のレポートを貼"
 "り付けると、より早く回答が得られます。"
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid "Get help"
 msgstr "サポートを受ける"
 
-#: admin/class-mcp-admin.php:711
+#: admin/class-mcp-admin.php:716
 msgid ""
 "Enjoying Cowboy MCP? A review on WordPress.org helps other site owners find "
 "it."
@@ -2034,12 +2077,12 @@ msgstr ""
 "Cowboy MCP は便利ですか？WordPress.org にレビューを投稿すると、他のサイト所有"
 "者がこのプラグインを見つけやすくなります。"
 
-#: admin/class-mcp-admin.php:711 admin/class-mcp-feedback.php:192
+#: admin/class-mcp-admin.php:716 admin/class-mcp-feedback.php:192
 msgid "Leave a review"
 msgstr "レビューを書く"
 
 #. translators: %s: Model Context Protocol website URL.
-#: admin/class-mcp-admin.php:719
+#: admin/class-mcp-admin.php:724
 #, php-format
 msgid ""
 "<strong>Cowboy MCP</strong> turns this WordPress site into a <a href=\"%s\" "
@@ -2318,6 +2361,29 @@ msgstr "承認"
 #, php-format
 msgid "Redirects to: %s"
 msgstr "リダイレクト先: %s"
+
+#~ msgid "Lift safety restrictions for advanced operations"
+#~ msgstr "高度な操作のために安全制限を解除する"
+
+#~ msgid ""
+#~ "<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
+#~ "dangerous SQL, writing files anywhere, and requests to internal "
+#~ "addresses. This grants effective <strong>remote code execution</strong> "
+#~ "to anyone holding an API key. Only enable on a trusted, locked-down site "
+#~ "you control. Your MCP API keys and the plugin&#8217;s own settings stay "
+#~ "protected."
+#~ msgstr ""
+#~ "<strong>危険:</strong> <code>eval</code>/<code>shell</code>、危険な SQL、"
+#~ "任意の場所へのファイル書き込み、内部アドレスへのリクエストを許可します。こ"
+#~ "れは API キーを持つ誰にでも実質的な<strong>リモートコード実行</strong>を許"
+#~ "可します。信頼できる、自分が管理する厳重に保護されたサイトでのみ有効にして"
+#~ "ください。MCP API キーとプラグイン自身の設定は保護されたままです。"
+
+#~ msgid "Turning it on allows"
+#~ msgstr "オンにすると許可されること"
+
+#~ msgid "Dangerous SQL"
+#~ msgstr "危険な SQL"
 
 #~ msgid "New connections: disabled"
 #~ msgstr "新しい接続: 無効"

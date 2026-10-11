@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-10 17:53-0700\n"
+"POT-Creation-Date: 2026-10-10 18:18-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Chinese (China)\n"
@@ -1195,7 +1195,7 @@ msgid "Access for <strong>%s</strong>"
 msgstr "<strong>%s</strong> 的访问权限"
 
 #: admin/class-mcp-admin-connections.php:1394
-#: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:220
+#: admin/class-mcp-admin-settings.php:152 admin/class-mcp-admin.php:220
 msgid "Cancel"
 msgstr "取消"
 
@@ -1510,100 +1510,132 @@ msgid "advanced · off by default"
 msgstr "高级 · 默认关闭"
 
 #: admin/class-mcp-admin-settings.php:95
-msgid "Lift safety restrictions for advanced operations"
-msgstr "为高级操作解除安全限制"
+msgid "Unlock advanced operations"
+msgstr "解锁高级操作"
 
 #: admin/class-mcp-admin-settings.php:98
 msgid ""
-"<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
-"dangerous SQL, writing files anywhere, and requests to internal addresses. "
-"This grants effective <strong>remote code execution</strong> to anyone "
-"holding an API key. Only enable on a trusted, locked-down site you control. "
-"Your MCP API keys and the plugin&#8217;s own settings stay protected."
-msgstr ""
-"<strong>危险：</strong>允许 <code>eval</code>/<code>shell</code>、危险的 "
-"SQL、向任意位置写入文件以及向内部地址发起请求。这实际上会向任何持有 API 密钥"
-"的人授予<strong>远程代码执行</strong>能力。请仅在您掌控的、受信任且已加固的站"
-"点上启用。您的 MCP API 密钥和插件自身的设置仍受保护。"
+"Power mode gives your AI agent the reach of a senior developer with server "
+"access: WP-CLI <code>eval</code> and <code>shell</code>, schema-changing "
+"SQL, writes anywhere in the install, requests to internal services, and "
+"admin-level user management. Many real jobs need exactly this. The audit "
+"log, the undo journal, and automatic checkpoints before WP-CLI writes all "
+"stay on."
+msgstr "强力模式让你的 AI 代理拥有具备服务器访问权限的资深开发者的能力：WP-CLI <code>eval</code> 和 <code>shell</code>、更改结构的 SQL、写入安装中的任意位置、请求内部服务，以及管理员级别的用户管理。许多实际任务正需要这些。审计日志、撤销日志以及 WP-CLI 写入前的自动检查点都保持开启。"
 
 #: admin/class-mcp-admin-settings.php:104
-msgid "Turning it on allows"
-msgstr "开启后将允许"
+msgid ""
+"<strong>Potential risk:</strong> with these limits lifted, anyone holding an "
+"API key can run code on this server. Turn it on for sites you control, with "
+"credentials you trust, and turn it off again when the job is done."
+msgstr "<strong>潜在风险：</strong>解除这些限制后，任何持有 API 密钥的人都可以在此服务器上运行代码。请仅在你控制的站点上、使用你信任的凭据开启，并在任务完成后再次关闭。"
 
-#: admin/class-mcp-admin-settings.php:106
+#: admin/class-mcp-admin-settings.php:110
+msgid "What you gain"
+msgstr "你将获得"
+
+#: admin/class-mcp-admin-settings.php:112
+msgid "Fix a fatal or run a one-off migration from the agent"
+msgstr "由代理修复致命错误或运行一次性迁移"
+
+#: admin/class-mcp-admin-settings.php:113
+msgid "Alter tables and clean up orphaned data"
+msgstr "修改数据表并清理孤立数据"
+
+#: admin/class-mcp-admin-settings.php:114
+msgid "Ship must-use plugins and edit any install file"
+msgstr "部署 must-use 插件并编辑安装中的任何文件"
+
+#: admin/class-mcp-admin-settings.php:115
+msgid "Reach local, staging, and Docker-sibling services"
+msgstr "访问本地、预发布和 Docker 同级服务"
+
+#: admin/class-mcp-admin-settings.php:116
+msgid "Create administrators and reset passwords"
+msgstr "创建管理员并重置密码"
+
+#: admin/class-mcp-admin-settings.php:120
+msgid "Potential risks"
+msgstr "潜在风险"
+
+#: admin/class-mcp-admin-settings.php:122
 msgid "<code>eval</code> / <code>shell</code> via WP-CLI"
 msgstr "通过 WP-CLI 执行 <code>eval</code> / <code>shell</code>"
 
-#: admin/class-mcp-admin-settings.php:107
-msgid "Dangerous SQL"
-msgstr "危险的 SQL"
+#: admin/class-mcp-admin-settings.php:123
+msgid "Schema-changing and destructive SQL"
+msgstr "更改结构和破坏性的 SQL"
 
-#: admin/class-mcp-admin-settings.php:108
+#: admin/class-mcp-admin-settings.php:124
 msgid "Writing files anywhere"
 msgstr "在任意位置写入文件"
 
-#: admin/class-mcp-admin-settings.php:109
+#: admin/class-mcp-admin-settings.php:125
 msgid "Requests to internal addresses"
 msgstr "向内部地址发起请求"
 
-#: admin/class-mcp-admin-settings.php:113
+#: admin/class-mcp-admin-settings.php:126
+msgid "Granting admin roles and setting passwords"
+msgstr "授予管理员角色和设置密码"
+
+#: admin/class-mcp-admin-settings.php:130
 msgid "Always stays protected"
 msgstr "始终受到保护"
 
-#: admin/class-mcp-admin-settings.php:115
+#: admin/class-mcp-admin-settings.php:132
 msgid "Your MCP API keys"
 msgstr "您的 MCP API 密钥"
 
-#: admin/class-mcp-admin-settings.php:116
+#: admin/class-mcp-admin-settings.php:133
 msgid "The plugin's own settings"
 msgstr "插件自身的设置"
 
-#: admin/class-mcp-admin-settings.php:117
+#: admin/class-mcp-admin-settings.php:134
 msgid "Self-delete and last-admin guards"
 msgstr "自我删除和最后一名管理员保护"
 
-#: admin/class-mcp-admin-settings.php:118
+#: admin/class-mcp-admin-settings.php:135
 msgid "Secret redaction in results"
 msgstr "结果中的机密信息脱敏"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "Off"
 msgstr "关"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "On"
 msgstr "开"
 
 #. translators: %s: this site's host name, e.g. example.com
-#: admin/class-mcp-admin-settings.php:130
+#: admin/class-mcp-admin-settings.php:147
 #, php-format
 msgid "Type %s to turn on Power mode."
 msgstr "输入 %s 以开启强力模式。"
 
-#: admin/class-mcp-admin-settings.php:134
+#: admin/class-mcp-admin-settings.php:151
 msgid "Turn on"
 msgstr "开启"
 
-#: admin/class-mcp-admin-settings.php:137
+#: admin/class-mcp-admin-settings.php:154
 msgid "It takes effect when you save."
 msgstr "保存后生效。"
 
-#: admin/class-mcp-admin-settings.php:142
-#: admin/class-mcp-admin-settings.php:143
+#: admin/class-mcp-admin-settings.php:159
+#: admin/class-mcp-admin-settings.php:160
 msgid "No unsaved changes"
 msgstr "没有未保存的更改"
 
-#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:159
 msgid "You have unsaved changes"
 msgstr "有未保存的更改"
 
-#: admin/class-mcp-admin-settings.php:144
+#: admin/class-mcp-admin-settings.php:161
 msgid "Discard"
 msgstr "放弃"
 
-#: admin/class-mcp-admin-settings.php:145
+#: admin/class-mcp-admin-settings.php:162
 msgid "Save Settings"
 msgstr "保存设置"
 
@@ -1879,83 +1911,95 @@ msgstr "关于"
 msgid "Cowboy MCP sections"
 msgstr "Cowboy MCP 分区"
 
-#: admin/class-mcp-admin.php:637
+#: admin/class-mcp-admin.php:641
+msgid "Power mode is on. Open Power mode settings."
+msgstr "强力模式已开启。打开强力模式设置。"
+
+#: admin/class-mcp-admin.php:641
 msgid "Power mode on"
 msgstr "强力模式已开启"
 
-#: admin/class-mcp-admin.php:640
+#: admin/class-mcp-admin.php:643
+msgid "Power mode is off. Open Power mode settings."
+msgstr "强力模式已关闭。打开强力模式设置。"
+
+#: admin/class-mcp-admin.php:643
+msgid "Power mode off"
+msgstr "强力模式已关闭"
+
+#: admin/class-mcp-admin.php:646
 msgid "Safe mode off"
 msgstr "安全模式已关闭"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "Every request from AI apps is rejected."
 msgstr "来自 AI 应用的所有请求都会被拒绝。"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "MCP server is off."
 msgstr "MCP 服务器已关闭。"
 
-#: admin/class-mcp-admin.php:666
+#: admin/class-mcp-admin.php:670
 msgid "Turn on in Settings"
 msgstr "在设置中开启"
 
-#: admin/class-mcp-admin.php:693
+#: admin/class-mcp-admin.php:698
 msgid "Pagination"
 msgstr "分页"
 
-#: admin/class-mcp-admin.php:694
+#: admin/class-mcp-admin.php:699
 msgid "Previous"
 msgstr "上一页"
 
 #. translators: 1: current page number, 2: total number of pages
-#: admin/class-mcp-admin.php:697
+#: admin/class-mcp-admin.php:702
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr "第 %1$d 页，共 %2$d 页"
 
-#: admin/class-mcp-admin.php:699
+#: admin/class-mcp-admin.php:704
 msgid "Next"
 msgstr "下一页"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Project home, guides, and news."
 msgstr "项目主页、指南和新闻。"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Website"
 msgstr "网站"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "GitHub"
 msgstr "GitHub"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "Source, issues & releases."
 msgstr "源代码、问题与发布。"
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid ""
 "Ask in the WordPress.org support forum. Paste your Connection Doctor report "
 "for a fast answer."
 msgstr "在 WordPress.org 支持论坛提问。粘贴您的连接诊断报告，可更快获得解答。"
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid "Get help"
 msgstr "获取帮助"
 
-#: admin/class-mcp-admin.php:711
+#: admin/class-mcp-admin.php:716
 msgid ""
 "Enjoying Cowboy MCP? A review on WordPress.org helps other site owners find "
 "it."
 msgstr ""
 "喜欢 Cowboy MCP？在 WordPress.org 上留下评价，可以帮助更多站点所有者发现它。"
 
-#: admin/class-mcp-admin.php:711 admin/class-mcp-feedback.php:192
+#: admin/class-mcp-admin.php:716 admin/class-mcp-feedback.php:192
 msgid "Leave a review"
 msgstr "留下评价"
 
 #. translators: %s: Model Context Protocol website URL.
-#: admin/class-mcp-admin.php:719
+#: admin/class-mcp-admin.php:724
 #, php-format
 msgid ""
 "<strong>Cowboy MCP</strong> turns this WordPress site into a <a href=\"%s\" "
@@ -2216,6 +2260,28 @@ msgstr "批准"
 #, php-format
 msgid "Redirects to: %s"
 msgstr "重定向到：%s"
+
+#~ msgid "Lift safety restrictions for advanced operations"
+#~ msgstr "为高级操作解除安全限制"
+
+#~ msgid ""
+#~ "<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
+#~ "dangerous SQL, writing files anywhere, and requests to internal "
+#~ "addresses. This grants effective <strong>remote code execution</strong> "
+#~ "to anyone holding an API key. Only enable on a trusted, locked-down site "
+#~ "you control. Your MCP API keys and the plugin&#8217;s own settings stay "
+#~ "protected."
+#~ msgstr ""
+#~ "<strong>危险：</strong>允许 <code>eval</code>/<code>shell</code>、危险的 "
+#~ "SQL、向任意位置写入文件以及向内部地址发起请求。这实际上会向任何持有 API 密"
+#~ "钥的人授予<strong>远程代码执行</strong>能力。请仅在您掌控的、受信任且已加"
+#~ "固的站点上启用。您的 MCP API 密钥和插件自身的设置仍受保护。"
+
+#~ msgid "Turning it on allows"
+#~ msgstr "开启后将允许"
+
+#~ msgid "Dangerous SQL"
+#~ msgstr "危险的 SQL"
 
 #~ msgid "New connections: disabled"
 #~ msgstr "新连接：已禁用"

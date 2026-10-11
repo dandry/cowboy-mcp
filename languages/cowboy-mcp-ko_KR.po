@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-10 17:53-0700\n"
+"POT-Creation-Date: 2026-10-10 18:18-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Korean\n"
@@ -1240,7 +1240,7 @@ msgid "Access for <strong>%s</strong>"
 msgstr "<strong>%s</strong>의 접근 권한"
 
 #: admin/class-mcp-admin-connections.php:1394
-#: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:220
+#: admin/class-mcp-admin-settings.php:152 admin/class-mcp-admin.php:220
 msgid "Cancel"
 msgstr "취소"
 
@@ -1567,101 +1567,132 @@ msgid "advanced · off by default"
 msgstr "고급 · 기본값 꺼짐"
 
 #: admin/class-mcp-admin-settings.php:95
-msgid "Lift safety restrictions for advanced operations"
-msgstr "고급 작업을 위해 안전 제한 해제"
+msgid "Unlock advanced operations"
+msgstr "고급 작업 잠금 해제"
 
 #: admin/class-mcp-admin-settings.php:98
 msgid ""
-"<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
-"dangerous SQL, writing files anywhere, and requests to internal addresses. "
-"This grants effective <strong>remote code execution</strong> to anyone "
-"holding an API key. Only enable on a trusted, locked-down site you control. "
-"Your MCP API keys and the plugin&#8217;s own settings stay protected."
-msgstr ""
-"<strong>위험:</strong> <code>eval</code>/<code>shell</code>, 위험한 SQL, 임"
-"의 위치로의 파일 쓰기, 내부 주소로의 요청을 허용합니다. 이는 API 키를 가진 누"
-"구에게나 사실상 <strong>원격 코드 실행</strong>을 부여합니다. 신뢰할 수 있고 "
-"직접 통제하는 잠긴 사이트에서만 활성화하세요. MCP API 키와 플러그인 자체 설정"
-"은 보호된 상태로 유지됩니다."
+"Power mode gives your AI agent the reach of a senior developer with server "
+"access: WP-CLI <code>eval</code> and <code>shell</code>, schema-changing "
+"SQL, writes anywhere in the install, requests to internal services, and "
+"admin-level user management. Many real jobs need exactly this. The audit "
+"log, the undo journal, and automatic checkpoints before WP-CLI writes all "
+"stay on."
+msgstr "파워 모드는 AI 에이전트에게 서버 접근 권한을 가진 시니어 개발자 수준의 역량을 부여합니다. WP-CLI <code>eval</code> 및 <code>shell</code>, 스키마를 변경하는 SQL, 설치 내 어디든 쓰기, 내부 서비스 요청, 관리자 수준의 사용자 관리가 가능합니다. 실제 작업 중 상당수가 바로 이것을 필요로 합니다. 감사 로그, 실행 취소 저널, WP-CLI 쓰기 전 자동 체크포인트는 모두 계속 켜져 있습니다."
 
 #: admin/class-mcp-admin-settings.php:104
-msgid "Turning it on allows"
-msgstr "켜면 허용되는 항목"
+msgid ""
+"<strong>Potential risk:</strong> with these limits lifted, anyone holding an "
+"API key can run code on this server. Turn it on for sites you control, with "
+"credentials you trust, and turn it off again when the job is done."
+msgstr "<strong>잠재적 위험:</strong> 이러한 제한이 해제되면 API 키를 가진 누구나 이 서버에서 코드를 실행할 수 있습니다. 직접 관리하는 사이트에서 신뢰하는 자격 증명으로만 켜고, 작업이 끝나면 다시 끄세요."
 
-#: admin/class-mcp-admin-settings.php:106
+#: admin/class-mcp-admin-settings.php:110
+msgid "What you gain"
+msgstr "얻을 수 있는 것"
+
+#: admin/class-mcp-admin-settings.php:112
+msgid "Fix a fatal or run a one-off migration from the agent"
+msgstr "에이전트에서 치명적 오류를 수정하거나 일회성 마이그레이션 실행"
+
+#: admin/class-mcp-admin-settings.php:113
+msgid "Alter tables and clean up orphaned data"
+msgstr "테이블 변경 및 고아 데이터 정리"
+
+#: admin/class-mcp-admin-settings.php:114
+msgid "Ship must-use plugins and edit any install file"
+msgstr "must-use 플러그인 배포 및 설치 내 모든 파일 편집"
+
+#: admin/class-mcp-admin-settings.php:115
+msgid "Reach local, staging, and Docker-sibling services"
+msgstr "로컬, 스테이징, Docker 인접 서비스 접근"
+
+#: admin/class-mcp-admin-settings.php:116
+msgid "Create administrators and reset passwords"
+msgstr "관리자 생성 및 비밀번호 재설정"
+
+#: admin/class-mcp-admin-settings.php:120
+msgid "Potential risks"
+msgstr "잠재적 위험"
+
+#: admin/class-mcp-admin-settings.php:122
 msgid "<code>eval</code> / <code>shell</code> via WP-CLI"
 msgstr "WP-CLI를 통한 <code>eval</code> / <code>shell</code>"
 
-#: admin/class-mcp-admin-settings.php:107
-msgid "Dangerous SQL"
-msgstr "위험한 SQL"
+#: admin/class-mcp-admin-settings.php:123
+msgid "Schema-changing and destructive SQL"
+msgstr "스키마를 변경하거나 파괴적인 SQL"
 
-#: admin/class-mcp-admin-settings.php:108
+#: admin/class-mcp-admin-settings.php:124
 msgid "Writing files anywhere"
 msgstr "어디에나 파일 쓰기"
 
-#: admin/class-mcp-admin-settings.php:109
+#: admin/class-mcp-admin-settings.php:125
 msgid "Requests to internal addresses"
 msgstr "내부 주소로의 요청"
 
-#: admin/class-mcp-admin-settings.php:113
+#: admin/class-mcp-admin-settings.php:126
+msgid "Granting admin roles and setting passwords"
+msgstr "관리자 역할 부여 및 비밀번호 설정"
+
+#: admin/class-mcp-admin-settings.php:130
 msgid "Always stays protected"
 msgstr "항상 보호되는 항목"
 
-#: admin/class-mcp-admin-settings.php:115
+#: admin/class-mcp-admin-settings.php:132
 msgid "Your MCP API keys"
 msgstr "MCP API 키"
 
-#: admin/class-mcp-admin-settings.php:116
+#: admin/class-mcp-admin-settings.php:133
 msgid "The plugin's own settings"
 msgstr "플러그인 자체 설정"
 
-#: admin/class-mcp-admin-settings.php:117
+#: admin/class-mcp-admin-settings.php:134
 msgid "Self-delete and last-admin guards"
 msgstr "자기 삭제 및 마지막 관리자 보호"
 
-#: admin/class-mcp-admin-settings.php:118
+#: admin/class-mcp-admin-settings.php:135
 msgid "Secret redaction in results"
 msgstr "결과의 비밀 정보 가림 처리"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "Off"
 msgstr "꺼짐"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "On"
 msgstr "켜짐"
 
 #. translators: %s: this site's host name, e.g. example.com
-#: admin/class-mcp-admin-settings.php:130
+#: admin/class-mcp-admin-settings.php:147
 #, php-format
 msgid "Type %s to turn on Power mode."
 msgstr "파워 모드를 켜려면 %s을(를) 입력하세요."
 
-#: admin/class-mcp-admin-settings.php:134
+#: admin/class-mcp-admin-settings.php:151
 msgid "Turn on"
 msgstr "켜기"
 
-#: admin/class-mcp-admin-settings.php:137
+#: admin/class-mcp-admin-settings.php:154
 msgid "It takes effect when you save."
 msgstr "저장하면 적용됩니다."
 
-#: admin/class-mcp-admin-settings.php:142
-#: admin/class-mcp-admin-settings.php:143
+#: admin/class-mcp-admin-settings.php:159
+#: admin/class-mcp-admin-settings.php:160
 msgid "No unsaved changes"
 msgstr "저장되지 않은 변경 사항 없음"
 
-#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:159
 msgid "You have unsaved changes"
 msgstr "저장되지 않은 변경 사항이 있습니다"
 
-#: admin/class-mcp-admin-settings.php:144
+#: admin/class-mcp-admin-settings.php:161
 msgid "Discard"
 msgstr "되돌리기"
 
-#: admin/class-mcp-admin-settings.php:145
+#: admin/class-mcp-admin-settings.php:162
 msgid "Save Settings"
 msgstr "설정 저장"
 
@@ -1938,61 +1969,73 @@ msgstr "정보"
 msgid "Cowboy MCP sections"
 msgstr "Cowboy MCP 섹션"
 
-#: admin/class-mcp-admin.php:637
+#: admin/class-mcp-admin.php:641
+msgid "Power mode is on. Open Power mode settings."
+msgstr "파워 모드가 켜져 있습니다. 파워 모드 설정을 엽니다."
+
+#: admin/class-mcp-admin.php:641
 msgid "Power mode on"
 msgstr "파워 모드 켜짐"
 
-#: admin/class-mcp-admin.php:640
+#: admin/class-mcp-admin.php:643
+msgid "Power mode is off. Open Power mode settings."
+msgstr "파워 모드가 꺼져 있습니다. 파워 모드 설정을 엽니다."
+
+#: admin/class-mcp-admin.php:643
+msgid "Power mode off"
+msgstr "파워 모드 꺼짐"
+
+#: admin/class-mcp-admin.php:646
 msgid "Safe mode off"
 msgstr "안전 모드 꺼짐"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "Every request from AI apps is rejected."
 msgstr "AI 앱의 모든 요청이 거부됩니다."
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "MCP server is off."
 msgstr "MCP 서버가 꺼져 있습니다."
 
-#: admin/class-mcp-admin.php:666
+#: admin/class-mcp-admin.php:670
 msgid "Turn on in Settings"
 msgstr "설정에서 켜기"
 
-#: admin/class-mcp-admin.php:693
+#: admin/class-mcp-admin.php:698
 msgid "Pagination"
 msgstr "페이지 이동"
 
-#: admin/class-mcp-admin.php:694
+#: admin/class-mcp-admin.php:699
 msgid "Previous"
 msgstr "이전"
 
 #. translators: 1: current page number, 2: total number of pages
-#: admin/class-mcp-admin.php:697
+#: admin/class-mcp-admin.php:702
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr "%2$d페이지 중 %1$d페이지"
 
-#: admin/class-mcp-admin.php:699
+#: admin/class-mcp-admin.php:704
 msgid "Next"
 msgstr "다음"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Project home, guides, and news."
 msgstr "프로젝트 홈, 가이드 및 소식."
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Website"
 msgstr "웹사이트"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "GitHub"
 msgstr "GitHub"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "Source, issues & releases."
 msgstr "소스, 이슈 및 릴리스."
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid ""
 "Ask in the WordPress.org support forum. Paste your Connection Doctor report "
 "for a fast answer."
@@ -2000,11 +2043,11 @@ msgstr ""
 "WordPress.org 지원 포럼에 질문하세요. 연결 진단 보고서를 붙여넣으면 더 빠르"
 "게 답변을 받을 수 있습니다."
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid "Get help"
 msgstr "도움 받기"
 
-#: admin/class-mcp-admin.php:711
+#: admin/class-mcp-admin.php:716
 msgid ""
 "Enjoying Cowboy MCP? A review on WordPress.org helps other site owners find "
 "it."
@@ -2012,12 +2055,12 @@ msgstr ""
 "Cowboy MCP가 마음에 드시나요? WordPress.org에 리뷰를 남기면 다른 사이트 소유"
 "자가 이 플러그인을 찾는 데 도움이 됩니다."
 
-#: admin/class-mcp-admin.php:711 admin/class-mcp-feedback.php:192
+#: admin/class-mcp-admin.php:716 admin/class-mcp-feedback.php:192
 msgid "Leave a review"
 msgstr "리뷰 남기기"
 
 #. translators: %s: Model Context Protocol website URL.
-#: admin/class-mcp-admin.php:719
+#: admin/class-mcp-admin.php:724
 #, php-format
 msgid ""
 "<strong>Cowboy MCP</strong> turns this WordPress site into a <a href=\"%s\" "
@@ -2290,6 +2333,29 @@ msgstr "승인"
 #, php-format
 msgid "Redirects to: %s"
 msgstr "리디렉션 대상: %s"
+
+#~ msgid "Lift safety restrictions for advanced operations"
+#~ msgstr "고급 작업을 위해 안전 제한 해제"
+
+#~ msgid ""
+#~ "<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
+#~ "dangerous SQL, writing files anywhere, and requests to internal "
+#~ "addresses. This grants effective <strong>remote code execution</strong> "
+#~ "to anyone holding an API key. Only enable on a trusted, locked-down site "
+#~ "you control. Your MCP API keys and the plugin&#8217;s own settings stay "
+#~ "protected."
+#~ msgstr ""
+#~ "<strong>위험:</strong> <code>eval</code>/<code>shell</code>, 위험한 SQL, "
+#~ "임의 위치로의 파일 쓰기, 내부 주소로의 요청을 허용합니다. 이는 API 키를 가"
+#~ "진 누구에게나 사실상 <strong>원격 코드 실행</strong>을 부여합니다. 신뢰할 "
+#~ "수 있고 직접 통제하는 잠긴 사이트에서만 활성화하세요. MCP API 키와 플러그"
+#~ "인 자체 설정은 보호된 상태로 유지됩니다."
+
+#~ msgid "Turning it on allows"
+#~ msgstr "켜면 허용되는 항목"
+
+#~ msgid "Dangerous SQL"
+#~ msgstr "위험한 SQL"
 
 #~ msgid "New connections: disabled"
 #~ msgstr "새 연결: 비활성"

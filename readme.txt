@@ -279,7 +279,7 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 
 == Screenshots ==
 
-1. Connections tab - pick your AI tool (Claude Code, Claude Desktop, claude.ai, ChatGPT, Codex, Cursor, VS Code, and more) and copy the ready-made setup command; most apps then sign in through your browser. Connected apps - API keys and app connections - are listed in one table with when each was created and last used, and can be limited to chosen tools or revoked.
+1. Connections tab - pick your AI tool (claude.ai, ChatGPT, Claude Code, Claude Desktop, Codex, Cursor, VS Code, and more): one click adds the site to Claude or ChatGPT, terminal tools get a ready-made command, and every app then signs in through your browser. Connected apps - API keys and app connections - are listed in one table with when each was created and last used, and can be limited to chosen tools or revoked.
 2. Settings tab - turn the server on or off, require Safe Mode confirmation for destructive actions, turn on Browser sign-in (OAuth) for apps that connect without a key, set a per-key rate limit, tune the undo journal and database checkpoints, and opt in to advanced Power Mode.
 3. Activity tab - a per-change undo journal: review every change your agents made and roll any of them back individually, plus one-click database checkpoints you can restore the whole site to.
 4. Logs tab - a structured, filterable audit log of every MCP tool call, error, and auth event, auto-pruned after 30 days.
@@ -292,6 +292,7 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 * New: Claude Code, Codex, Gemini CLI, Opencode, Cursor and VS Code now connect with a sign-in in your browser - no API key to copy. Keys still work for scripts and CI.
 * UI updates: Add to Cursor and Install in VS Code buttons, one copy-and-run command per setup panel (config files are the fallback), a shorter Connections tab that confirms live when an app connects, "Desktop Connector" renamed to "Browser sign-in", and Select all / Deselect all for Custom access.
 * New: Claude Code and Codex connect without the New connections switch.
+* New: a Power mode indicator in the page header (grey when off, red when on) that opens the Power mode settings; the Power mode section now explains what it unlocks alongside the potential risks.
 * Fixes: Cursor sign-in, server addresses with a trailing slash, Connection Doctor warnings on local sites.
 * Security: the plugin's own transients are protected from the option tools and WP-CLI.
 

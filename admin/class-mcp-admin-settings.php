@@ -92,21 +92,38 @@ class Cowboy_MCP_Admin_Settings {
                 </div>
                 <div class="cmcp-srow">
                     <div>
-                        <h3><label for="cmcp-power-mode"><?php esc_html_e( 'Lift safety restrictions for advanced operations', 'cowboy-mcp' ); ?></label></h3>
-                        <p class="cmcp-desc cmcp-desc--danger"><?php
+                        <h3><label for="cmcp-power-mode"><?php esc_html_e( 'Unlock advanced operations', 'cowboy-mcp' ); ?></label></h3>
+                        <p class="cmcp-desc"><?php
                             echo wp_kses(
-                                __( '<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, dangerous SQL, writing files anywhere, and requests to internal addresses. This grants effective <strong>remote code execution</strong> to anyone holding an API key. Only enable on a trusted, locked-down site you control. Your MCP API keys and the plugin&#8217;s own settings stay protected.', 'cowboy-mcp' ),
-                                [ 'strong' => [], 'code' => [] ]
+                                __( 'Power mode gives your AI agent the reach of a senior developer with server access: WP-CLI <code>eval</code> and <code>shell</code>, schema-changing SQL, writes anywhere in the install, requests to internal services, and admin-level user management. Many real jobs need exactly this. The audit log, the undo journal, and automatic checkpoints before WP-CLI writes all stay on.', 'cowboy-mcp' ),
+                                [ 'code' => [] ]
                             );
                         ?></p>
-                        <div class="cmcp-lists">
+                        <p class="cmcp-desc cmcp-desc--danger"><?php
+                            echo wp_kses(
+                                __( '<strong>Potential risk:</strong> with these limits lifted, anyone holding an API key can run code on this server. Turn it on for sites you control, with credentials you trust, and turn it off again when the job is done.', 'cowboy-mcp' ),
+                                [ 'strong' => [] ]
+                            );
+                        ?></p>
+                        <div class="cmcp-lists cmcp-lists--3">
                             <div>
-                                <p class="cmcp-lh cmcp-lh--danger"><?php esc_html_e( 'Turning it on allows', 'cowboy-mcp' ); ?></p>
+                                <p class="cmcp-lh cmcp-lh--gain"><?php esc_html_e( 'What you gain', 'cowboy-mcp' ); ?></p>
+                                <ul class="cmcp-lifts cmcp-lifts--gain">
+                                    <li><?php esc_html_e( 'Fix a fatal or run a one-off migration from the agent', 'cowboy-mcp' ); ?></li>
+                                    <li><?php esc_html_e( 'Alter tables and clean up orphaned data', 'cowboy-mcp' ); ?></li>
+                                    <li><?php esc_html_e( 'Ship must-use plugins and edit any install file', 'cowboy-mcp' ); ?></li>
+                                    <li><?php esc_html_e( 'Reach local, staging, and Docker-sibling services', 'cowboy-mcp' ); ?></li>
+                                    <li><?php esc_html_e( 'Create administrators and reset passwords', 'cowboy-mcp' ); ?></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <p class="cmcp-lh cmcp-lh--danger"><?php esc_html_e( 'Potential risks', 'cowboy-mcp' ); ?></p>
                                 <ul class="cmcp-lifts">
                                     <li><?php echo wp_kses( __( '<code>eval</code> / <code>shell</code> via WP-CLI', 'cowboy-mcp' ), [ 'code' => [] ] ); ?></li>
-                                    <li><?php esc_html_e( 'Dangerous SQL', 'cowboy-mcp' ); ?></li>
+                                    <li><?php esc_html_e( 'Schema-changing and destructive SQL', 'cowboy-mcp' ); ?></li>
                                     <li><?php esc_html_e( 'Writing files anywhere', 'cowboy-mcp' ); ?></li>
                                     <li><?php esc_html_e( 'Requests to internal addresses', 'cowboy-mcp' ); ?></li>
+                                    <li><?php esc_html_e( 'Granting admin roles and setting passwords', 'cowboy-mcp' ); ?></li>
                                 </ul>
                             </div>
                             <div>

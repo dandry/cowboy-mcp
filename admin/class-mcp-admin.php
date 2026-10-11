@@ -630,26 +630,30 @@ class Cowboy_MCP_Admin {
         <?php
     }
 
-    /** Header status: only states that differ from the safe defaults. */
+    /**
+     * Header status chips. Power mode is always shown (grey when off, red when on)
+     * and links to its settings section; everything else appears only when it
+     * differs from the safe default.
+     */
     private static function render_exceptions( array $s ): void {
         $chips = [];
         if ( ! empty( $s['power_mode'] ) ) {
-            $chips[] = [ 'red', '#cmcp-power', __( 'Power mode on', 'cowboy-mcp' ) ];
+            $chips[] = [ 'red', 'bolt', '#cmcp-power', __( 'Power mode on', 'cowboy-mcp' ), __( 'Power mode is on. Open Power mode settings.', 'cowboy-mcp' ) ];
+        } else {
+            $chips[] = [ 'neutral', 'bolt', '#cmcp-power', __( 'Power mode off', 'cowboy-mcp' ), __( 'Power mode is off. Open Power mode settings.', 'cowboy-mcp' ) ];
         }
         if ( ! ( $s['safe_mode'] ?? true ) ) {
-            $chips[] = [ 'amber', '#cmcp-safe-mode', __( 'Safe mode off', 'cowboy-mcp' ) ];
-        }
-        if ( ! $chips ) {
-            return;
+            $chips[] = [ 'amber', 'warning', '#cmcp-safe-mode', __( 'Safe mode off', 'cowboy-mcp' ), '' ];
         }
         echo '<div class="cmcp-exceptions">';
-        foreach ( $chips as [ $tone, $anchor, $label ] ) {
+        foreach ( $chips as [ $tone, $icon, $anchor, $label, $title ] ) {
             printf(
-                '<a class="cmcp-xchip cmcp-xchip--%1$s" href="%2$s">%3$s%4$s</a>',
+                '<a class="cmcp-xchip cmcp-xchip--%1$s" href="%2$s"%5$s>%3$s%4$s</a>',
                 esc_attr( $tone ),
                 esc_url( self::url( [ 'tab' => 'settings' ] ) . $anchor ),
-                self::icon( 'warning' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG literal.
-                esc_html( $label )
+                self::icon( $icon ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG literal.
+                esc_html( $label ),
+                '' !== $title ? ' title="' . esc_attr( $title ) . '"' : ''
             );
         }
         echo '</div>';
@@ -674,6 +678,7 @@ class Cowboy_MCP_Admin {
             'kebab'    => '<circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"></circle><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"></circle><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"></circle>',
             'search'   => '<circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>',
             'warning'  => '<path d="M12 3l9.5 17h-19z"></path><path d="M12 10v4M12 17.5v.5"></path>',
+            'bolt'     => '<path d="M13 2L4 14h7l-1 8 9-12h-7z"></path>',
             'external' => '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"></path>',
             'copy'     => '<rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path>',
             'caret'    => '<path d="M9 6l6 6-6 6"></path>',

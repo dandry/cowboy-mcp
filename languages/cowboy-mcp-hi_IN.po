@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-10 17:53-0700\n"
+"POT-Creation-Date: 2026-10-10 18:18-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Hindi\n"
@@ -1229,7 +1229,7 @@ msgid "Access for <strong>%s</strong>"
 msgstr "<strong>%s</strong> के लिए एक्सेस"
 
 #: admin/class-mcp-admin-connections.php:1394
-#: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:220
+#: admin/class-mcp-admin-settings.php:152 admin/class-mcp-admin.php:220
 msgid "Cancel"
 msgstr "वापस"
 
@@ -1555,101 +1555,132 @@ msgid "advanced · off by default"
 msgstr "उन्नत · डिफ़ॉल्ट रूप से बंद"
 
 #: admin/class-mcp-admin-settings.php:95
-msgid "Lift safety restrictions for advanced operations"
-msgstr "उन्नत कार्यों के लिए सुरक्षा प्रतिबंध हटाएँ"
+msgid "Unlock advanced operations"
+msgstr "उन्नत ऑपरेशन अनलॉक करें"
 
 #: admin/class-mcp-admin-settings.php:98
 msgid ""
-"<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
-"dangerous SQL, writing files anywhere, and requests to internal addresses. "
-"This grants effective <strong>remote code execution</strong> to anyone "
-"holding an API key. Only enable on a trusted, locked-down site you control. "
-"Your MCP API keys and the plugin&#8217;s own settings stay protected."
-msgstr ""
-"<strong>खतरा:</strong> <code>eval</code>/<code>shell</code>, खतरनाक SQL, कहीं "
-"भी फ़ाइलें लिखने, और आंतरिक पतों पर अनुरोध की अनुमति देता है। यह API कुंजी रखने वाले किसी "
-"भी व्यक्ति को प्रभावी रूप से <strong>रिमोट कोड निष्पादन</strong> प्रदान करता है। इसे "
-"केवल किसी विश्वसनीय, सुरक्षित साइट पर सक्षम करें जिसे आप नियंत्रित करते हैं। आपकी MCP API "
-"कुंजियाँ और प्लगइन की अपनी सेटिंग्स सुरक्षित रहती हैं।"
+"Power mode gives your AI agent the reach of a senior developer with server "
+"access: WP-CLI <code>eval</code> and <code>shell</code>, schema-changing "
+"SQL, writes anywhere in the install, requests to internal services, and "
+"admin-level user management. Many real jobs need exactly this. The audit "
+"log, the undo journal, and automatic checkpoints before WP-CLI writes all "
+"stay on."
+msgstr "Power mode आपके AI एजेंट को सर्वर एक्सेस वाले सीनियर डेवलपर जैसी पहुँच देता है: WP-CLI <code>eval</code> और <code>shell</code>, स्कीमा बदलने वाला SQL, इंस्टॉल में कहीं भी लिखना, आंतरिक सेवाओं को अनुरोध, और एडमिन स्तर का उपयोगकर्ता प्रबंधन। कई वास्तविक कामों को ठीक यही चाहिए। ऑडिट लॉग, undo जर्नल और WP-CLI लिखने से पहले के स्वचालित चेकपॉइंट सभी चालू रहते हैं।"
 
 #: admin/class-mcp-admin-settings.php:104
-msgid "Turning it on allows"
-msgstr "इसे चालू करने से यह संभव होता है"
+msgid ""
+"<strong>Potential risk:</strong> with these limits lifted, anyone holding an "
+"API key can run code on this server. Turn it on for sites you control, with "
+"credentials you trust, and turn it off again when the job is done."
+msgstr "<strong>संभावित जोखिम:</strong> ये सीमाएँ हटने पर API key रखने वाला कोई भी व्यक्ति इस सर्वर पर कोड चला सकता है। इसे उन्हीं साइटों पर चालू करें जिन्हें आप नियंत्रित करते हैं, भरोसेमंद क्रेडेंशियल्स के साथ, और काम पूरा होने पर फिर से बंद कर दें।"
 
-#: admin/class-mcp-admin-settings.php:106
+#: admin/class-mcp-admin-settings.php:110
+msgid "What you gain"
+msgstr "आपको क्या मिलता है"
+
+#: admin/class-mcp-admin-settings.php:112
+msgid "Fix a fatal or run a one-off migration from the agent"
+msgstr "एजेंट से fatal error ठीक करना या एक बार का migration चलाना"
+
+#: admin/class-mcp-admin-settings.php:113
+msgid "Alter tables and clean up orphaned data"
+msgstr "टेबल बदलना और अनाथ डेटा साफ़ करना"
+
+#: admin/class-mcp-admin-settings.php:114
+msgid "Ship must-use plugins and edit any install file"
+msgstr "must-use प्लगइन डालना और इंस्टॉल की कोई भी फ़ाइल संपादित करना"
+
+#: admin/class-mcp-admin-settings.php:115
+msgid "Reach local, staging, and Docker-sibling services"
+msgstr "लोकल, staging और पड़ोसी Docker सेवाओं तक पहुँचना"
+
+#: admin/class-mcp-admin-settings.php:116
+msgid "Create administrators and reset passwords"
+msgstr "एडमिनिस्ट्रेटर बनाना और पासवर्ड रीसेट करना"
+
+#: admin/class-mcp-admin-settings.php:120
+msgid "Potential risks"
+msgstr "संभावित जोखिम"
+
+#: admin/class-mcp-admin-settings.php:122
 msgid "<code>eval</code> / <code>shell</code> via WP-CLI"
 msgstr "WP-CLI के ज़रिए <code>eval</code> / <code>shell</code>"
 
-#: admin/class-mcp-admin-settings.php:107
-msgid "Dangerous SQL"
-msgstr "खतरनाक SQL"
+#: admin/class-mcp-admin-settings.php:123
+msgid "Schema-changing and destructive SQL"
+msgstr "स्कीमा बदलने वाला और विनाशकारी SQL"
 
-#: admin/class-mcp-admin-settings.php:108
+#: admin/class-mcp-admin-settings.php:124
 msgid "Writing files anywhere"
 msgstr "कहीं भी फ़ाइलें लिखना"
 
-#: admin/class-mcp-admin-settings.php:109
+#: admin/class-mcp-admin-settings.php:125
 msgid "Requests to internal addresses"
 msgstr "आंतरिक पतों पर अनुरोध"
 
-#: admin/class-mcp-admin-settings.php:113
+#: admin/class-mcp-admin-settings.php:126
+msgid "Granting admin roles and setting passwords"
+msgstr "एडमिन भूमिकाएँ देना और पासवर्ड सेट करना"
+
+#: admin/class-mcp-admin-settings.php:130
 msgid "Always stays protected"
 msgstr "हमेशा सुरक्षित रहता है"
 
-#: admin/class-mcp-admin-settings.php:115
+#: admin/class-mcp-admin-settings.php:132
 msgid "Your MCP API keys"
 msgstr "आपकी MCP API कुंजियाँ"
 
-#: admin/class-mcp-admin-settings.php:116
+#: admin/class-mcp-admin-settings.php:133
 msgid "The plugin's own settings"
 msgstr "प्लगइन की अपनी सेटिंग्स"
 
-#: admin/class-mcp-admin-settings.php:117
+#: admin/class-mcp-admin-settings.php:134
 msgid "Self-delete and last-admin guards"
 msgstr "खुद को हटाने और अंतिम एडमिन की सुरक्षा"
 
-#: admin/class-mcp-admin-settings.php:118
+#: admin/class-mcp-admin-settings.php:135
 msgid "Secret redaction in results"
 msgstr "परिणामों में गोपनीय जानकारी छिपाना"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "Off"
 msgstr "बंद"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "On"
 msgstr "चालू"
 
 #. translators: %s: this site's host name, e.g. example.com
-#: admin/class-mcp-admin-settings.php:130
+#: admin/class-mcp-admin-settings.php:147
 #, php-format
 msgid "Type %s to turn on Power mode."
 msgstr "Power mode चालू करने के लिए %s टाइप करें।"
 
-#: admin/class-mcp-admin-settings.php:134
+#: admin/class-mcp-admin-settings.php:151
 msgid "Turn on"
 msgstr "चालू करें"
 
-#: admin/class-mcp-admin-settings.php:137
+#: admin/class-mcp-admin-settings.php:154
 msgid "It takes effect when you save."
 msgstr "यह सहेजने पर लागू होता है।"
 
-#: admin/class-mcp-admin-settings.php:142
-#: admin/class-mcp-admin-settings.php:143
+#: admin/class-mcp-admin-settings.php:159
+#: admin/class-mcp-admin-settings.php:160
 msgid "No unsaved changes"
 msgstr "कोई सहेजे न गए बदलाव नहीं"
 
-#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:159
 msgid "You have unsaved changes"
 msgstr "आपके बदलाव सहेजे नहीं गए हैं"
 
-#: admin/class-mcp-admin-settings.php:144
+#: admin/class-mcp-admin-settings.php:161
 msgid "Discard"
 msgstr "छोड़ें"
 
-#: admin/class-mcp-admin-settings.php:145
+#: admin/class-mcp-admin-settings.php:162
 msgid "Save Settings"
 msgstr "सेटिंग्स सहेजें"
 
@@ -1925,61 +1956,73 @@ msgstr "परिचय"
 msgid "Cowboy MCP sections"
 msgstr "Cowboy MCP के अनुभाग"
 
-#: admin/class-mcp-admin.php:637
+#: admin/class-mcp-admin.php:641
+msgid "Power mode is on. Open Power mode settings."
+msgstr "Power mode चालू है। Power mode सेटिंग्स खोलें।"
+
+#: admin/class-mcp-admin.php:641
 msgid "Power mode on"
 msgstr "Power mode चालू"
 
-#: admin/class-mcp-admin.php:640
+#: admin/class-mcp-admin.php:643
+msgid "Power mode is off. Open Power mode settings."
+msgstr "Power mode बंद है। Power mode सेटिंग्स खोलें।"
+
+#: admin/class-mcp-admin.php:643
+msgid "Power mode off"
+msgstr "Power mode बंद"
+
+#: admin/class-mcp-admin.php:646
 msgid "Safe mode off"
 msgstr "Safe mode बंद"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "Every request from AI apps is rejected."
 msgstr "AI ऐप्स के सभी अनुरोध अस्वीकार किए जाते हैं।"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "MCP server is off."
 msgstr "MCP सर्वर बंद है।"
 
-#: admin/class-mcp-admin.php:666
+#: admin/class-mcp-admin.php:670
 msgid "Turn on in Settings"
 msgstr "सेटिंग्स में चालू करें"
 
-#: admin/class-mcp-admin.php:693
+#: admin/class-mcp-admin.php:698
 msgid "Pagination"
 msgstr "पृष्ठ-संख्या"
 
-#: admin/class-mcp-admin.php:694
+#: admin/class-mcp-admin.php:699
 msgid "Previous"
 msgstr "पिछला"
 
 #. translators: 1: current page number, 2: total number of pages
-#: admin/class-mcp-admin.php:697
+#: admin/class-mcp-admin.php:702
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr "पृष्ठ %2$d में से %1$d"
 
-#: admin/class-mcp-admin.php:699
+#: admin/class-mcp-admin.php:704
 msgid "Next"
 msgstr "अगला"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Project home, guides, and news."
 msgstr "प्रोजेक्ट होम, गाइड और समाचार।"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Website"
 msgstr "वेबसाइट"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "GitHub"
 msgstr "GitHub"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "Source, issues & releases."
 msgstr "स्रोत, इश्यू और रिलीज़।"
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid ""
 "Ask in the WordPress.org support forum. Paste your Connection Doctor report "
 "for a fast answer."
@@ -1987,11 +2030,11 @@ msgstr ""
 "WordPress.org सपोर्ट फ़ोरम में पूछें। तेज़ जवाब के लिए अपनी कनेक्शन डायग्नोस्टिक रिपोर्ट "
 "पेस्ट करें।"
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid "Get help"
 msgstr "सहायता प्राप्त करें"
 
-#: admin/class-mcp-admin.php:711
+#: admin/class-mcp-admin.php:716
 msgid ""
 "Enjoying Cowboy MCP? A review on WordPress.org helps other site owners find "
 "it."
@@ -1999,12 +2042,12 @@ msgstr ""
 "Cowboy MCP पसंद आ रहा है? WordPress.org पर एक समीक्षा अन्य साइट मालिकों को इसे "
 "खोजने में मदद करती है।"
 
-#: admin/class-mcp-admin.php:711 admin/class-mcp-feedback.php:192
+#: admin/class-mcp-admin.php:716 admin/class-mcp-feedback.php:192
 msgid "Leave a review"
 msgstr "समीक्षा लिखें"
 
 #. translators: %s: Model Context Protocol website URL.
-#: admin/class-mcp-admin.php:719
+#: admin/class-mcp-admin.php:724
 #, php-format
 msgid ""
 "<strong>Cowboy MCP</strong> turns this WordPress site into a <a href=\"%s\" "
@@ -2279,6 +2322,29 @@ msgstr "स्वीकृत करें"
 #, php-format
 msgid "Redirects to: %s"
 msgstr "यहाँ पुनर्निर्देशित करता है: %s"
+
+#~ msgid "Lift safety restrictions for advanced operations"
+#~ msgstr "उन्नत कार्यों के लिए सुरक्षा प्रतिबंध हटाएँ"
+
+#~ msgid ""
+#~ "<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
+#~ "dangerous SQL, writing files anywhere, and requests to internal "
+#~ "addresses. This grants effective <strong>remote code execution</strong> "
+#~ "to anyone holding an API key. Only enable on a trusted, locked-down site "
+#~ "you control. Your MCP API keys and the plugin&#8217;s own settings stay "
+#~ "protected."
+#~ msgstr ""
+#~ "<strong>खतरा:</strong> <code>eval</code>/<code>shell</code>, खतरनाक SQL, "
+#~ "कहीं भी फ़ाइलें लिखने, और आंतरिक पतों पर अनुरोध की अनुमति देता है। यह API कुंजी रखने "
+#~ "वाले किसी भी व्यक्ति को प्रभावी रूप से <strong>रिमोट कोड निष्पादन</strong> प्रदान "
+#~ "करता है। इसे केवल किसी विश्वसनीय, सुरक्षित साइट पर सक्षम करें जिसे आप नियंत्रित करते "
+#~ "हैं। आपकी MCP API कुंजियाँ और प्लगइन की अपनी सेटिंग्स सुरक्षित रहती हैं।"
+
+#~ msgid "Turning it on allows"
+#~ msgstr "इसे चालू करने से यह संभव होता है"
+
+#~ msgid "Dangerous SQL"
+#~ msgstr "खतरनाक SQL"
 
 #~ msgid "New connections: disabled"
 #~ msgstr "नए कनेक्शन: अक्षम"

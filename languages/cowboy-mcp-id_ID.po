@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cowboy MCP 1.6.7\n"
 "Report-Msgid-Bugs-To: https://cowboymcp.com\n"
-"POT-Creation-Date: 2026-10-10 17:53-0700\n"
+"POT-Creation-Date: 2026-10-10 18:18-0700\n"
 "PO-Revision-Date: 2026-08-24 12:26-0700\n"
 "Last-Translator: februality\n"
 "Language-Team: Indonesian\n"
@@ -1247,7 +1247,7 @@ msgid "Access for <strong>%s</strong>"
 msgstr "Akses untuk <strong>%s</strong>"
 
 #: admin/class-mcp-admin-connections.php:1394
-#: admin/class-mcp-admin-settings.php:135 admin/class-mcp-admin.php:220
+#: admin/class-mcp-admin-settings.php:152 admin/class-mcp-admin.php:220
 msgid "Cancel"
 msgstr "Batal"
 
@@ -1580,102 +1580,132 @@ msgid "advanced · off by default"
 msgstr "lanjutan · nonaktif secara bawaan"
 
 #: admin/class-mcp-admin-settings.php:95
-msgid "Lift safety restrictions for advanced operations"
-msgstr "Cabut pembatasan keamanan untuk operasi lanjutan"
+msgid "Unlock advanced operations"
+msgstr "Buka operasi lanjutan"
 
 #: admin/class-mcp-admin-settings.php:98
 msgid ""
-"<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
-"dangerous SQL, writing files anywhere, and requests to internal addresses. "
-"This grants effective <strong>remote code execution</strong> to anyone "
-"holding an API key. Only enable on a trusted, locked-down site you control. "
-"Your MCP API keys and the plugin&#8217;s own settings stay protected."
-msgstr ""
-"<strong>Bahaya:</strong> mengizinkan <code>eval</code>/<code>shell</code>, "
-"SQL berbahaya, penulisan file di mana saja, dan permintaan ke alamat "
-"internal. Ini memberikan <strong>eksekusi kode jarak jauh</strong> yang "
-"efektif kepada siapa pun yang memegang kunci API. Aktifkan hanya di situs "
-"tepercaya dan terkunci yang Anda kendalikan. Kunci API MCP Anda dan "
-"pengaturan plugin ini sendiri tetap terlindungi."
+"Power mode gives your AI agent the reach of a senior developer with server "
+"access: WP-CLI <code>eval</code> and <code>shell</code>, schema-changing "
+"SQL, writes anywhere in the install, requests to internal services, and "
+"admin-level user management. Many real jobs need exactly this. The audit "
+"log, the undo journal, and automatic checkpoints before WP-CLI writes all "
+"stay on."
+msgstr "Power mode memberi agen AI Anda jangkauan seorang developer senior dengan akses server: WP-CLI <code>eval</code> dan <code>shell</code>, SQL pengubah skema, menulis di mana saja dalam instalasi, permintaan ke layanan internal, dan manajemen pengguna tingkat admin. Banyak pekerjaan nyata membutuhkan persis ini. Log audit, jurnal undo, dan checkpoint otomatis sebelum penulisan WP-CLI tetap aktif."
 
 #: admin/class-mcp-admin-settings.php:104
-msgid "Turning it on allows"
-msgstr "Mengaktifkannya memungkinkan"
+msgid ""
+"<strong>Potential risk:</strong> with these limits lifted, anyone holding an "
+"API key can run code on this server. Turn it on for sites you control, with "
+"credentials you trust, and turn it off again when the job is done."
+msgstr "<strong>Risiko potensial:</strong> dengan batasan ini dicabut, siapa pun yang memegang kunci API dapat menjalankan kode di server ini. Aktifkan di situs yang Anda kendalikan, dengan kredensial yang Anda percaya, dan matikan lagi setelah pekerjaan selesai."
 
-#: admin/class-mcp-admin-settings.php:106
+#: admin/class-mcp-admin-settings.php:110
+msgid "What you gain"
+msgstr "Yang Anda dapatkan"
+
+#: admin/class-mcp-admin-settings.php:112
+msgid "Fix a fatal or run a one-off migration from the agent"
+msgstr "Memperbaiki fatal error atau menjalankan migrasi sekali jalan dari agen"
+
+#: admin/class-mcp-admin-settings.php:113
+msgid "Alter tables and clean up orphaned data"
+msgstr "Mengubah tabel dan membersihkan data yatim"
+
+#: admin/class-mcp-admin-settings.php:114
+msgid "Ship must-use plugins and edit any install file"
+msgstr "Memasang plugin must-use dan mengedit file apa pun dalam instalasi"
+
+#: admin/class-mcp-admin-settings.php:115
+msgid "Reach local, staging, and Docker-sibling services"
+msgstr "Menjangkau layanan lokal, staging, dan kontainer Docker tetangga"
+
+#: admin/class-mcp-admin-settings.php:116
+msgid "Create administrators and reset passwords"
+msgstr "Membuat administrator dan mereset kata sandi"
+
+#: admin/class-mcp-admin-settings.php:120
+msgid "Potential risks"
+msgstr "Risiko potensial"
+
+#: admin/class-mcp-admin-settings.php:122
 msgid "<code>eval</code> / <code>shell</code> via WP-CLI"
 msgstr "<code>eval</code> / <code>shell</code> melalui WP-CLI"
 
-#: admin/class-mcp-admin-settings.php:107
-msgid "Dangerous SQL"
-msgstr "SQL berbahaya"
+#: admin/class-mcp-admin-settings.php:123
+msgid "Schema-changing and destructive SQL"
+msgstr "SQL pengubah skema dan destruktif"
 
-#: admin/class-mcp-admin-settings.php:108
+#: admin/class-mcp-admin-settings.php:124
 msgid "Writing files anywhere"
 msgstr "Menulis file di mana saja"
 
-#: admin/class-mcp-admin-settings.php:109
+#: admin/class-mcp-admin-settings.php:125
 msgid "Requests to internal addresses"
 msgstr "Permintaan ke alamat internal"
 
-#: admin/class-mcp-admin-settings.php:113
+#: admin/class-mcp-admin-settings.php:126
+msgid "Granting admin roles and setting passwords"
+msgstr "Pemberian peran admin dan pengaturan kata sandi"
+
+#: admin/class-mcp-admin-settings.php:130
 msgid "Always stays protected"
 msgstr "Selalu tetap terlindungi"
 
-#: admin/class-mcp-admin-settings.php:115
+#: admin/class-mcp-admin-settings.php:132
 msgid "Your MCP API keys"
 msgstr "Kunci API MCP Anda"
 
-#: admin/class-mcp-admin-settings.php:116
+#: admin/class-mcp-admin-settings.php:133
 msgid "The plugin's own settings"
 msgstr "Pengaturan plugin itu sendiri"
 
-#: admin/class-mcp-admin-settings.php:117
+#: admin/class-mcp-admin-settings.php:134
 msgid "Self-delete and last-admin guards"
 msgstr "Perlindungan hapus diri sendiri dan administrator terakhir"
 
-#: admin/class-mcp-admin-settings.php:118
+#: admin/class-mcp-admin-settings.php:135
 msgid "Secret redaction in results"
 msgstr "Penyamaran rahasia pada hasil"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "Off"
 msgstr "Mati"
 
-#: admin/class-mcp-admin-settings.php:125
-#: admin/class-mcp-admin-settings.php:164
+#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:181
 msgid "On"
 msgstr "Aktif"
 
 #. translators: %s: this site's host name, e.g. example.com
-#: admin/class-mcp-admin-settings.php:130
+#: admin/class-mcp-admin-settings.php:147
 #, php-format
 msgid "Type %s to turn on Power mode."
 msgstr "Ketik %s untuk menyalakan Power mode."
 
-#: admin/class-mcp-admin-settings.php:134
+#: admin/class-mcp-admin-settings.php:151
 msgid "Turn on"
 msgstr "Nyalakan"
 
-#: admin/class-mcp-admin-settings.php:137
+#: admin/class-mcp-admin-settings.php:154
 msgid "It takes effect when you save."
 msgstr "Berlaku setelah Anda menyimpan."
 
-#: admin/class-mcp-admin-settings.php:142
-#: admin/class-mcp-admin-settings.php:143
+#: admin/class-mcp-admin-settings.php:159
+#: admin/class-mcp-admin-settings.php:160
 msgid "No unsaved changes"
 msgstr "Tidak ada perubahan yang belum disimpan"
 
-#: admin/class-mcp-admin-settings.php:142
+#: admin/class-mcp-admin-settings.php:159
 msgid "You have unsaved changes"
 msgstr "Anda memiliki perubahan yang belum disimpan"
 
-#: admin/class-mcp-admin-settings.php:144
+#: admin/class-mcp-admin-settings.php:161
 msgid "Discard"
 msgstr "Buang"
 
-#: admin/class-mcp-admin-settings.php:145
+#: admin/class-mcp-admin-settings.php:162
 msgid "Save Settings"
 msgstr "Simpan Pengaturan"
 
@@ -1959,61 +1989,73 @@ msgstr "Tentang"
 msgid "Cowboy MCP sections"
 msgstr "Bagian Cowboy MCP"
 
-#: admin/class-mcp-admin.php:637
+#: admin/class-mcp-admin.php:641
+msgid "Power mode is on. Open Power mode settings."
+msgstr "Power mode aktif. Buka pengaturan Power mode."
+
+#: admin/class-mcp-admin.php:641
 msgid "Power mode on"
 msgstr "Power mode aktif"
 
-#: admin/class-mcp-admin.php:640
+#: admin/class-mcp-admin.php:643
+msgid "Power mode is off. Open Power mode settings."
+msgstr "Power mode mati. Buka pengaturan Power mode."
+
+#: admin/class-mcp-admin.php:643
+msgid "Power mode off"
+msgstr "Power mode mati"
+
+#: admin/class-mcp-admin.php:646
 msgid "Safe mode off"
 msgstr "Safe mode mati"
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "Every request from AI apps is rejected."
 msgstr "Semua permintaan dari aplikasi AI ditolak."
 
-#: admin/class-mcp-admin.php:665
+#: admin/class-mcp-admin.php:669
 msgid "MCP server is off."
 msgstr "Server MCP nonaktif."
 
-#: admin/class-mcp-admin.php:666
+#: admin/class-mcp-admin.php:670
 msgid "Turn on in Settings"
 msgstr "Nyalakan di Pengaturan"
 
-#: admin/class-mcp-admin.php:693
+#: admin/class-mcp-admin.php:698
 msgid "Pagination"
 msgstr "Penomoran halaman"
 
-#: admin/class-mcp-admin.php:694
+#: admin/class-mcp-admin.php:699
 msgid "Previous"
 msgstr "Sebelumnya"
 
 #. translators: 1: current page number, 2: total number of pages
-#: admin/class-mcp-admin.php:697
+#: admin/class-mcp-admin.php:702
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr "Halaman %1$d dari %2$d"
 
-#: admin/class-mcp-admin.php:699
+#: admin/class-mcp-admin.php:704
 msgid "Next"
 msgstr "Berikutnya"
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Project home, guides, and news."
 msgstr "Beranda proyek, panduan, dan berita."
 
-#: admin/class-mcp-admin.php:708
+#: admin/class-mcp-admin.php:713
 msgid "Website"
 msgstr "Situs Web"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "GitHub"
 msgstr "GitHub"
 
-#: admin/class-mcp-admin.php:709
+#: admin/class-mcp-admin.php:714
 msgid "Source, issues & releases."
 msgstr "Kode sumber, isu & rilis."
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid ""
 "Ask in the WordPress.org support forum. Paste your Connection Doctor report "
 "for a fast answer."
@@ -2021,11 +2063,11 @@ msgstr ""
 "Tanyakan di forum dukungan WordPress.org. Tempelkan laporan Diagnostik "
 "Koneksi Anda agar lebih cepat mendapat jawaban."
 
-#: admin/class-mcp-admin.php:710
+#: admin/class-mcp-admin.php:715
 msgid "Get help"
 msgstr "Dapatkan bantuan"
 
-#: admin/class-mcp-admin.php:711
+#: admin/class-mcp-admin.php:716
 msgid ""
 "Enjoying Cowboy MCP? A review on WordPress.org helps other site owners find "
 "it."
@@ -2033,12 +2075,12 @@ msgstr ""
 "Menikmati Cowboy MCP? Ulasan di WordPress.org membantu pemilik situs lain "
 "menemukannya."
 
-#: admin/class-mcp-admin.php:711 admin/class-mcp-feedback.php:192
+#: admin/class-mcp-admin.php:716 admin/class-mcp-feedback.php:192
 msgid "Leave a review"
 msgstr "Tinggalkan ulasan"
 
 #. translators: %s: Model Context Protocol website URL.
-#: admin/class-mcp-admin.php:719
+#: admin/class-mcp-admin.php:724
 #, php-format
 msgid ""
 "<strong>Cowboy MCP</strong> turns this WordPress site into a <a href=\"%s\" "
@@ -2321,6 +2363,30 @@ msgstr "Setujui"
 #, php-format
 msgid "Redirects to: %s"
 msgstr "Mengalihkan ke: %s"
+
+#~ msgid "Lift safety restrictions for advanced operations"
+#~ msgstr "Cabut pembatasan keamanan untuk operasi lanjutan"
+
+#~ msgid ""
+#~ "<strong>Danger:</strong> allows <code>eval</code>/<code>shell</code>, "
+#~ "dangerous SQL, writing files anywhere, and requests to internal "
+#~ "addresses. This grants effective <strong>remote code execution</strong> "
+#~ "to anyone holding an API key. Only enable on a trusted, locked-down site "
+#~ "you control. Your MCP API keys and the plugin&#8217;s own settings stay "
+#~ "protected."
+#~ msgstr ""
+#~ "<strong>Bahaya:</strong> mengizinkan <code>eval</code>/<code>shell</"
+#~ "code>, SQL berbahaya, penulisan file di mana saja, dan permintaan ke "
+#~ "alamat internal. Ini memberikan <strong>eksekusi kode jarak jauh</strong> "
+#~ "yang efektif kepada siapa pun yang memegang kunci API. Aktifkan hanya di "
+#~ "situs tepercaya dan terkunci yang Anda kendalikan. Kunci API MCP Anda dan "
+#~ "pengaturan plugin ini sendiri tetap terlindungi."
+
+#~ msgid "Turning it on allows"
+#~ msgstr "Mengaktifkannya memungkinkan"
+
+#~ msgid "Dangerous SQL"
+#~ msgstr "SQL berbahaya"
 
 #~ msgid "New connections: disabled"
 #~ msgstr "Koneksi baru: nonaktif"
