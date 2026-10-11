@@ -1,6 +1,46 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
+/** Validate the optional scope before either execution or a central preview. */
+function cowboy_mcp_search_replace_validate_post_id( array $args ): ?WP_Error {
+    if ( array_key_exists( 'post_id', $args ) && ( ! is_int( $args['post_id'] ) || $args['post_id'] <= 0 ) ) {
+        return new WP_Error( 'invalid_params', 'post_id must be a positive integer.', [ 'code' => -32602 ] );
+    }
+    return null;
+}
+
+/** WHERE clause shared by the handler and the dry-run preview. */
+function cowboy_mcp_search_replace_where( array $a ): string {
+    global $wpdb;
+    $type       = $a['post_type'] ?? 'any';
+    $conditions = [ $wpdb->prepare( 'post_content LIKE %s', '%' . $wpdb->esc_like( $a['search'] ) . '%' ) ];
+    if ( $type !== 'any' ) {
+        $conditions[] = $wpdb->prepare( 'post_type = %s', $type );
+    }
+    if ( array_key_exists( 'post_id', $a ) ) {
+        $conditions[] = $wpdb->prepare( 'ID = %d', $a['post_id'] );
+    }
+    return 'WHERE ' . implode( ' AND ', $conditions );
+}
+
+/**
+ * Dry-run plan for a post_id-scoped search-replace: read the target row only —
+ * no updates, cache invalidation or rollback capture.
+ */
+function cowboy_mcp_search_replace_plan( array $a ): array {
+    global $wpdb;
+    $select_sql = $wpdb->prepare( 'SELECT post_content FROM %i', $wpdb->posts ) . ' ' . cowboy_mcp_search_replace_where( $a );
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
+    $content = $wpdb->get_var( $select_sql );
+    return [
+        'post_id'             => $a['post_id'],
+        'matched_posts'       => $content !== null ? 1 : 0,
+        // LIKE follows the column collation; REPLACE() is case-sensitive, so count
+        // what REPLACE() would actually change. An empty search changes nothing.
+        'matched_occurrences' => $content !== null && $a['search'] !== '' ? substr_count( $content, $a['search'] ) : 0,
+    ];
+}
+
 return [
     'tools' => [
         Cowboy_MCP_Tools::tool( 'wp_site_info', '[System] Get comprehensive site information: WP version, active theme/plugins, PHP info, permalink structure, etc.', [], [ 'title' => 'Site Info', 'readOnlyHint' => true, 'destructiveHint' => false, 'idempotentHint' => true, 'openWorldHint' => false ], [
@@ -46,6 +86,7 @@ return [
             'search'    => [ 'type' => 'string',  'description' => 'Text to search for', 'required' => true ],
             'replace'   => [ 'type' => 'string',  'description' => 'Replacement text', 'required' => true ],
             'post_type' => [ 'type' => 'string',  'description' => 'Limit to post type', 'default' => 'any' ],
+            'post_id'   => [ 'type' => 'integer', 'description' => 'Limit to a single post or page ID (combined with post_type when supplied)', 'minimum' => 1 ],
             'dry_run'   => [ 'type' => 'boolean', 'description' => 'Preview without making changes', 'default' => true ],
             'limit'     => [ 'type' => 'integer', 'description' => 'Max posts to update per call (default 1000)', 'default' => 1000 ],
         ], [ 'title' => 'Search and Replace', 'readOnlyHint' => false, 'destructiveHint' => true, 'idempotentHint' => false, 'openWorldHint' => false ]),
@@ -148,18 +189,16 @@ return [
         'wp_search_replace' => function ( array $a ) {
             global $wpdb;
 
+            $error = cowboy_mcp_search_replace_validate_post_id( $a );
+            if ( $error ) {
+                return $error;
+            }
+
             $search  = $a['search'];
             $replace = $a['replace'];
             $dry_run = $a['dry_run'] ?? true;
-            $type    = $a['post_type'] ?? 'any';
 
-            $like = '%' . $wpdb->esc_like( $search ) . '%';
-
-            $conditions = [ $wpdb->prepare( 'post_content LIKE %s', $like ) ];
-            if ( $type !== 'any' ) {
-                $conditions[] = $wpdb->prepare( 'post_type = %s', $type );
-            }
-            $where_sql = 'WHERE ' . implode( ' AND ', $conditions );
+            $where_sql = cowboy_mcp_search_replace_where( $a );
 
             $count_sql = $wpdb->prepare( "SELECT COUNT(*) FROM %i", $wpdb->posts ) . " $where_sql";
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
