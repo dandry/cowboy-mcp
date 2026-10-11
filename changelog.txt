@@ -5,11 +5,8 @@ release; older entries are kept here.
 
 = 1.7.2 =
 * Claude Code, Codex, Gemini CLI, Opencode, Cursor and VS Code now connect with a sign-in in your browser - no API key to copy. Keys still work for scripts and CI.
-* New Add to Cursor and Install in VS Code buttons.
-* Every setup panel leads with one command to copy and run; editing a config file by hand is the fallback.
-* The Connections tab is shorter and clearer, and confirms live when an app connects.
-* "Desktop Connector" is now "Browser sign-in"; Claude Code and Codex connect without the New connections switch.
-* Custom access gets Select all / Deselect all buttons.
+* UI updates: Add to Cursor and Install in VS Code buttons, one copy-and-run command per setup panel (config files are the fallback), a shorter Connections tab that confirms live when an app connects, "Desktop Connector" renamed to "Browser sign-in", and Select all / Deselect all for Custom access.
+* Claude Code and Codex connect without the New connections switch.
 * Fixes: Cursor sign-in, server addresses with a trailing slash, Connection Doctor warnings on local sites.
 * Security: the plugin's own transients are protected from the option tools and WP-CLI.
 
