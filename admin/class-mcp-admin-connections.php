@@ -678,7 +678,10 @@ class Cowboy_MCP_Admin_Connections {
                         </div>
                     </details>
                 <?php endif; ?>
-                <?php self::render_file_fallback( $slug, $domain, $endpoint, $cursor ? __( 'Add this to <code>%s</code>, then restart Cursor. It signs in on first use.', 'cowboy-mcp' ) : '' ); ?>
+                <?php
+                /* translators: %s: path of the client's config file. */
+                $file_text = $cursor ? __( 'Add this to <code>%s</code>, then restart Cursor. It signs in on first use.', 'cowboy-mcp' ) : '';
+                self::render_file_fallback( $slug, $domain, $endpoint, $file_text ); ?>
                 <?php self::render_key_fallback( $slug, $label, $keys, $endpoint, $new_key, $is_local ); ?>
                 </div>
         <?php self::step_close(); ?>
@@ -1310,7 +1313,7 @@ class Cowboy_MCP_Admin_Connections {
                     }
                     foreach ( $connections as $c ) {
                         $who = class_exists( 'Cowboy_MCP_OAuth' ) ? Cowboy_MCP_OAuth::client_display_name( $c['client_info'] ?? null ) : null;
-                        if ( $who ) {
+                        if ( $who && $who !== (string) $c['client_name'] ) {
                             /* translators: 1: app name detected from its first request, 2: WordPress username of the approving admin */
                             $sub = sprintf( __( '%1$s · approved by %2$s', 'cowboy-mcp' ), $who, $c['user'] );
                         } else {

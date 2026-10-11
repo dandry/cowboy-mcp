@@ -279,8 +279,8 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 
 == Screenshots ==
 
-1. Connections tab - pick your AI tool (Claude Code, Claude Desktop, claude.ai, ChatGPT, Cursor, Codex, and more) and copy the ready-made setup command. Connected apps - API keys and app connections - are listed in one table with when each was created and last used, and can be limited to chosen tools or revoked.
-2. Settings tab - turn the server on or off, require Safe Mode confirmation for destructive actions, enable the one-click Desktop/web (OAuth) connector, set a per-key rate limit, tune the undo journal and database checkpoints, and opt in to advanced Power Mode.
+1. Connections tab - pick your AI tool (Claude Code, Claude Desktop, claude.ai, ChatGPT, Codex, Cursor, VS Code, and more) and copy the ready-made setup command; most apps then sign in through your browser. Connected apps - API keys and app connections - are listed in one table with when each was created and last used, and can be limited to chosen tools or revoked.
+2. Settings tab - turn the server on or off, require Safe Mode confirmation for destructive actions, turn on Browser sign-in (OAuth) for apps that connect without a key, set a per-key rate limit, tune the undo journal and database checkpoints, and opt in to advanced Power Mode.
 3. Activity tab - a per-change undo journal: review every change your agents made and roll any of them back individually, plus one-click database checkpoints you can restore the whole site to.
 4. Logs tab - a structured, filterable audit log of every MCP tool call, error, and auth event, auto-pruned after 30 days.
 5. About tab - what Cowboy MCP does, with links to the project site and source.
@@ -289,19 +289,14 @@ Still stuck? Paste the Doctor report into a new topic in the [support forum](htt
 == Changelog ==
 
 = 1.7.2 =
-* Claude Code, Codex, Gemini CLI and Opencode now connect with a sign-in in your browser - no API key to copy. The key stays available for headless and CI use.
-* Add to Cursor and Install in VS Code buttons on the Connections tab.
-* The live Connected confirmation now works for every app and names the one that connected.
-* Fixed Cursor desktop failing to sign in (its callback address is now accepted), and sign-ins from apps that write the server address with a trailing slash.
-* Connection Doctor no longer flags local development sites that sign in terminal tools over plain http, and counts OAuth connections as credentials.
-* Claude Code and Codex now identify themselves with an OAuth Client ID Metadata Document (the current MCP standard), so they connect without the "New connections" switch and without registering a client on the site.
-* The OAuth connector is now called "Browser sign-in" everywhere, since every app without a key uses it; any by-hand setup can switch it on from the Connections tab.
-* Claude Desktop on a local site signs in through the mcp-remote bridge in your browser - no API key in the config file.
-* Every setup step is now a command you run - Gemini CLI, Opencode and VS Code use their own add commands, Claude Desktop gets a one-line installer for its bridge - and editing a config file by hand is the collapsed fallback.
-* Connection Doctor no longer warns about the New-connections switch being off unless an app was actually refused.
-* Security: the plugin's own transients (the New-connections window, sign-in codes, the identity-document cache) can no longer be written through the option tools or WP-CLI, Power mode included.
-* The Connections tab is shorter and easier to read: each step says only what to do, the "New connections" switch appears only where you have to flip it yourself (by-hand setup, or after a refused attempt) and on the live status strip while it is open, the test prompt is a one-line copy, and the config-file and API-key options sit on one row under the main step.
-* Custom access: Select all and Deselect all buttons above the tool list.
+* Claude Code, Codex, Gemini CLI, Opencode, Cursor and VS Code now connect with a sign-in in your browser - no API key to copy. Keys still work for scripts and CI.
+* New Add to Cursor and Install in VS Code buttons.
+* Every setup panel leads with one command to copy and run; editing a config file by hand is the fallback.
+* The Connections tab is shorter and clearer, and confirms live when an app connects.
+* "Desktop Connector" is now "Browser sign-in"; Claude Code and Codex connect without the New connections switch.
+* Custom access gets Select all / Deselect all buttons.
+* Fixes: Cursor sign-in, server addresses with a trailing slash, Connection Doctor warnings on local sites.
+* Security: the plugin's own transients are protected from the option tools and WP-CLI.
 
 = Earlier versions =
 
