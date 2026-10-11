@@ -23,7 +23,7 @@ Cowboy MCP connects your WordPress site to Claude, ChatGPT, Cursor, Gemini or an
 * 🛡️ **Secure by default** - safe mode confirms before anything destructive, you can preview any change before it runs, every key can be scoped to read-only, and every action is written to an audit log.
 * 🆓 **Free and open source** - every tool included, with deep WooCommerce, Gutenberg, ACF, Elementor, Beaver Builder, SiteOrigin, Wordfence and SEO support. No Pro tier, no credits, no usage meter.
 * 🔒 **Your data stays yours** - self-hosted, no accounts, no relay, no phone-home. Your agent connects to your site; nothing leaves your server.
-* 🔌 **Works with your AI assistant** - Claude, ChatGPT, Cursor, GitHub Copilot, Codex, Gemini, Claude Code and any MCP client. Set up in about two minutes, on a live site or a local one.
+* 🔌 **One-click sign-in** - Claude, ChatGPT, Cursor, VS Code, Codex, Gemini, Claude Code and any MCP client connect through your browser; no API key to paste. About two minutes, on a live site or a local one.
 
 > "More access than any other MCP offers, easy to use, LOVE the change journal and the checkpoints - safe if you break something, without having to run back ups on the host or yet another plugin." - a WordPress.org reviewer
 
@@ -72,24 +72,28 @@ Up to 203 tools. The core set is always on; integrations light up automatically 
 
 Plus 17 read-only MCP resources, 4 resource templates and 8 guided workflow prompts (site audit, troubleshooting, SEO, security hardening, performance and more).
 
+= One-click sign-in for every app =
+
+Every app connects the same way: it sends you to a sign-in page on your own site, you approve it as an administrator, done. Claude and ChatGPT: one button. Cursor and VS Code: one button. Claude Code, Codex, Gemini CLI and Opencode: one command, then your browser opens. The consent screen names the app that is asking and lets you grant full access, read-only, or a hand-picked list of tools. No API key to copy; nothing is granted until you click **Approve**. Keys remain for scripts and CI.
+
 = Connect Claude Code to WordPress =
 
-Pick the app on the Connections tab and click **Copy** (this switches sign-in on for 30 minutes), then run two lines in your terminal - no key to copy:
+Open the Claude Code panel on the Connections tab and run the two lines it shows:
 
     claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
     claude mcp login your-site
 
-Headless or CI? Use an API key from the Connections tab: `claude mcp add --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"`.
+Headless or CI? Use an API key from the Connections tab with `--header "Authorization: Bearer YOUR_API_KEY"`.
 
 = Connect Claude to WordPress (claude.ai and Claude Desktop) =
 
-No terminal and no key to paste: click **Add to Claude** on the Connections tab (it switches browser sign-in on for you), and approve the sign-in on your own site as an administrator. The consent screen lets you choose full access, read-only, or a hand-picked list of tools. This is a standard OAuth 2.1 flow and needs a public HTTPS site.
+No terminal: click **Add to Claude** on the Connections tab and approve the sign-in on your own site. Needs a public HTTPS site.
 
 = Connect ChatGPT to WordPress =
 
 ChatGPT connects with the same one-click sign-in. You need ChatGPT on the web with a Plus, Pro, Business, Enterprise or Edu plan, and a public HTTPS site.
 
-1. On your site, open the ChatGPT panel on the Connections tab and click **Open ChatGPT** (it copies your connection link and switches browser sign-in on for 30 minutes).
+1. On your site, open the ChatGPT panel on the Connections tab and click **Open ChatGPT** (it copies your connection link).
 2. In ChatGPT, open **Settings > Security and login** and turn on **Developer mode**. On Business and Enterprise workspaces an admin has to allow Developer mode first.
 3. Go to **Plugins**, click **+** and choose **Add custom MCP server**. Paste your connection link as the MCP server URL and choose **OAuth**.
 4. ChatGPT opens a sign-in page on your site. Review it and click **Approve**.
@@ -118,7 +122,7 @@ Windsurf (now Devin Desktop) uses this block in `~/.config/devin/mcp_config.json
 
     codex mcp add your-site --url https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
 
-Click **Copy** on the Connections tab (it switches sign-in on for 30 minutes); Codex then opens your browser to sign in.
+Codex opens your browser to sign in - no key, no switch to flip.
 
 Headless or CI? Add `--bearer-token-env-var COWBOY_MCP_API_KEY` and export your key in your shell profile.
 
@@ -126,9 +130,9 @@ Headless or CI? Add `--bearer-token-env-var COWBOY_MCP_API_KEY` and export your 
 
     gemini mcp add -s user -t http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint
 
-Click **Copy** on the Connections tab (it switches sign-in on for 30 minutes), then start `gemini` and run `/mcp auth your-site` to sign in.
+Click **Copy** on the Connections tab (it opens the 30-minute connection window), then start `gemini` and run `/mcp auth your-site` to sign in.
 
-Headless or CI? Use an API key: `gemini mcp add --scope user --transport http your-site https://yoursite.com/wp-json/cowboy-mcp/v1/endpoint --header "Authorization: Bearer YOUR_API_KEY"`.
+Headless or CI? Use an API key with `--header "Authorization: Bearer YOUR_API_KEY"`.
 
 = n8n, Opencode and other MCP clients =
 
@@ -178,7 +182,7 @@ Questions and connection problems: post in the [support forum](https://wordpress
 == Installation ==
 
 1. Install and activate Cowboy MCP from the Plugins screen.
-2. Go to **Settings > Cowboy MCP**, open the **Connections** tab, pick your app and click **Copy**; it switches sign-in on for 30 minutes.
+2. Go to **Settings > Cowboy MCP**, open the **Connections** tab, pick your app and click its button or copy its command; you then sign in through your browser.
 3. Connect your agent and start giving it instructions.
 
 **Claude Code:**
@@ -200,7 +204,7 @@ A plugin that lets AI assistants act on your site through the Model Context Prot
 
 = How do I connect ChatGPT to my WordPress site? =
 
-Click **Open ChatGPT** on the ChatGPT panel of the Connections tab in Cowboy MCP; it copies your connection link and switches browser sign-in on. In ChatGPT on the web, turn on **Developer mode** under **Settings > Security and login**, then go to **Plugins**, click **+ > Add custom MCP server**, paste the link and choose OAuth. Approve the sign-in on your site as an administrator, then pick **Developer mode** from the **+** menu in a chat. It needs a Plus, Pro, Business, Enterprise or Edu plan and a public HTTPS site.
+Click **Open ChatGPT** on the ChatGPT panel of the Connections tab in Cowboy MCP; it copies your connection link. In ChatGPT on the web, turn on **Developer mode** under **Settings > Security and login**, then go to **Plugins**, click **+ > Add custom MCP server**, paste the link and choose OAuth. Approve the sign-in on your site as an administrator, then pick **Developer mode** from the **+** menu in a chat. It needs a Plus, Pro, Business, Enterprise or Edu plan and a public HTTPS site.
 
 = How do I connect Claude to my WordPress site? =
 
