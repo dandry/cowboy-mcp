@@ -1,12 +1,33 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-/** Validate the optional scope before either execution or a central preview. */
-function cowboy_mcp_search_replace_validate_post_id( array $args ): ?WP_Error {
-    if ( array_key_exists( 'post_id', $args ) && ( ! is_int( $args['post_id'] ) || $args['post_id'] <= 0 ) ) {
-        return new WP_Error( 'invalid_params', 'post_id must be a positive integer.', [ 'code' => -32602 ] );
+/**
+ * Validate and normalize the arguments before either execution or a central
+ * preview (the previews run outside the handler's try/catch). A digit-only
+ * post_id string becomes an int; anything else that is not a positive integer
+ * is rejected, so a bad id never falls through to a site-wide replace.
+ */
+function cowboy_mcp_search_replace_normalize_args( array $args ): array|WP_Error {
+    foreach ( [ 'search', 'replace' ] as $key ) {
+        if ( ! array_key_exists( $key, $args ) ) {
+            continue;
+        }
+        if ( ! is_string( $args[ $key ] ) && ! is_int( $args[ $key ] ) && ! is_float( $args[ $key ] ) ) {
+            return new WP_Error( 'invalid_params', "{$key} must be a string.", [ 'code' => -32602 ] );
+        }
+        $args[ $key ] = (string) $args[ $key ];
     }
-    return null;
+    if ( array_key_exists( 'post_id', $args ) ) {
+        $id = $args['post_id'];
+        if ( is_string( $id ) && $id !== '' && ctype_digit( $id ) ) {
+            $id = (int) $id;
+        }
+        if ( ! is_int( $id ) || $id <= 0 ) {
+            return new WP_Error( 'invalid_params', 'post_id must be a positive integer.', [ 'code' => -32602 ] );
+        }
+        $args['post_id'] = $id;
+    }
+    return $args;
 }
 
 /** WHERE clause shared by the handler and the dry-run preview. */
@@ -189,9 +210,9 @@ return [
         'wp_search_replace' => function ( array $a ) {
             global $wpdb;
 
-            $error = cowboy_mcp_search_replace_validate_post_id( $a );
-            if ( $error ) {
-                return $error;
+            $a = cowboy_mcp_search_replace_normalize_args( $a );
+            if ( is_wp_error( $a ) ) {
+                return $a;
             }
 
             $search  = $a['search'];
@@ -199,6 +220,10 @@ return [
             $dry_run = $a['dry_run'] ?? true;
 
             $where_sql = cowboy_mcp_search_replace_where( $a );
+
+            // Scoped calls report the same occurrence count as the preview, read
+            // before any update so an executed call says what it replaced.
+            $plan = array_key_exists( 'post_id', $a ) ? cowboy_mcp_search_replace_plan( $a ) : null;
 
             $count_sql = $wpdb->prepare( "SELECT COUNT(*) FROM %i", $wpdb->posts ) . " $where_sql";
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
@@ -257,7 +282,7 @@ return [
                 }
             }
 
-            return [
+            $response = [
                 'search'         => $search,
                 'replace'        => $replace,
                 'matched_posts'  => $count,
@@ -266,6 +291,11 @@ return [
                 'dry_run'        => $dry_run,
                 'executed'       => ! $dry_run,
             ];
+            if ( $plan !== null ) {
+                $response = [ 'post_id' => $plan['post_id'] ] + $response;
+                $response['matched_occurrences'] = $plan['matched_occurrences'];
+            }
+            return $response;
         },
 
     ],

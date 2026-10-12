@@ -330,10 +330,10 @@ class Cowboy_MCP_Tools {
         }
 
         // The dry-run and safe-mode previews bypass the handler's validation.
-        if ( $name === 'wp_search_replace' ) {
-            $error = cowboy_mcp_search_replace_validate_post_id( $args );
-            if ( $error ) {
-                return $error;
+        if ( $name === 'wp_search_replace' && function_exists( 'cowboy_mcp_search_replace_normalize_args' ) ) {
+            $args = cowboy_mcp_search_replace_normalize_args( $args );
+            if ( is_wp_error( $args ) ) {
+                return $args;
             }
         }
 
